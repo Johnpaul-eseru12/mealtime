@@ -255,10 +255,21 @@ body.dark .rw{border-color:#30363d;}
 
 <!-- REPORT PAGE -->
 <div class="pg" id="pg-report">
-  <div class="ph no-print"><h2>Weekly Report</h2><button class="bpr" onclick="window.print()">Print / PDF</button></div>
-  <div class="no-print" style="margin-bottom:1.25rem;">
+  <div class="ph no-print">
+    <h2>Report</h2>
+    <div style="display:flex;gap:.5rem;align-items:center;">
+      <button id="tab-weekly" class="bpr" onclick="switchReportTab('weekly')" style="background:var(--g);">Weekly</button>
+      <button id="tab-monthly" class="bpr" onclick="switchReportTab('monthly')" style="background:var(--text-muted);">Monthly</button>
+      <button class="bpr" onclick="window.print()">Print</button>
+    </div>
+  </div>
+  <div id="report-weekly-controls" class="no-print" style="margin-bottom:1.25rem;">
     <select id="rf" onchange="renderRepTable()" style="width:100%;max-width:320px;height:38px;font-size:.88rem;padding:0 .8rem;border:1.5px solid var(--bd);border-radius:10px;background:var(--bg-input);color:var(--text-main);appearance:none;"><option value="">Select a week...</option></select>
   </div>
+  <div id="report-monthly-controls" style="display:none;margin-bottom:1.25rem;">
+    <select id="rm" onchange="renderMonthly()" style="width:100%;max-width:320px;height:38px;font-size:.88rem;padding:0 .8rem;border:1.5px solid var(--bd);border-radius:10px;background:var(--bg-input);color:var(--text-main);appearance:none;"><option value="">Select a month...</option></select>
+  </div>
+
   <div id="rep-body"></div>
 </div>
 
@@ -307,8 +318,17 @@ function setSess(s){sessionStorage.setItem('lt-s',JSON.stringify(s));}
 function dayRate(d){return new Date(d+'T00:00:00').getDay()===5?5000:3000;}
 function calcCost(p,d){var r=dayRate(d);return{co:Math.min(r,p),tu:Math.max(0,p-r)};}
 function wkKey(d){var dt=new Date(d+'T00:00:00'),dy=dt.getDay(),m=new Date(dt);m.setDate(dt.getDate()-dy+(dy===0?-6:1));return m.toISOString().slice(0,10);}
-function fmtWk(w){var m=new Date(w+'T00:00:00'),f=new Date(m);f.setDate(f.getDate()+4);var fn=function(x){return x.toLocaleDateString('en-UG',{month:'short',day:'numeric'});};return fn(m)+' - '+fn(f)+', '+m.getFullYear();}
-function fmtDay(d){return new Date(d+'T00:00:00').toLocaleDateString('en-UG',{weekday:'long',month:'short',day:'numeric'});}
+function fmtWk(w){
+  var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var m=new Date(w+'T00:00:00'),f=new Date(m);f.setDate(f.getDate()+4);
+  return m.getDate()+' '+months[m.getMonth()]+' - '+f.getDate()+' '+months[f.getMonth()]+', '+m.getFullYear();
+}
+function fmtDay(d){
+  var dt=new Date(d+'T00:00:00');
+  var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return days[dt.getDay()]+', '+dt.getDate()+' '+months[dt.getMonth()]+' '+dt.getFullYear();
+}
 function N(n){return n.toLocaleString('en-UG');}
 function ini(n){return n.trim().split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase()||'?';}
 function showToast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('on');},3000);}
@@ -711,6 +731,222 @@ function toggleTheme(){
   }
   renderSauces();
 })();
+
+
+function switchReportTab(tab){
+  document.getElementById('report-weekly-controls').style.display=tab==='weekly'?'block':'none';
+  document.getElementById('report-monthly-controls').style.display=tab==='monthly'?'block':'none';
+  document.getElementById('tab-weekly').style.background=tab==='weekly'?'var(--g)':'var(--text-muted)';
+  document.getElementById('tab-monthly').style.background=tab==='monthly'?'var(--g)':'var(--text-muted)';
+  if(tab==='monthly') renderMonthly();
+  else renderAdminReport();
+}
+
+function renderMonthly(){
+  var orders=gO();
+  var months={};
+  orders.forEach(function(o){
+    var m=o.date.slice(0,7); // yyyy-mm
+    if(!months[m])months[m]=[];
+    months[m].push(o);
+  });
+  var mkeys=Object.keys(months).sort(function(a,b){return b.localeCompare(a);});
+  var mnames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  // Populate month select
+  var sel=document.getElementById('rm'),pv=sel.value;
+  sel.innerHTML='<option value="">Select a month...</option>'+mkeys.map(function(m){
+    var parts=m.split('-');
+    var label=mnames[parseInt(parts[1])-1]+' '+parts[0];
+    return '<option value="'+m+'"'+(pv===m?' selected':'')+'>'+label+'</option>';
+  }).join('');
+  if(!sel.value&&mkeys.length)sel.value=mkeys[0];
+
+  var selMonth=sel.value;
+  if(!selMonth){document.getElementById('rep-body').innerHTML='<div class="empty">Select a month.</div>';return;}
+  var mo=months[selMonth]||[];
+  if(!mo.length){document.getElementById('rep-body').innerHTML='<div class="empty">No orders this month.</div>';return;}
+
+  var parts=selMonth.split('-');
+  var monthLabel=mnames[parseInt(parts[1])-1]+' '+parts[0];
+  var tc=mo.reduce(function(s,o){return s+o.co;},0);
+  var tt=mo.reduce(function(s,o){return s+o.tu;},0);
+
+  var empRows=NAMES.map(function(n,i){
+    var m2=mo.filter(function(o){return o.ei===i;});
+    if(!m2.length)return '';
+    var ec=m2.reduce(function(s,o){return s+o.co;},0);
+    var et=m2.reduce(function(s,o){return s+o.tu;},0);
+    return '<tr><td><strong>'+n+'</strong></td><td>'+m2.length+'</td>'
+      +'<td style="text-align:right;color:#1565c0;font-weight:600;">UGX '+N(ec)+'</td>'
+      +'<td style="text-align:right;'+(et>0?'color:#92400e;font-weight:600;':'color:#0284c7;')+'">'+(et>0?'UGX '+N(et):'—')+'</td>'
+      +'<td style="text-align:right;font-weight:600;">UGX '+N(ec+et)+'</td></tr>';
+  }).join('');
+
+  document.getElementById('rep-body').innerHTML='<div class="sc3">'
+    +'<div class="sc"><div class="scl">Company Total</div><div class="scv">UGX '+N(tc)+'</div><div class="scs">'+mo.length+' orders in '+monthLabel+'</div></div>'
+    +'<div class="sc"><div class="scl">Top-ups</div><div class="scv">UGX '+N(tt)+'</div><div class="scs">Paid by staff</div></div>'
+    +'<div class="sc"><div class="scl">Grand Total</div><div class="scv">UGX '+N(tc+tt)+'</div><div class="scs">All meals</div></div>'
+    +'</div>'
+    +'<div class="card"><div class="ct">Per-Employee — '+monthLabel+'</div>'
+    +'<div style="overflow-x:auto;"><table class="rtb" style="min-width:420px;">'
+    +'<thead><tr><th>Employee</th><th>Orders</th><th style="text-align:right">Company</th><th style="text-align:right">Top-ups</th><th style="text-align:right">Total</th></tr></thead>'
+    +'<tbody>'+empRows
+    +'<tr class="ttr"><td>TOTAL</td><td>'+mo.length+'</td>'
+    +'<td style="text-align:right;">UGX '+N(tc)+'</td>'
+    +'<td style="text-align:right;">'+(tt?'UGX '+N(tt):'—')+'</td>'
+    +'<td style="text-align:right;">UGX '+N(tc+tt)+'</td></tr>'
+    +'</tbody></table></div></div>';
+}
+
+// Expose functions for Firebase module
+window.gE = gE;
+window.sE = sE;
+window.gO = gO;
+window.sO = sO;
+window.getSess = getSess;
+window.setSess = setSess;
+window.SC = SC;
+window.S = S;
+window.N = N;
+window.calcCost = calcCost;
+window.showToast = showToast;
+window.refEmp = refEmp;
+window.renderSauces = renderSauces;
+window.renderLog = renderLog;
+window.renderAdminReport = renderAdminReport;
+window.doSubmit = doSubmit;
+window.delO = delO;
+
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, onValue, remove, push } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAwW31V5RCTfhQMdqm9-Vx7YK6IQtFbY00",
+  authDomain: "mealtime-ha.firebaseapp.com",
+  databaseURL: "https://mealtime-ha-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "mealtime-ha",
+  storageBucket: "mealtime-ha.firebasestorage.app",
+  messagingSenderId: "661705305604",
+  appId: "1:661705305604:web:e08c85d0c327bf32414f51"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const ordersRef = ref(db, 'orders');
+
+// ── OVERRIDE localStorage order functions with Firebase ───────────────────
+// Listen for real-time updates from Firebase
+window._fbOrders = [];
+window._fbReady = false;
+window._fbListeners = [];
+
+onValue(ordersRef, function(snapshot) {
+  var data = snapshot.val();
+  var orders = [];
+  if(data){
+    Object.keys(data).forEach(function(key){
+      var o = data[key];
+      o._fbKey = key;
+      orders.push(o);
+    });
+    // Sort by id descending (newest first)
+    orders.sort(function(a,b){ return b.id - a.id; });
+  }
+  window._fbOrders = orders;
+  window._fbReady = true;
+  // Notify any listeners (log, report re-render)
+  window._fbListeners.forEach(function(fn){ fn(); });
+});
+
+// Override gO to return Firebase orders
+window.gO = function(){ return window._fbOrders.slice(); };
+
+// Override sO to write to Firebase
+// sO receives the full array - find what changed
+window.sO = function(orders){
+  // This is called with the full new array after add/delete
+  // We handle add and delete separately via Firebase push/remove
+  // so sO is now a no-op (handled by doSubmitFB and delOFB)
+};
+
+// Add order to Firebase
+window.doSubmitFB = function(order){
+  push(ordersRef, order).then(function(){
+    // success
+  }).catch(function(e){ alert('Could not save order. Check your connection.'); });
+};
+
+// Delete order from Firebase by fbKey
+window.delOFB = function(fbKey){
+  remove(ref(db, 'orders/'+fbKey));
+};
+
+// Patch doSubmit to use Firebase
+var _origDoSubmit = window.doSubmit;
+window.doSubmit = function(){
+  var em = window.gE();
+  var SC = window.SC;
+  var S = window.S;
+  var s = null; for(var i=0;i<SC.length;i++){if(SC[i].k===S.sauce){s=SC[i];break;}}
+  if(!s) return;
+  var c = window.calcCost(s.p, S.date);
+  var special = document.getElementById('f-special').value.trim();
+  var order = {
+    id: Date.now(),
+    ei: parseInt(S.emp),
+    en: em[parseInt(S.emp)],
+    date: S.date,
+    st: S.st.slice(),
+    sauce: s.l,
+    sp: s.p,
+    co: c.co,
+    tu: c.tu,
+    special: special
+  };
+  window.doSubmitFB(order);
+  // Reset form
+  S.sauce=''; S.st=[]; S.emp='';
+  document.getElementById('f-emp').value='';
+  document.querySelectorAll('.pill').forEach(function(x){x.classList.remove('on');});
+  document.getElementById('st-hint').textContent='Nothing selected yet';
+  document.getElementById('sauces').innerHTML='';
+  document.getElementById('csummary').innerHTML='';
+  document.getElementById('f-special').value='';
+  document.getElementById('btn-add').disabled=true;
+  window.showToast('Order placed'+(c.tu>0?' - remember to top up UGX '+window.N(c.tu):''));
+  window.refEmp();
+  window.renderSauces();
+};
+
+// Patch delO to use Firebase
+window.delO = function(id){
+  if(!confirm('Cancel this order?')) return;
+  var orders = window._fbOrders;
+  var o = null;
+  for(var i=0;i<orders.length;i++){ if(orders[i].id===id){ o=orders[i]; break; } }
+  if(o && o._fbKey){
+    window.delOFB(o._fbKey);
+    window.showToast('Order cancelled');
+  }
+};
+
+// Re-render log/report when Firebase data updates
+window._fbListeners.push(function(){
+  var active = document.querySelector('.pg.on');
+  if(!active) return;
+  var id = active.id;
+  if(id==='pg-log') window.renderLog();
+  if(id==='pg-report'){
+    var sess = window.getSess();
+    if(sess&&sess.admin) window.renderAdminReport();
+  }
+});
+
+console.log('Firebase connected to mealtime-ha');
 </script>
 </body>
 </html>
