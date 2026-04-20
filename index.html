@@ -5,108 +5,502 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mealtime</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
 <style>
+/* ════════════════════════════════════════════
+   SECTION: Reset & Root Variables
+   WHAT:    Zeroes browser defaults and defines brand colour tokens.
+   WHY:     Consistent spacing and colours everywhere — nothing inherits unexpected defaults.
+   ════════════════════════════════════════════ */
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{width:100%;overflow-x:hidden;}
 :root{
-  --g:#0a1628;--gm:#1565c0;--gl:#dbeeff;--gp:#eef6ff;--al:#fef3c7;
-  --bd:#e5e7eb;--mu:#6b7280;
-  --bg-page:#eef3fb;--bg-card:#ffffff;--bg-input:#ffffff;
-  --text-main:#1a1a1a;--text-muted:#6b7280;--text-light:#9ca3af;
+  /* Brand core */
+  --g:#0a1628;
+  --gm:#1565c0;
+  --gl:#dbeeff;
+  --gp:#eef6ff;
+  --al:#fef3c7;
+  --bd:#e2e8f0;
+  --mu:#6b7280;
+
+  /* Light theme surfaces */
+  --bg-page:#e8eef8;
+  --bg-card:#ffffff;
+  --bg-input:#ffffff;
+  --text-main:#1a1a2e;
+  --text-muted:#6b7280;
+  --text-light:#9ca3af;
+
+  /* Glass effect tokens */
+  --glass-bg:rgba(255,255,255,0.65);
+  --glass-border:rgba(255,255,255,0.85);
+  --glass-shadow:0 8px 32px rgba(10,22,40,0.10), 0 1.5px 4px rgba(10,22,40,0.06);
+  --glass-blur:blur(18px) saturate(1.6);
+
+  /* Meal icon colours */
+  --food-warm:#ff6b35;
+  --food-green:#22c55e;
+  --food-gold:#f59e0b;
+  --food-blue:#3b82f6;
+}
+
+/* Dark theme overrides */
+body.dark{
+  --bg-page:#0d1117;
+  --bg-card:#161b22;
+  --bg-input:#1c2333;
+  --text-main:#e6edf3;
+  --text-muted:#8b949e;
+  --text-light:#484f58;
+  --bd:#30363d;
+  --mu:#8b949e;
+  --gl:#0d2137;
+  --gp:#0d1f35;
+  --al:#2d1f00;
+  --glass-bg:rgba(22,27,34,0.75);
+  --glass-border:rgba(255,255,255,0.08);
+  --glass-shadow:0 8px 32px rgba(0,0,0,0.4), 0 1.5px 4px rgba(0,0,0,0.2);
+}
+
+/* ════════════════════════════════════════════
+   SECTION: Body Base
+   WHAT:    Font, background with mesh gradient, and animation base.
+   WHY:     The gradient mesh creates depth — the app feels alive, not flat.
+   ════════════════════════════════════════════ */
+body{
+  font-family:'DM Sans',sans-serif;
+  color:var(--text-main);
+  font-size:14px;
+  min-height:100vh;
+  -webkit-text-size-adjust:100%;
+  transition:background .3s,color .3s;
+  background-color:var(--bg-page);
+  /* Layered gradient mesh — brand colours only */
+  background-image:
+    radial-gradient(ellipse at 20% 10%, rgba(21,101,192,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 5%, rgba(10,22,40,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 80%, rgba(26,158,212,0.10) 0%, transparent 50%),
+    radial-gradient(ellipse at 10% 90%, rgba(21,101,192,0.08) 0%, transparent 45%);
+  background-attachment:fixed;
 }
 body.dark{
-  --bg-page:#0d1117;--bg-card:#161b22;--bg-input:#1c2333;
-  --text-main:#e6edf3;--text-muted:#8b949e;--text-light:#484f58;
-  --bd:#30363d;--mu:#8b949e;--gl:#0d2137;--gp:#0d1f35;--al:#2d1f00;
+  background-image:
+    radial-gradient(ellipse at 20% 10%, rgba(21,101,192,0.25) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 5%, rgba(10,22,40,0.6) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 80%, rgba(26,158,212,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 10% 90%, rgba(21,101,192,0.10) 0%, transparent 45%);
 }
-body{font-family:'DM Sans',sans-serif;background:var(--bg-page);color:var(--text-main);font-size:14px;min-height:100vh;-webkit-text-size-adjust:100%;transition:background .2s,color .2s;}
 
-/* LOGIN */
-#ls{position:fixed;top:0;left:0;width:100%;height:100%;background:#eef3fb;z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;}
-body.dark #ls{background:#0d1117;}
-.lc{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:1.5rem;}
-body.dark .lc{background:#161b22;border-color:#30363d;}
+/* ════════════════════════════════════════════
+   SECTION: Login Screen
+   WHAT:    Full-screen centered login overlay with glass card.
+   WHY:     Covers the entire app until authentication is confirmed.
+   ════════════════════════════════════════════ */
+#ls{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:transparent;z-index:500;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;
+}
+/* Glass login card */
+.lc{
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  border-radius:20px;
+  padding:1.75rem;
+  backdrop-filter:var(--glass-blur);
+  -webkit-backdrop-filter:var(--glass-blur);
+  box-shadow:var(--glass-shadow);
+}
 .lf{margin-bottom:1rem;}
-.lf label{display:block;font-size:.68rem;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem;}
-.lf select,.lf input{height:44px;padding:0 .8rem;border:1.5px solid #e5e7eb;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:16px;color:#1a1a1a;background:#fff;width:100%;appearance:none;}
-body.dark .lf select,body.dark .lf input{background:#1c2333;border-color:#30363d;color:#e6edf3;}
-.lf select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;}
-#lerr{display:none;font-size:.82rem;color:#c0392b;margin-bottom:.75rem;padding:.5rem .75rem;background:#fdecea;border-radius:8px;border:1px solid #fca5a5;}
-.lbtn{background:#0a1628;color:#fff;border:none;border-radius:10px;height:44px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;width:100%;}
-.lbtn:hover{background:#1565c0;}
+.lf label{
+  display:block;font-size:.68rem;font-weight:600;
+  color:var(--text-muted);text-transform:uppercase;
+  letter-spacing:.07em;margin-bottom:.3rem;
+}
+/* Login inputs — glass inset look */
+.lf select,.lf input{
+  height:46px;padding:0 .9rem;
+  border:1.5px solid var(--glass-border);
+  border-radius:12px;
+  font-family:'DM Sans',sans-serif;font-size:16px;
+  color:var(--text-main);
+  background:rgba(255,255,255,0.55);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  width:100%;appearance:none;
+  transition:border-color .2s, box-shadow .2s;
+}
+.lf select:focus,.lf input:focus{
+  outline:none;
+  border-color:#1a9ed4;
+  box-shadow:0 0 0 3px rgba(26,158,212,0.15);
+}
+body.dark .lf select,body.dark .lf input{
+  background:rgba(28,35,51,0.7);
+  border-color:rgba(255,255,255,0.12);
+  color:#e6edf3;
+}
+.lf select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;
+}
+#lerr{
+  display:none;font-size:.82rem;color:#c0392b;margin-bottom:.75rem;
+  padding:.5rem .75rem;background:#fdecea;border-radius:10px;border:1px solid #fca5a5;
+}
+.lbtn{
+  background:linear-gradient(135deg,#0a1628 0%,#1565c0 100%);
+  color:#fff;border:none;border-radius:12px;height:46px;
+  font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;
+  cursor:pointer;width:100%;
+  box-shadow:0 4px 16px rgba(10,22,40,0.25);
+  transition:all .2s;letter-spacing:.02em;
+}
+.lbtn:hover{
+  background:linear-gradient(135deg,#1565c0 0%,#1a9ed4 100%);
+  transform:translateY(-1px);box-shadow:0 6px 20px rgba(10,22,40,0.35);
+}
+.lbtn:active{transform:translateY(0);}
 
-/* TOPBAR */
-.bar{background:var(--g);padding:0 1rem;display:flex;align-items:center;justify-content:space-between;min-height:56px;width:100%;box-sizing:border-box;position:sticky;top:0;z-index:50;gap:.5rem;overflow-x:auto;}
-.bar-t{color:#fff;font-family:'DM Serif Display',serif;font-size:.95rem;}
+/* ════════════════════════════════════════════
+   SECTION: Top Navigation Bar
+   WHAT:    Sticky app bar with logo and nav tabs.
+   WHY:     Glass effect ties the bar visually to the page without blocking the gradient.
+   ════════════════════════════════════════════ */
+.bar{
+  background:rgba(10,22,40,0.82);
+  backdrop-filter:blur(20px) saturate(1.8);
+  -webkit-backdrop-filter:blur(20px) saturate(1.8);
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  padding:0 1rem;display:flex;align-items:center;
+  justify-content:space-between;min-height:58px;
+  width:100%;box-sizing:border-box;
+  position:sticky;top:0;z-index:50;gap:.5rem;overflow-x:auto;
+}
+.bar-t{color:#fff;font-family:'DM Serif Display',serif;font-size:.95rem;letter-spacing:.01em;}
 .bar-s{color:rgba(255,255,255,.45);font-size:.68rem;margin-top:1px;}
-.nav{display:flex;align-items:center;}
-.nb{background:none;border:none;color:rgba(255,255,255,.6);font-family:'DM Sans',sans-serif;font-size:.73rem;font-weight:600;padding:.45rem .6rem;cursor:pointer;border-bottom:2px solid transparent;text-transform:uppercase;letter-spacing:.02em;transition:all .15s;white-space:nowrap;flex-shrink:0;}
-.nb.on{color:#fff;border-bottom-color:#00d4f5;}
-.nb:hover:not(.on){color:rgba(255,255,255,.9);}
+.nav{display:flex;align-items:center;gap:.2rem;}
+.nb{
+  background:none;border:none;
+  color:rgba(255,255,255,.55);
+  font-family:'DM Sans',sans-serif;font-size:.73rem;font-weight:600;
+  padding:.45rem .65rem;cursor:pointer;
+  border-bottom:2px solid transparent;
+  text-transform:uppercase;letter-spacing:.04em;
+  transition:all .2s;white-space:nowrap;flex-shrink:0;
+  border-radius:6px 6px 0 0;
+}
+.nb.on{color:#fff;border-bottom-color:#00d4f5;background:rgba(255,255,255,0.06);}
+.nb:hover:not(.on){color:rgba(255,255,255,.9);background:rgba(255,255,255,0.05);}
 
-/* PAGES */
-.pg{display:none;max-width:780px;margin:0 auto;padding:1.5rem 1.25rem;}
+/* ════════════════════════════════════════════
+   SECTION: Page Layout
+   WHAT:    Centred content wrapper and animated page sections.
+   WHY:     Pages slide in on switch — this prevents jarring instant-swap.
+   ════════════════════════════════════════════ */
+.pg{
+  display:none;max-width:800px;margin:0 auto;
+  padding:1.75rem 1.25rem;
+  animation:pgIn .3s ease;
+}
 .pg.on{display:block;}
-.card{background:var(--bg-card);border:1px solid var(--bd);border-radius:14px;padding:1.25rem;margin-bottom:1rem;transition:background .2s;}
-.ct{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--text-main);margin-bottom:1rem;}
-.lbl{display:block;font-size:.68rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem;}
-.r2{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin-bottom:.85rem;}
-.field{margin-bottom:.85rem;}
-select,input[type=date]{height:40px;padding:0 .8rem;border:1.5px solid var(--bd);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--text-main);background:var(--bg-input);width:100%;transition:border-color .15s,background .2s;}
-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;}
-select:focus,input:focus{outline:none;border-color:#1a9ed4;}
+@keyframes pgIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
 
-/* PILLS */
-.pills{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.3rem;}
-.pill{padding:.35rem .85rem;border:1.5px solid var(--bd);border-radius:50px;font-size:.82rem;font-weight:500;cursor:pointer;background:var(--bg-input);color:var(--text-muted);user-select:none;transition:all .15s;}
-.pill.on{border-color:#1a9ed4;background:var(--gp);color:var(--text-main);}
-.pill:hover:not(.on){border-color:#9ca3af;}
-.hint{font-size:.72rem;color:var(--text-light);margin-top:.4rem;}
+/* ════════════════════════════════════════════
+   SECTION: Glass Card
+   WHAT:    The core UI container — frosted glass aesthetic.
+   WHY:     Every content block floats off the gradient background with depth.
+   ════════════════════════════════════════════ */
+.card{
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  border-radius:20px;padding:1.5rem;margin-bottom:1.25rem;
+  backdrop-filter:var(--glass-blur);
+  -webkit-backdrop-filter:var(--glass-blur);
+  box-shadow:var(--glass-shadow);
+  transition:background .3s, box-shadow .2s;
+}
+.card:hover{box-shadow:0 12px 40px rgba(10,22,40,0.14), 0 2px 6px rgba(10,22,40,0.07);}
+.ct{
+  font-family:'DM Serif Display',serif;font-size:1.05rem;
+  color:var(--text-main);margin-bottom:1.1rem;
+  letter-spacing:.01em;
+}
+.lbl{
+  display:block;font-size:.67rem;font-weight:600;
+  color:var(--text-muted);text-transform:uppercase;
+  letter-spacing:.07em;margin-bottom:.35rem;
+}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:.9rem;}
+.field{margin-bottom:.9rem;}
 
-/* SAUCE ROWS */
-.sr{display:flex;align-items:center;justify-content:space-between;padding:.55rem .85rem;border:1.5px solid var(--bd);border-radius:10px;cursor:pointer;margin-bottom:.35rem;background:var(--bg-input);transition:all .15s;}
-.sr.on{border-color:#1a9ed4;background:var(--gp);}
-.sr:hover:not(.on){border-color:#9ca3af;}
-.sn{font-size:.88rem;font-weight:500;color:var(--text-main);}
-.si{font-size:.78rem;color:var(--text-muted);}
-.tut{color:#92400e;font-weight:600;margin-left:6px;}
-.okt{color:#0284c7;font-weight:600;margin-left:6px;}
-body.dark .okt{color:#38bdf8;}
+/* Inputs — glass style */
+select,input[type=date]{
+  height:42px;padding:0 .85rem;
+  border:1.5px solid rgba(203,213,225,0.7);
+  border-radius:12px;
+  font-family:'DM Sans',sans-serif;font-size:16px;
+  color:var(--text-main);
+  background:rgba(255,255,255,0.6);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  width:100%;
+  transition:border-color .2s,background .2s,box-shadow .2s;
+}
+body.dark select,body.dark input[type=date]{
+  background:rgba(28,35,51,0.65);
+  border-color:rgba(255,255,255,0.10);
+  color:#e6edf3;
+}
+select{
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;
+}
+select:focus,input:focus{
+  outline:none;border-color:#1a9ed4;
+  box-shadow:0 0 0 3px rgba(26,158,212,0.15);
+  background:rgba(255,255,255,0.8);
+}
+body.dark select:focus,body.dark input:focus{
+  background:rgba(28,35,51,0.9);
+}
 
-/* COST BOX */
-.cbox{border-radius:10px;padding:.9rem 1rem;display:flex;gap:.85rem;flex-wrap:wrap;margin-top:.85rem;}
-.cbox.cg{background:var(--gl);border:1px solid #7dd3fc;}
-.cbox.ca{background:var(--al);border:1px solid #fcd34d;}
-body.dark .cbox.ca{background:#2d1f00;border-color:#854d0e;}
-body.dark .cbox.cg{background:#0d2137;border-color:#1e4a7a;}
-.ci .cl{font-size:.68rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;margin-bottom:.2rem;}
+/* ════════════════════════════════════════════
+   SECTION: Meal Pills (Starch Selection)
+   WHAT:    Clickable pill buttons for selecting main course starches.
+   WHY:     Multi-select needs visual toggle state — pills communicate selection at a glance.
+   ════════════════════════════════════════════ */
+.pills{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.4rem;}
+.pill{
+  padding:.4rem 1rem;
+  border:1.5px solid rgba(203,213,225,0.6);
+  border-radius:50px;
+  font-size:.83rem;font-weight:500;
+  cursor:pointer;
+  background:rgba(255,255,255,0.5);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  color:var(--text-muted);
+  user-select:none;
+  transition:all .2s;
+}
+.pill.on{
+  border-color:#1a9ed4;
+  background:linear-gradient(135deg,rgba(26,158,212,0.15),rgba(21,101,192,0.1));
+  color:var(--text-main);
+  box-shadow:0 0 0 2px rgba(26,158,212,0.2);
+}
+.pill:hover:not(.on){border-color:#9ca3af;background:rgba(255,255,255,0.7);}
+.hint{font-size:.72rem;color:var(--text-light);margin-top:.45rem;}
+
+/* ════════════════════════════════════════════
+   SECTION: Meal Menu Cards (Sauce Selection)
+   WHAT:    Rich visual food cards with emoji icons, price, and selection state.
+   WHY:     Makes the ordering experience feel exciting — not just a form.
+   ════════════════════════════════════════════ */
+.menu-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:.75rem;
+  margin-top:.35rem;
+}
+/* Each sauce becomes a beautiful food card */
+.food-card{
+  position:relative;
+  background:rgba(255,255,255,0.55);
+  border:1.5px solid rgba(203,213,225,0.5);
+  border-radius:16px;
+  padding:1rem .9rem .85rem;
+  cursor:pointer;
+  transition:all .22s cubic-bezier(.34,1.56,.64,1);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  overflow:hidden;
+  text-align:center;
+}
+body.dark .food-card{
+  background:rgba(22,27,34,0.6);
+  border-color:rgba(255,255,255,0.08);
+}
+/* Shimmer layer on hover */
+.food-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.3) 0%,transparent 60%);
+  opacity:0;transition:opacity .2s;border-radius:inherit;
+  pointer-events:none;
+}
+.food-card:hover::before{opacity:1;}
+.food-card:hover{
+  transform:translateY(-4px) scale(1.02);
+  box-shadow:0 12px 28px rgba(10,22,40,0.13);
+  border-color:rgba(26,158,212,0.4);
+}
+/* Selected state — glow + fill */
+.food-card.on{
+  border-color:#1a9ed4;
+  background:linear-gradient(135deg,rgba(26,158,212,0.18),rgba(21,101,192,0.12));
+  box-shadow:0 0 0 3px rgba(26,158,212,0.2), 0 8px 24px rgba(10,22,40,0.12);
+  transform:translateY(-2px);
+}
+body.dark .food-card.on{
+  background:linear-gradient(135deg,rgba(26,158,212,0.22),rgba(21,101,192,0.15));
+}
+/* Selected tick badge */
+.food-card .tick{
+  position:absolute;top:8px;right:8px;
+  width:20px;height:20px;
+  background:#1a9ed4;
+  border-radius:50%;
+  display:none;align-items:center;justify-content:center;
+  font-size:10px;color:#fff;font-weight:700;
+  box-shadow:0 2px 8px rgba(26,158,212,0.4);
+}
+.food-card.on .tick{display:flex;}
+/* Big emoji food icon */
+.food-icon{
+  font-size:2.2rem;
+  display:block;
+  margin-bottom:.5rem;
+  line-height:1;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,0.12));
+  transition:transform .2s;
+}
+.food-card:hover .food-icon{transform:scale(1.15) rotate(-5deg);}
+.food-card.on .food-icon{transform:scale(1.1);}
+.food-name{
+  font-size:.85rem;font-weight:600;
+  color:var(--text-main);margin-bottom:.3rem;
+  line-height:1.2;
+}
+.food-price{
+  font-size:.78rem;color:var(--text-muted);
+  font-weight:500;margin-bottom:.2rem;
+}
+.food-badge{
+  display:inline-block;
+  font-size:.65rem;font-weight:700;
+  padding:2px 8px;border-radius:50px;
+  margin-top:.25rem;
+  letter-spacing:.03em;
+}
+.badge-topup{background:rgba(254,243,199,0.8);color:#92400e;border:1px solid #fcd34d;}
+body.dark .badge-topup{background:rgba(45,31,0,0.8);color:#fbbf24;border-color:#854d0e;}
+.badge-covered{background:rgba(219,238,255,0.8);color:#1565c0;border:1px solid #7dd3fc;}
+body.dark .badge-covered{background:rgba(13,33,55,0.8);color:#38bdf8;border-color:#1e4a7a;}
+
+/* ════════════════════════════════════════════
+   SECTION: Cost Summary Box
+   WHAT:    The coloured breakdown card showing company cost vs top-up.
+   WHY:     Staff need to know immediately if they owe money before placing the order.
+   ════════════════════════════════════════════ */
+.cbox{
+  border-radius:14px;padding:1rem 1.1rem;
+  display:flex;gap:.9rem;flex-wrap:wrap;margin-top:.9rem;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.cbox.cg{
+  background:rgba(219,238,255,0.65);
+  border:1px solid rgba(125,211,252,0.6);
+}
+.cbox.ca{
+  background:rgba(254,243,199,0.65);
+  border:1px solid rgba(252,211,77,0.6);
+}
+body.dark .cbox.ca{background:rgba(45,31,0,0.6);border-color:#854d0e;}
+body.dark .cbox.cg{background:rgba(13,33,55,0.6);border-color:#1e4a7a;}
+.ci .cl{font-size:.66rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;margin-bottom:.2rem;letter-spacing:.06em;}
 .ci .cv{font-size:1.05rem;font-weight:700;color:var(--text-main);}
-.tual{background:var(--al);border:1px solid #fcd34d;border-radius:10px;padding:.65rem .9rem;margin-top:.65rem;font-size:.86rem;color:#92400e;font-weight:500;}
-body.dark .tual{background:#2d1f00;border-color:#854d0e;color:#fbbf24;}
+.tual{
+  background:rgba(254,243,199,0.7);
+  border:1px solid rgba(252,211,77,0.5);
+  border-radius:12px;padding:.7rem 1rem;
+  margin-top:.7rem;font-size:.86rem;color:#92400e;font-weight:500;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+body.dark .tual{background:rgba(45,31,0,0.7);border-color:#854d0e;color:#fbbf24;}
 
-/* BUTTONS */
-.btn{background:var(--g);color:#fff;border:none;border-radius:10px;height:42px;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;width:100%;margin-top:.85rem;transition:background .15s;}
-.btn:hover{background:var(--gm);}
-.btn:disabled{background:#9ca3af;cursor:not-allowed;}
-.bsm{background:none;border:1px solid var(--bd);border-radius:6px;padding:.3rem .7rem;font-family:'DM Sans',sans-serif;font-size:.75rem;color:var(--text-muted);cursor:pointer;transition:all .15s;}
+/* ════════════════════════════════════════════
+   SECTION: Buttons
+   WHAT:    Primary CTA, small utility, delete, and edit button styles.
+   WHY:     Visual weight signals importance — the main CTA must dominate.
+   ════════════════════════════════════════════ */
+.btn{
+  background:linear-gradient(135deg,#0a1628 0%,#1565c0 100%);
+  color:#fff;border:none;border-radius:12px;height:46px;
+  font-family:'DM Sans',sans-serif;font-size:.92rem;font-weight:600;
+  cursor:pointer;width:100%;margin-top:.9rem;
+  transition:all .2s;letter-spacing:.02em;
+  box-shadow:0 4px 14px rgba(10,22,40,0.2);
+}
+.btn:hover{
+  background:linear-gradient(135deg,#1565c0 0%,#1a9ed4 100%);
+  transform:translateY(-1px);box-shadow:0 6px 20px rgba(10,22,40,0.3);
+}
+.btn:active{transform:translateY(0);}
+.btn:disabled{
+  background:linear-gradient(135deg,#94a3b8 0%,#cbd5e1 100%);
+  cursor:not-allowed;transform:none;box-shadow:none;
+}
+/* Small utility button base */
+.bsm{
+  background:rgba(255,255,255,0.5);
+  border:1.5px solid var(--bd);border-radius:8px;
+  padding:.32rem .75rem;
+  font-family:'DM Sans',sans-serif;font-size:.75rem;
+  color:var(--text-muted);cursor:pointer;
+  transition:all .18s;
+  backdrop-filter:blur(4px);
+}
 .bsm:hover{border-color:#1a9ed4;color:var(--g);}
 .bdel{border-color:#fca5a5;color:#c0392b;}
-.bdel:hover{background:#fdecea;border-color:#c0392b;}
+.bdel:hover{background:rgba(253,236,234,0.8);border-color:#c0392b;}
 .bedit{border-color:#bfdbfe;color:#1565c0;}
-.bedit:hover{background:#eff6ff;border-color:#1565c0;}
+.bedit:hover{background:rgba(239,246,255,0.8);border-color:#1565c0;}
+body.dark .bsm{background:rgba(22,27,34,0.5);}
 body.dark .bdel{border-color:#6b2020;color:#f87171;}
-body.dark .bdel:hover{background:#2d1515;border-color:#f87171;}
+body.dark .bdel:hover{background:rgba(45,21,21,0.7);border-color:#f87171;}
 body.dark .bedit{border-color:#1e3a5f;color:#60a5fa;}
-body.dark .bedit:hover{background:#0d2137;border-color:#60a5fa;}
+body.dark .bedit:hover{background:rgba(13,33,55,0.7);border-color:#60a5fa;}
 
-/* LOG */
-.wbk{margin-bottom:1.75rem;}
-.wh{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #1a9ed4;padding-bottom:.4rem;margin-bottom:.65rem;}
+/* ════════════════════════════════════════════
+   SECTION: Orders Log
+   WHAT:    Grouped list of orders by week and day.
+   WHY:     Grouping by date helps everyone track meal history at a glance.
+   ════════════════════════════════════════════ */
+.wbk{margin-bottom:2rem;}
+.wh{
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:2px solid rgba(26,158,212,0.4);
+  padding-bottom:.5rem;margin-bottom:.75rem;
+}
 .wh h3{font-family:'DM Serif Display',serif;font-size:.95rem;color:var(--text-main);}
 .wh .wt{font-size:.82rem;font-weight:700;color:var(--text-main);}
-.dlb{font-size:.68rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin:.65rem 0 .35rem;}
-.or{background:var(--bg-card);border:1px solid var(--bd);border-radius:10px;padding:.6rem .9rem;display:flex;align-items:center;gap:.65rem;margin-bottom:.35rem;transition:background .2s;}
-.av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.73rem;font-weight:700;flex-shrink:0;}
+.dlb{
+  font-size:.67rem;font-weight:600;color:var(--text-muted);
+  text-transform:uppercase;letter-spacing:.07em;margin:.7rem 0 .4rem;
+}
+/* Individual order row */
+.or{
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  border-radius:14px;padding:.7rem 1rem;
+  display:flex;align-items:center;gap:.7rem;
+  margin-bottom:.4rem;
+  backdrop-filter:var(--glass-blur);
+  -webkit-backdrop-filter:var(--glass-blur);
+  box-shadow:var(--glass-shadow);
+  transition:all .2s;
+}
+.or:hover{transform:translateX(3px);}
+.av{
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.73rem;font-weight:700;flex-shrink:0;
+  border:2px solid rgba(255,255,255,0.6);
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
 .oi{flex:1;min-width:0;}
 .nm{font-size:.88rem;font-weight:600;color:var(--text-main);}
 .ml{font-size:.78rem;color:var(--text-muted);margin-top:1px;}
@@ -114,57 +508,220 @@ body.dark .bedit:hover{background:#0d2137;border-color:#60a5fa;}
 body.dark .spreq{color:#60a5fa;}
 .oc{text-align:right;flex-shrink:0;}
 .cp2{font-size:.75rem;color:var(--text-muted);}
-.tub{display:inline-block;background:var(--al);color:#92400e;font-size:.69rem;font-weight:700;padding:1px 6px;border-radius:4px;margin-top:2px;}
+.tub{
+  display:inline-block;background:rgba(254,243,199,0.8);
+  color:#92400e;font-size:.69rem;font-weight:700;
+  padding:1px 7px;border-radius:5px;margin-top:2px;
+  border:1px solid #fcd34d;
+}
 .okb{font-size:.71rem;color:#0284c7;font-weight:600;}
-body.dark .tub{background:#2d1f00;color:#fbbf24;}
+body.dark .tub{background:rgba(45,31,0,0.8);color:#fbbf24;}
 body.dark .okb{color:#38bdf8;}
-.empty{text-align:center;padding:3rem 1rem;color:var(--text-light);font-size:.9rem;}
+.empty{
+  text-align:center;padding:3.5rem 1rem;
+  color:var(--text-light);font-size:.9rem;
+}
 
-/* REPORT */
-.sc3{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem;margin-bottom:1.25rem;}
-.sc{background:var(--bg-card);border:1px solid var(--bd);border-radius:10px;padding:.9rem 1rem;transition:background .2s;}
-.scl{font-size:.68rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;margin-bottom:.25rem;}
+/* ════════════════════════════════════════════
+   SECTION: Report Tables
+   WHAT:    Summary stats grid and detailed order tables for admin view.
+   WHY:     Admin needs clean data export-ready layouts, not fancy cards.
+   ════════════════════════════════════════════ */
+.sc3{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;margin-bottom:1.35rem;}
+.sc{
+  background:var(--glass-bg);border:1px solid var(--glass-border);
+  border-radius:14px;padding:1rem 1.1rem;
+  backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
+  box-shadow:var(--glass-shadow);transition:all .2s;
+}
+.sc:hover{transform:translateY(-2px);}
+.scl{font-size:.67rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;margin-bottom:.28rem;letter-spacing:.06em;}
 .scv{font-size:1.25rem;font-weight:700;color:var(--text-main);}
-.scs{font-size:.71rem;color:var(--text-light);margin-top:.15rem;}
+.scs{font-size:.71rem;color:var(--text-light);margin-top:.18rem;}
 .rtb{width:100%;border-collapse:collapse;font-size:.82rem;}
-.rtb th{background:var(--g);color:#fff;padding:.55rem .8rem;text-align:left;font-size:.7rem;text-transform:uppercase;font-weight:600;letter-spacing:.04em;}
-.rtb td{padding:.55rem .8rem;border-bottom:1px solid var(--bd);vertical-align:middle;color:var(--text-main);}
+.rtb th{
+  background:rgba(10,22,40,0.85);color:#fff;
+  padding:.6rem .85rem;text-align:left;
+  font-size:.7rem;text-transform:uppercase;font-weight:600;letter-spacing:.05em;
+}
+.rtb th:first-child{border-radius:8px 0 0 0;}
+.rtb th:last-child{border-radius:0 8px 0 0;}
+.rtb td{
+  padding:.58rem .85rem;border-bottom:1px solid var(--bd);
+  vertical-align:middle;color:var(--text-main);
+}
 .rtb tr:last-child td{border-bottom:none;}
-.rtb tr:hover td{background:var(--gp);}
+.rtb tr:hover td{background:rgba(26,158,212,0.05);}
 body.dark .rtb td{border-bottom-color:#30363d;}
-body.dark .rtb tr:hover td{background:#1c2d40;}
-.ttr td{background:var(--gl);font-weight:700;color:var(--g);border-top:2px solid #1a9ed4;}
-body.dark .ttr td{background:#0d2137;color:#93c5fd;}
-.rw{border:1px solid var(--bd);border-radius:14px;overflow:hidden;}
+.ttr td{
+  background:rgba(219,238,255,0.5);font-weight:700;
+  color:var(--g);border-top:2px solid #1a9ed4;
+}
+body.dark .ttr td{background:rgba(13,33,55,0.6);color:#93c5fd;}
+.rw{border:1px solid var(--bd);border-radius:14px;overflow:hidden;box-shadow:var(--glass-shadow);}
 body.dark .rw{border-color:#30363d;}
-.ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;}
-.ph h2{font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--text-main);}
-.bpr{background:var(--g);color:#fff;border:none;border-radius:10px;padding:0 1.1rem;height:38px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;}
+.ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.35rem;}
+.ph h2{font-family:'DM Serif Display',serif;font-size:1.35rem;color:var(--text-main);}
+.bpr{
+  background:rgba(10,22,40,0.85);
+  color:#fff;border:none;border-radius:10px;
+  padding:0 1.1rem;height:38px;
+  font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;
+  backdrop-filter:blur(8px);transition:all .18s;
+}
 .bpr:hover{background:var(--gm);}
 
-/* SETTINGS */
-.er{display:flex;align-items:center;gap:.65rem;padding:.75rem .9rem;border:1px solid var(--bd);border-radius:10px;margin-bottom:.4rem;background:var(--bg-card);}
-.er input[type=text]{height:36px;padding:0 .75rem;border:1.5px solid var(--bd);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.9rem;flex:1;color:var(--text-main);background:var(--bg-input);transition:border-color .15s,background .2s;}
-.er input:focus{outline:none;border-color:#1a9ed4;}
+/* ════════════════════════════════════════════
+   SECTION: Settings
+   WHAT:    Employee name editor and pricing reference table.
+   WHY:     Staff can update display names; the pricing table prevents confusion about top-ups.
+   ════════════════════════════════════════════ */
+.er{
+  display:flex;align-items:center;gap:.65rem;
+  padding:.8rem 1rem;border:1px solid var(--glass-border);
+  border-radius:12px;margin-bottom:.4rem;
+  background:rgba(255,255,255,0.45);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+.er input[type=text]{
+  height:38px;padding:0 .75rem;
+  border:1.5px solid var(--bd);border-radius:10px;
+  font-family:'DM Sans',sans-serif;font-size:.9rem;
+  flex:1;color:var(--text-main);
+  background:rgba(255,255,255,0.6);
+  transition:border-color .2s,background .2s;
+}
+.er input:focus{outline:none;border-color:#1a9ed4;background:rgba(255,255,255,0.9);}
+body.dark .er{background:rgba(22,27,34,0.5);}
+body.dark .er input[type=text]{background:rgba(28,35,51,0.7);color:#e6edf3;}
 
-/* TOAST */
-.toast{position:fixed;bottom:1.25rem;left:50%;transform:translateX(-50%) translateY(8px);background:var(--g);color:#fff;padding:.55rem 1.35rem;border-radius:50px;font-size:.83rem;font-weight:600;opacity:0;transition:all .25s;pointer-events:none;z-index:999;white-space:nowrap;}
+/* ════════════════════════════════════════════
+   SECTION: Toast Notification
+   WHAT:    Slide-up confirmation message at bottom of screen.
+   WHY:     Tells the user their action succeeded without interrupting the flow.
+   ════════════════════════════════════════════ */
+.toast{
+  position:fixed;bottom:1.5rem;left:50%;
+  transform:translateX(-50%) translateY(12px);
+  background:rgba(10,22,40,0.92);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,0.1);
+  color:#fff;padding:.6rem 1.5rem;
+  border-radius:50px;font-size:.84rem;font-weight:600;
+  opacity:0;transition:all .28s cubic-bezier(.34,1.56,.64,1);
+  pointer-events:none;z-index:999;white-space:nowrap;
+  box-shadow:0 8px 32px rgba(0,0,0,0.25);
+}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
 
-@media print{.bar,.nb,.bpr,.bsm,.no-print{display:none!important;}.pg{display:block!important;padding:0;max-width:100%;}.pg:not(#pg-report){display:none!important;}body{background:#fff;}.card{box-shadow:none;}}
-@media(max-width:640px){.sc3{grid-template-columns:1fr 1fr;}.r2{grid-template-columns:1fr;}.pg{padding:1rem .75rem;}.card{padding:1rem;}.sr{flex-direction:column;align-items:flex-start;gap:.3rem;}.or{flex-wrap:wrap;}.oc{width:100%;text-align:left;margin-top:.3rem;}}
-@media(max-width:400px){.nb{padding:.35rem .4rem;font-size:.6rem;}.bar-t{font-size:.85rem;}}
+/* ════════════════════════════════════════════
+   SECTION: Greeting Box
+   WHAT:    The welcome message area that shows the logged-in user's name.
+   WHY:     Personalisation — the user knows they're in the right account.
+   ════════════════════════════════════════════ */
+#greeting-box{
+  display:flex;align-items:center;padding:.7rem 1rem;
+  background:linear-gradient(135deg,rgba(26,158,212,0.15),rgba(21,101,192,0.1));
+  border:1.5px solid rgba(26,158,212,0.3);
+  border-radius:12px;height:42px;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+#greeting-text{font-size:.92rem;font-weight:500;color:var(--text-main);}
+
+/* ════════════════════════════════════════════
+   SECTION: Special Request Textarea
+   WHAT:    Text area for custom meal requests.
+   WHY:     Some users have dietary needs — this captures them without a separate form.
+   ════════════════════════════════════════════ */
+#f-special{
+  width:100%;padding:.65rem .9rem;
+  border:1.5px solid rgba(203,213,225,0.6);
+  border-radius:12px;
+  font-family:'DM Sans',sans-serif;font-size:16px;
+  color:var(--text-main);
+  background:rgba(255,255,255,0.55);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  resize:vertical;line-height:1.55;
+  transition:border-color .2s, box-shadow .2s;
+}
+#f-special:focus{
+  outline:none;border-color:#1a9ed4;
+  box-shadow:0 0 0 3px rgba(26,158,212,0.12);
+  background:rgba(255,255,255,0.8);
+}
+body.dark #f-special{
+  background:rgba(28,35,51,0.65);
+  border-color:rgba(255,255,255,0.10);
+  color:#e6edf3;
+}
+
+/* ════════════════════════════════════════════
+   SECTION: Edit Mode Banner
+   WHAT:    Visible banner when user is in edit mode.
+   WHY:     Prevents confusion — user must know they're editing, not creating new.
+   ════════════════════════════════════════════ */
+#edit-banner{
+  display:none;
+  background:linear-gradient(135deg,rgba(21,101,192,0.2),rgba(26,158,212,0.15));
+  border:1.5px solid rgba(26,158,212,0.4);
+  border-radius:12px;padding:.7rem 1rem;
+  margin-bottom:1rem;font-size:.85rem;
+  color:#1565c0;font-weight:600;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  align-items:center;gap:.5rem;
+}
+body.dark #edit-banner{color:#60a5fa;}
+#edit-banner.on{display:flex;}
+
+/* ════════════════════════════════════════════
+   SECTION: Report Access Lock (Non-Admin)
+   WHAT:    Lock screen shown to non-admin users who navigate to Report.
+   WHY:     The report page must be hidden from staff — only admin sees full financials.
+   ════════════════════════════════════════════ */
+/* Styles handled inline in showUnauth() */
+
+/* ════════════════════════════════════════════
+   SECTION: Print Styles
+   WHAT:    Hides interactive UI elements when page is printed.
+   WHY:     Reports need clean paper output without buttons or nav bars.
+   ════════════════════════════════════════════ */
+@media print{
+  .bar,.nb,.bpr,.bsm,.no-print{display:none!important;}
+  .pg{display:block!important;padding:0;max-width:100%;}
+  .pg:not(#pg-report){display:none!important;}
+  body{background:#fff;}
+  .card{box-shadow:none;background:#fff;border-color:#e5e7eb;}
+}
+
+/* ════════════════════════════════════════════
+   SECTION: Responsive Breakpoints
+   WHAT:    Adjusts grid and layout at tablet and mobile widths.
+   WHY:     Without this, 3-column grids and side-by-side elements break on phones.
+   ════════════════════════════════════════════ */
+@media(max-width:640px){
+  .sc3{grid-template-columns:1fr 1fr;}
+  .r2{grid-template-columns:1fr;}
+  .pg{padding:1rem .85rem;}
+  .card{padding:1.1rem;}
+  .menu-grid{grid-template-columns:repeat(2,1fr);}
+  .or{flex-wrap:wrap;}
+  .oc{width:100%;text-align:left;margin-top:.35rem;}
+}
+@media(max-width:400px){
+  .nb{padding:.35rem .4rem;font-size:.6rem;}
+  .bar-t{font-size:.85rem;}
+  .menu-grid{grid-template-columns:repeat(2,1fr);}
+}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="ls">
-  <div style="width:100%;max-width:340px;">
+  <div style="width:100%;max-width:350px;">
     <div style="text-align:center;margin-bottom:1.75rem;">
-      <img src="data:image/jpeg;base64,/9j/4QEZRXhpZgAATU0AKgAAAAgABQEAAAMAAAABAKoAAAEBAAMAAAABAJcAAAExAAIAAAAmAAAASodpAAQAAAABAAAAcAESAAQAAAABAAAAAAAAAABBbmRyb2lkIFVQMUEuMjMxMDA1LjAwNy5BMDY1RlhYUzNBWUIxAAAEkAMAAgAAABQAAACmkpEAAgAAAAQ3NTAAkBEAAgAAAAcAAAC6kggABAAAAAEAAAAAAAAAADIwMjY6MDM6MTcgMDI6NDk6NTYAKzAzOjAwAAADAQAAAwAAAAEAqgAAATEAAgAAACYAAADrAQEAAwAAAAEAlwAAAAAAAEFuZHJvaWQgVVAxQS4yMzEwMDUuMDA3LkEwNjVGWFhTM0FZQjEA/+AAEEpGSUYAAQEAAAEAAQAA/+IB2ElDQ19QUk9GSUxFAAEBAAAByAAAAAAEMAAAbW50clJHQiBYWVogB+AAAQABAAAAAAAAYWNzcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAPbWAAEAAAAA0y0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJZGVzYwAAAPAAAAAkclhZWgAAARQAAAAUZ1hZWgAAASgAAAAUYlhZWgAAATwAAAAUd3RwdAAAAVAAAAAUclRSQwAAAWQAAAAoZ1RSQwAAAWQAAAAoYlRSQwAAAWQAAAAoY3BydAAAAYwAAAA8bWx1YwAAAAAAAAABAAAADGVuVVMAAAAIAAAAHABzAFIARwBCWFlaIAAAAAAAAG+iAAA49QAAA5BYWVogAAAAAAAAYpkAALeFAAAY2lhZWiAAAAAAAAAkoAAAD4QAALbPWFlaIAAAAAAAAPbWAAEAAAAA0y1wYXJhAAAAAAAEAAAAAmZmAADypwAADVkAABPQAAAKWwAAAAAAAAAAbWx1YwAAAAAAAAABAAAADGVuVVMAAAAgAAAAHABHAG8AbwBnAGwAZQAgAEkAbgBjAC4AIAAyADAAMQA2/9sAQwABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB/9sAQwEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB/8AAEQgAlwCqAwEiAAIRAQMRAf/EAB4AAQACAgIDAQAAAAAAAAAAAAAJCgEIBgcCBAUD/8QAPRAAAQMDAwICBgkCBQUBAAAAAQIDBAAFEQYHIRIxCEEJExRRYfAVIjhxdYGRobUywSMkJVLhFihCsdHx/8QAHgEBAAIDAQEBAQEAAAAAAAAAAAcIBAYJAgUDAQr/xAA8EQACAQQBAwEDCQYGAgMAAAABAgMABAURBgcSITETQVEICRQVIjJhcbE2OHR2gZEjQkNSofAkYjOywf/aAAwDAQACEQMRAD8Ao70pSugFa/SlKUpSlKUpSlKUpSlKUpSlKUpSlKUpSlKUpSlKUpSlKUpSlKUpSlKZHv8Ah+fupSlK/Rtl55aW2WnHXFY6UNoUtasnAwlIJOSRjA5rmdq203Fvikpsug9YXZS8dCbbpu8TlKz26RGhuE58sd/KvaRSSeI43c/BEZv/AKg1gXeVxdgCb7JWFkB6m7vLe2A/MzSJXCKV3nF8MPiRnBCoewW8spLn9Bj7aaxeC+CfqlFnUDwCePLmvTn+HHxBWpCnLnsdu3b20DKnJu3erYqEgZ5Ut60oSBx3JAr9/oV6Bs2l1r4/R5df37K+QOacOZ/ZryzjTP6dgzuLLb9Ndout7PuGvNdMUr7V105qGxLLd6sd3tDgJSUXK3TIKgodwUyWWiCPMEZHnXxax2R0OnVkPwZSp/sQDX3ra7tbyMS2lzb3UR9JbaaOeM/k8TMp/oaUpSvNZFKUpSlKUpSlKUpSlKUpSlKUpSlKUpSlCMjHH7H9R7u374xVgP0ePo//AA67vbF6c3f3PtF71XqC8Xi+x12l+8yoGn2Y1rnGJGQiNavYprhUEFx1Ttw+sokdAR9Wq/lW3PRWn/s00KOrH+uau4xnP+su+flntW+dO7CzyOeMF9bRXMS2k0gSUdyh1K6OvHnyfjVH/l+845ZwHohHmOH57Icdyk3J8TYyX+MmNvcm0uBL7WESqO5UcKvd2kE/nW2GivDhsFt7HjsaO2Z25spjJAamsaWs711OCMF27zIsm6yFjAJXImvLyASonOO4I8OHDR6uJBjRGgeERm22Ugd/6GwlPf3Dvjmv2GMD6oPx6gKEZ/2jj39/3PP6D+9iYcfY26hYbS3iVRpQkMagenwX4D19a4AZXm/MM3LJNl+UZ/JSzEtK97l765Lltb37Wdhr1HaB2geAKZHfpGOw7/vz7vurKSkk9KFE47cjy5+J4+A78HyrwrIxnkZHuzj5+e1ZPYmu3tXXw7Rr+2tVrq3VyjiVbiZZAdhxK4fYIP3g3d6j41x2/wCidF6tiuQtV6N0xqaG8MPRdQWS13iM6CCMOMXCLJbWMEjlJ91aDbvei08Ke6AlzbRpyftffZBdUmZoaWqNbfXrKlJW7YZvtdsSylZB9mtyLY30DoQtvAKJHPhj4jkZGcefby8xQHAOFdPPAIzXy77B4jIx+zu8fazDyATEgYb1sq6gMGHkg79fPqKkvhvWjqnwK8S94pzrkeJkUjcUWTuZbV1QqwSS1nkkgZCR5Bj8+m9VVj399Er4g9rU3S97fGFu9paIHJLCNPtqi6vTDSQf8bTDrjr0qSgHlmyyrotQAWlKclCIubnaLpY5r9svNtnWm4RVqakwbjFehy47iVFKm3o8hCHW1pUCFBSQcg1fkSopIwek8gqyFcY5yM+Z8uck8eedYPEH4PtiPEva1R9w9IRGL+htaIWuLAhm2ashKI/wgq4tMq9vjNqyUQ7szOiIKlKaaadJcqMs50ticNPg5zE+t/Q7hu6Mn11HN95fgA2x+Iro50V+cvy9pNa4frNhYslZsUiblGBiWC9hXSj2t7jNiGcA6Z2t3jfySI28CqVVPn+//rmpIPFl6NjeLw4/SWq7A05uTtc0+C3qKyRXFXiyxHestHU9jZU/IgJb6S29co6pNrSoslyVHekNxkxwEEEggpI4IPcc8hXAwQeCD2P6CIL/AB17i52tb63ktpl/ySKQCPGmRvuup9xUka/pXWbgnUPh3UvBW/I+FZ6wzuKuVUiazmV5IHZVYw3UGxNbTp3APFMiMDrx5rFKUrBrdKUpSlKUpSlKUpSlKUpSlKVba9Fd9jXQn45q7+ZdqpLVtr0V32NdCfjmrv5l2pH6XftI38Bc/rHXPP5y793+2/nDCfpLUi1KUqxNcA6UpSlKUpSlKVnjGTzg5A8z84/f41g8d+PvrIxnkZ+HalNH4f8Af+kV4uNMSELYfaRIYeQtp5l5IW0624Chxp1CsocbWglKkKBSsFSVJIOKhY8bnor7Drxq8bm+HGBD09rYuO3C9bdtqYhae1EVB1yS9p1S3G49kuqnOlSbdhFoldZTHVbS2huRNSM5A7/D3/IzXmCpIyAcjBByQUHPJA8+rz9w5OAK+LmsBjs9avb30KuQD7OZQBLC51p429Rrx9nypB0wINS/0d62c/6Jclg5DwrLz2gDp9ZYmV3fFZa2DKXtr617gjB1BCyr2zRHTRurKCKEN8sV501d7hYL/bJtnvVqlPQbja7jGdiToUuO4pt6PJjPIQ60624lSFoWkKCgRjivTEGapPUmHKUn/cI7pT+oRj96tKeNzbnbyTuVaNW2zb3SFy3DTp0quk+fEYQq8x/aSIjMlwoejNXRDUd1EW6uxH5SGnGojziobbaGtN9Ma40HfrjI0qq3RdO6pg5bl6VvkKJbrgej6yn4LSsMXGEUDqalQHH21thLpCAtIrRbPokJDD9P5FbY/wCmO30FZYHCzp3fYX2zERCYj/T7u73jeq7o8P8AleScw4bi+U47gOQlaTHwXOXtkvYWeylYBZpEhQNO1kX8xXLIqkMA4U1BYttbZw4haD2wtJSc+7CgDXhVgO4aH0VeEqbu2jtM3FJBChOs1skcE4IJejqUk9uRgpI78V0Nq7whbN6nDz0C3TNJT3CpQesMpwRfWK5BVAlmTESgE8tx0xkjGE4Hb9sr8nrkVtGZcXk7HIgDYicPbSH01pm7kO/h4/rWz4T5WnD7yYRZrDZPEKxA9uhiu4lJ0D3qhWQdo8k9p9B678Q60raXdXwnbgbdNzLtaQjWOmY4Lyp1rbWi5xI5A6nLhaAp5bYbPUXXYbsppKAHXVMhSgjVsgpUpKgQpJKVJPBBHBBHcEHIIODkVCuawGY49dNZ5iwnsp19BKhCOP8AdHJrtdT7ipNWQ45yvj3LLFMhx7K2mTtnA20EgaSIkA9k0R1JE42Nq6g+o8+axSlK+PWw0pSlKUq216K77GuhPxzV38y7VSWrbXorvsa6E/HNXfzLtSP0u/aRv4C5/WOuefzl37v9t/OGE/SWpFqUpVia4B0pSlKUrIweDn4YI+A7H8uc+6sV8bUl6j6c07fL/LX6tiz2qdcVY6SpZix1uhptK1JSt1xSUobQVJClrSkqHUCP4xIBIUsQCQqjbMfcqj3knwPxrNxtjLk7+zx8GhNe3UFrGT6B55UiUn/1BcFj7gCa+Tqvcrbjb5pL+vNwtF6Eaez6l3VmpLNYkP4xn1KrrMi+tIySoN9WAMkDvXAYfim8M851LETxFbMvPKUEpQncXSAWtROB0JN2BVk8ZSCBnuMiqZ28uttZ663J1lfNc3u63u+v6iu4lu3WW/IcYW3Ofb9mbS6spYYjBIaZYbShpltCW0ISgBNdW9j58Hue4AHHnwR7+/kc96hC+6qX8V3NDFioEjileLsnkk9r9hyp7+3Shvs+g2AdjzXZfi/zX/ELrj2Ous71Kz/1vd2Vvcy/VWNsPq+OSeGOTsj+kd88kaMxAcspdRsohOhfXtGq9LakYTL07qjT+oYjmCiVZbtb7lGdBHUkofgyH2yFJwoEK578p5P3ygAJWWiEZJKgvPVgZ8scDz457d+KoS2nU+pLC6l+y3+72l5IBS7brjLhuJI9y47rZGOCMHjt24G0u3Pj18WO2AWxYN49UXGCtn1IturHmdX29hvpKcRI+o2biICh1E9cFUdXVhXVlKCM+y6sWzMq3+LlRdjb20ofQ2PRXAJ18Pw9TWmcn+a2zUG5eIdSLG+Csp+i5vGS2ksg2O4Ce1kljUldgFl1vW+0DdTcbx6nc1ZuNqi7FeWkXFyFBCc4EKAUw4oHUcglhlK1nCQpa1KwnJA1I3n2it25lgedhlNs1raGVydLahjqVGmMTmkl1qG/KZKXfYZLmELClEx1LElgdSVJc0TgeOjdFnBuVk0rdHFErdeXHuEZx1f/AJLX6md0FSlEkkIxk9gAK9a/+N3c+7QpEO1WrTmn3ZLS2RPiMSpctjrHT6yOJkhyOh1GSpta2HOheFdJIT0yrkurvTnIYCXG3AvZgbX2aRGyZXW49mOySJ+7/DkSXTLIpBUjwfUVO3Cfk3dWeF5HBfVgxdpHi/ols88eQQwPbRLHHPHJCE3LDNGHEkTqVcMQwO/OxXhi8QNw1s+9t1rp3OrrW06m23NQAXeY8DKJLE09XSbpFQj1hdSB7Wwh1x3L7SlPbo/JznOc+eahY8MrNxuG+Wi3Y5ecdTcJcya6kKUox0QpLktbpHcOJKvWKVkEryeSBU1KyCtRByCTg/sf0ORWydGOR5DkPGZjfvLMcdevZ21zMSZZbYKrxCVj99410jN6nW/XzXw/lGcPw/E+Z2/1THDb/W2NjyF7Z2+lt7e8L+ymMEY/+KKZ1aRY/RfPb9nQHjxzwDweD25494J79v7ZrTffjwpWTXbczU+hGYth1eEl+RbWkojWe/rTyorQFIZgXBwEkSW0BmQ6lJlIStxyWjcimfn3fEfHit/5JxfD8qx8mPy9pHPGwPs5Sqie3fXiSKTRZWB86B0fQgioq4bzfkXBcrFluP38ttKrL7a37mNrdxggtFcw77JFYDWyAy+qsCKr1Xmy3XT10m2W9wZFtulukORZkKU2pp5l5pRSpJSoDKSeUrSVIUkhSVKSQT8ypkPEZsJbt17A/d7RHaja7tEdbtukoDTX0y02kE2qe4QCvqSnEF5a8sO4bJDLi/Vw6PsOxn3o77a2X2HFsvtOJKFtOtqKHG1pIBSpKkkEY4IIPINUV6gcFvuDZb6JOfb2Nz3SY+8AOpYgfKP4+zLGCAw9+u4eK6fdJ+qOM6nYEX9uotcrZhIstj+7Zt5io1LGfVoJjsxn1HlT5FflSlK0KpUpVtr0V32NdCfjmrv5l2qktW2vRXfY10J+Oau/mXakfpd+0jfwFz+sdc8/nLv3f7b+cMJ+ktSLUpSrE1wDpT76VkDOM9jkfP7cdz5c0pWPurWDxU6xbsmg2NOR3CLjqSckOI6cj6JhlLslSjn6pXK9kbQClQWgvcp6AF7QcDlRwkcqP+0DJOTxg47Z4zjvjBii391wnW+4d0fjKJtlnJstuAUCl1mE44HZKTgDplSFvPt55S0ttKsqSTWwcbsTe5FGZdxW2pZPeCR90H3eT/8AnxqZuh/GWznL4b+VCbPBr9NlY67WuNhbWPyCCS5Lkf7U9KgO8Xeh0aQ3duNwislq36ujNagZwD0Ca6PUXVKVdipc5pyWpIOECUlOAACdXPn9uP2qXTxiaATqzbE6jix1OXfRMpVyDiU9S1WeSlLF0awBkoR0xphUchpEVxWUhS1CIvGPn9f+aq31a44eO8yyKJGUtMg5v7UgaQpOduq/ikmww2dE1/o76DcvTl3TvESSTe0v8Sn1TfAkdwe1AWJzo7IeHsIY+SQd0rfT0dW3GwG63iBj6J8QDbsu1XaxSW9GWlV0lWi3XvWImwfZbVcZkCTCnYk28zzBjxpsZyVPQxHC1qdSy5oXXsRJcqBKjzYUh6JMiOtyIsqO4pp+O+0sLaeZcQUrbcbWErQtCgoEZBGM1H1hcR2l5bXMsEdzFDKryW8o2kqA/aRh8CN6+B0dH0rfOc8fv+VcR5Bx7F5u+43kcrjZ7WxzuNfsvcZdOu4bqBvjG4HcAVJQsFZSQwuFyPRu+CiQ36pWx1oZKs/Wj6n16hxPHBChqrpV5EAhSckZBOAOGSPRWeC199LyNB3uKkLUoxo2r9RlhWcYQovzn3ulPPT6t5JGTknCSNHfBL6VyO3Gs213idmLQmMwxbrDuqkKWSloIZYY1q2j/EOGeDqCMh11S20m4xXlOv3Fuee1XS2322QL1ZrlCu1nusZqZbrrbpDEy3T4b7aH48mJNjrcjyWHmnEONutOKbWhQUlRSoZsNg7fhXIrdZ7TGWHtVCmW2eJFmibxsOgIJBPjuG1YVwH6x5j5X3QLkE+F5R1A5wthLJIMVn7bJ3c+IysHdpJILkqyxylSDJbylJoydFQPNRobrbBbCeHLS1t03tFt7ZdN3fUkv2m6XwuTLrqF62W8joiqu15kXC4MRJUxxDq40ORFirXCQVx1k5GuROTkDAPYe77/AHH4VsD4lNW/9Tbn3Nhlz1sPTjTdijYwAXI2XZqyEjn/AD7shKVHJLSGyD0hONfT8/Pz7qsnxTE2uHwtta2tvHbIw9qY4kVFBcA/dUD89nz581IfFL3keR47jMjyvLZDNZ/JQLfZHIZO6lu7qSS51KiGSVmKrHEyKI1CohBAA80pSlbJWwVkDJwO/u+7JHv789hk/GoHt4bd9Fbp7gQAnoSxqy9lCcYAQ7OefR0jAwnpcGAAAPKp4knBB+OP+c+RGfL9ahf8Vdq+i98dXpSgpRP+jLog44V7bbYzjqhjIOHw8k4PdJ7dhXf5RNp7Tj+Huwu/o2RdC3wE0QABPwJHj8RVvPkiX3suV8ise7Qu8NE4Ukfba2nBJC/+qt6j3f1rXWlKVT+uglKtteiu+xroT8c1d/Mu1Ulq216K77GuhPxzV38y7Uj9Lv2kb+Auf1jrnn85d+7/AG384YT9JakWpWcH3GhBHcEffVia4B1isjnjAycYPuxyf2pg4zg49+Dj9e1ebba3D0IQpalHgISVHjvkDnsT5e/4U2PiPHr+FelRmICqxJIAABJ8614H5iuoN8NbK0Nt5d7gw4G7hdE/Q1sX1FK25U5p5KpDRSQsORoyH32lggJdQ2VZGUqiVcWpxalrJK1EqUpRypSlEklR7knPJPPvrY7xlbq2GHqpu13rUNrs1i0rGQy+9crhHgxTdZrbUmQAuQ42HZIZMdkMoLiwppQQ3lRzGZqbxhbM6fWpmJPu2qJAKgRYbf1xspJAKpU9+3tEe71JeJAz0gEE7ljc7xvjGO9vl8vYWU1zqRkknQzdnooMaFnHv8duiACN10d+T/0c5e/ELSTD8Zyt9e5phfXMsdlIiBHAFtEZ5AkZEcWmP2wFLnY8+NmZ0GNdIU22TWW5EO4xH4Uxh0BTb0aS0pl5pxJ4UhxtxSVAg8E47moEtwtKvaJ1vqjSr6VJNlvEyG0VgguxUulUR9Oe6H4qmXUK80KHnmpFT469vw08tOkdWGQkKMdpRtQZdV3SHXvblLZBOAopZfwOQFdqjz3L11M3J1vf9ZzYjUF28ykLbhMqK0RYsWO1DhsF0hJecbjMNB14pQHXetaUISUpEFdbuVcR5PY4iTC5GK+yFtPKrmFWHbbOoJWRmUej6Kgb9SfTVdKvk0cH6gcKyPIIuSYi4xWIvbaB41uXj3JexvpXiRHff+ESrnxrQrglKUquVW/ofI/Ej9B589jnzGM/Htub4YvHTvp4XpqY+lr2dR6KeWn2/QepnX51iWn+lbtsPrRKsswoyPX211hDqgj2xiU2lKK0ypWVZX13j7iO6s55LeeNgyvGxU+DvTAeGU+hU7BHg1rfKuH8Z5viLjA8rwmPzuKul7ZbPIW8c8e/QPGXBaKVfVJIyrqfIYetTm7ceIfR++C5M+DPTB1TLLs+76dnrQ3PbkOrLkp2HkgT4iXFkh6PkoQpJfaYKgiu3D35/Pj9x2yCMH4nPNV47fcZ9pmMXG2TJVvnRVh2NLhPLjyWXU8pW062UrQQoA9SVA/EVINsr4ysCFpvdnKkpSmPF1hGaJc6k9KGzfYraVesyMddwjI6ipKVSIyytySLYdPuuNlerbYnlISxuwEhgyMY1ayle1U9uv8AouR4LfcJ9wqkXVH5L97hI5ctwAPf4uFSzYNj3XtpEo+7aNr/AMiJFACxk+1AAH2vWpFaV6VtuVvvECLdLTNjXG2zWUSIc6G8iRFkMODKHGnmipC0qweyjggpOCCB7tWKilinjSaGRJYpFDJJGyujqwBDKy7BBHwNVGnt57WaS3uYZbeeJiksMyNHIjqdFXRgGBBHoRTy+c1Fd45bWIu5enbq2gJTdNIR23VgY65EC6XNpRJxyoRnoyQPIJHapUajx8eVtzH29u4TyHb3blq+HTCkoT+qlkfn8aiXrhZi64Bft2gta3dncqfeoSQq2vzDDfuqefkz5A2XVbEx95VL6yyFmV9ztJErICPeQU2vwPp+MctKUqip8f8AH/I3XUGlW2vRXfY10J+Oau/mXqqS1a89GtqnTWiPAtpbVOsb7atNactN21dIuN6vc6PbbbDbF7cTl6XKW20lbi1tNMthRdeecaaZQt1xCVSJ0ykji5DJLK6xxpj7lnd2CooBjJLMxAA/M1z++cfsL3KdCsdYY60ub69uua4GC2tbSGS4uJ5XMirHFDErO7E+NKD+PipN+xI/pJA4H1ie/wClcd1brLSW39jmam1xqayaP0/BQDJu+oLlEttvQpefVs+0THWmlSHikoYjoUX314bZQ4shJhQ8TnpibNYpF00n4a7DH1BKQl6E7uFqaO8LS2/0qbMnT9jJZenBlR9ZGm3ZbcV1wYctciMkKfgy3R3w3Y3ovD173O11qHV8xx1x5pu6T3XIMMuKUv1NvtyCiBAjo6uluPEjsstoAQhASABv2d6mYywLwYuP6xuF2vtdlLVWGv8AP96T1JHYO06+9VGeiXzc/UfnMVnm+o14vAcDOI5xYNEtzyO5gYBxq2OorEnXafpLe0Xu2YjVjne70vfh9299fa9srZet2dRNFQ9tiJNj0k0oBSfrXSe0u4S1pX0q9VEs5juNklNwbUnpMTm83pVvFRuomRAsd/t+1didBR7HoSKqJdHGsqKfXaimLl3pt0pUErNulQGHB/Uxjmo1Pn9efn/7SopynNuQ5UyCW9e3hc69hagwIB8O5f8AEbx4JLaPwHpXT3pl8jToL0yS3nseIW/IMvABvM8m7cpcs+l26W8q/RIRsEqqQApv12N19u/6m1Fqq4P3bUt8ut+uUt5yRJnXedJnynnnVFbrrr0lxxa3HFkqWSclRJJJJr4Y8/vPv/v7+/Yf3OaVq0ksszd8sjyuRotI7O3j3dzEnQq0Vra21nBHb2lvBbW8aqsUNvEkMSIAAFWONVVQANAAeBqlKUrxWRSlKUpSlKUpSn68fl++DzkfoefIFSlK7l2n301ztHcEuWOcZtkdcCp+nLgtb1rlJ4CnGkElUKXgfVkxihRwEuh1rLRlY2m350Lu5DaRaZibZqNDPXN0zcHW0T23EZU85BJ6EXCKkZWHo460NgLkMsKKgIQq9u33CfapjFwtkyRAnRXEPRZcR5xiSw8g9SXGnWlJWlSSAQQR5/CpR4P1Uz/DpI7cynI4juAksLh2YxpsdxtnO2jbXoo+wTvYqEep3QzivUOGa6SFMRyDsJiylrGqiZwPsrexL2rOhOgWOpFHo2hqrDx79sfv8/P3Vpv437P7btNaLohBU5Z9YQluKAP1Isy3zoyySOyTIVGBzgElPOeD1bst4y1t+w6b3YT6xpKUR4+sIzZLwPZC77GScOJAwlydEQlYCULfjvLU6+Nk/EOu2au8P2sLhaJcW621y2wrtAnwnm5EV9ES5wny4y80VIVhLS0qwrKCFpWlJCgLKZflWB6gdP8AkAxVyhuDjJJJbGYhbqCSILKQ0RO2C9p06bBHnY3VNePcF5X0m6rcSfO2TraDNQQwZOAM9jcxzsYNrMB2qxEgJjk7WB9x8VC7+p+/57e6lPyx8/Pb/mlUarpyD6HW9gHz+Oj/AN935j1cHOcYx9/PPw/LOR3PlkHnU/c3X9z0VZNt52rby9oTTr8yVZtK+1LbssOVPkOSpcr2NkIbflPPOKPtMpLz6EdLKHEMpQ2ngtK9rI6dwR3TvHa/aSvcvglTrW1PjY9D+YrDusfY3zW7Xlpb3RtJlubYzxRymCdfCzQ+0VuyVQSFddMASAfNOPL/APfkY99KUrxWXSlKUpSlKUpSlKUpSlKUpSlKUpSlKUpSlKUpT5+fk9zXPdN7l6x0rZL7pu13V1WntR2+XbrrZJf+Zt7qJbRbMmOy4r/JzWlBDrUqKppZW2hD3rWVONOcCpWTa3l1ZSGW0uJbeRkdGaJyhZHUq6NogMrKSCrbB3+VYd7j7LIxCC/tYLuJZElVJ41kCyxsHSRO4Eq6MAVZSCCPWn5Y9/x+NKUrG/7/AGrM9ND4AAfkPA/4pSlKUpSlKUpSlKUpSlKUpSlKUpSlKUpSlKUpSlKUpSlKUpSlKUpSlKUr/9kAAFEMFAAAAFNhbXN1bmdfQ2FwdHVyZV9JbmZvU2NyZWVuc2hvdAAAoQ0RAAAAQ2FwdHVyZWRfQXBwX0luZm9leUpqYjIxd0lqb2lZMjl0TG5OaGJYTjFibWN1WVc1a2NtOXBaQzVoY0hBdWMyMWhjblJqWVhCMGRYSmxYQzlqYjIwdWMyRnRjM1Z1Wnk1aGJtUnliMmxrTG1Gd2NDNW1iR0Z6YUdGdWJtOTBZWFJsTGtac1lYTm9RVzV1YjNSaGRHVkJZM1JwZG1sMGVTSjlTRUZIawAAAAIAAAAAAFEMzwAAACYAAAAAAKENqQAAAKkAAAAkAAAAU0VGVA==" id="logo-img" style="height:60px;width:60px;object-fit:contain;mix-blend-mode:screen;display:block;margin:0 auto .75rem;">
-      <div style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:#0a1628;">Mealtime</div>
-      <div style="font-size:.8rem;color:#6b7280;margin-top:.2rem;">Highway Academy</div>
+      <img src="data:image/jpeg;base64,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" id="logo-img" style="height:62px;width:62px;object-fit:contain;mix-blend-mode:screen;display:block;margin:0 auto .75rem;filter:drop-shadow(0 4px 12px rgba(21,101,192,0.3));">
+      <div style="font-family:'DM Serif Display',serif;font-size:1.55rem;color:#0a1628;letter-spacing:.01em;">Mealtime</div>
+      <div style="font-size:.8rem;color:#6b7280;margin-top:.25rem;letter-spacing:.05em;text-transform:uppercase;font-weight:600;">Highway Academy</div>
     </div>
     <div class="lc">
       <div class="lf">
@@ -182,12 +739,11 @@ body.dark .rw{border-color:#30363d;}
         <input type="password" id="lp" placeholder="Enter your pass" onkeydown="if(event.key==='Enter')doLogin()">
       </div>
       <div id="lerr"></div>
-      <button class="lbtn" onclick="doLogin()">Sign in</button>
+      <button class="lbtn" onclick="doLogin()">Sign in →</button>
     </div>
   </div>
 </div>
 
-<!-- APP -->
 <div id="app" style="display:none;">
 
 <div class="bar">
@@ -195,65 +751,67 @@ body.dark .rw{border-color:#30363d;}
     <img src="data:image/jpeg;base64,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" id="bar-logo" style="height:38px;width:38px;object-fit:contain;mix-blend-mode:screen;">
     <span>
       <div class="bar-t">Mealtime</div>
-
     </span>
   </span>
-  <div style="display:flex;align-items:center;flex-shrink:0;">
+  <div style="display:flex;align-items:center;flex-shrink:0;gap:.3rem;">
     <nav class="nav">
       <button class="nb on" onclick="go('order')">Orders</button>
       <button class="nb" onclick="go('log')">Log</button>
-      <button class="nb" onclick="go('report')">Report</button>
+      <button class="nb" id="nav-report" onclick="go('report')">Report</button>
       <button class="nb" onclick="go('cfg')">Settings</button>
     </nav>
-    <button onclick="toggleTheme()" title="Toggle theme" style="background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.3);border-radius:50px;padding:.35rem .6rem;cursor:pointer;color:#fff;font-family:'DM Sans',sans-serif;margin-left:.5rem;display:flex;align-items:center;flex-shrink:0;">
-      <span id="theme-icon" style="font-size:18px;line-height:1;">&#127769;</span>
-    </button>
+    <button onclick="doLogout()" title="Sign out" style="background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.18);border-radius:50px;padding:.35rem .65rem;cursor:pointer;color:rgba(255,255,255,.7);font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:600;margin-left:.2rem;flex-shrink:0;transition:all .2s;letter-spacing:.04em;">OUT</button>
   </div>
 </div>
 
-<!-- ORDERS PAGE -->
 <div class="pg on" id="pg-order">
+  <div id="edit-banner">
+    ✏️ <span>You're editing an existing order — make your changes and tap Place Order.</span>
+    <button onclick="cancelEdit()" style="margin-left:auto;background:rgba(21,101,192,0.15);border:1.5px solid rgba(21,101,192,0.3);border-radius:8px;padding:.25rem .6rem;font-size:.72rem;font-weight:600;color:#1565c0;cursor:pointer;">Cancel Edit</button>
+  </div>
   <div class="card">
-    <div class="ct">New Lunch Order</div>
+    <div class="ct">🍽️ New Lunch Order</div>
     <div class="r2">
-      <div id="greeting-box" style="display:flex;align-items:center;padding:.6rem .85rem;background:var(--gp);border:1.5px solid #1a9ed4;border-radius:10px;height:40px;"><span id="greeting-text" style="font-size:.95rem;font-weight:500;color:var(--text-main);">Welcome</span></div>
+      <div id="greeting-box"><span id="greeting-text" style="font-size:.92rem;font-weight:500;color:var(--text-main);">Welcome</span></div>
       <input type="hidden" id="f-emp" value="">
       <div><label class="lbl">Date</label><input type="date" id="f-date"></div>
     </div>
+
     <div class="field">
       <label class="lbl">Main Course <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-light);font-size:.68rem;">— select one or more</span></label>
       <div class="pills" id="starches">
-        <div class="pill" data-v="Posho">Posho</div>
-        <div class="pill" data-v="Brown Rice">Brown Rice</div>
-        <div class="pill" data-v="White Rice">White Rice</div>
-        <div class="pill" data-v="Matooke">Matooke</div>
-        <div class="pill" data-v="Sweet Potatoes">Sweet Potatoes</div>
+        <div class="pill" data-v="Posho">🌽 Posho</div>
+        <div class="pill" data-v="Brown Rice">🍚 Brown Rice</div>
+        <div class="pill" data-v="White Rice">🍚 White Rice</div>
+        <div class="pill" data-v="Matooke">🍌 Matooke</div>
+        <div class="pill" data-v="Sweet Potatoes">🍠 Sweet Potatoes</div>
       </div>
       <div class="hint" id="st-hint">Nothing selected yet</div>
     </div>
+
     <div class="field">
       <label class="lbl">Sauce <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-light);font-size:.68rem;">— one only, determines cost</span></label>
-      <div id="sauces"></div>
+      <div class="menu-grid" id="sauces"></div>
     </div>
+
     <div class="field">
       <label class="lbl">Any special requests? <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-light);font-size:.68rem;">— optional, no extra cost</span></label>
-      <textarea id="f-special" rows="2" placeholder="e.g. more soup, small rice..." style="width:100%;padding:.6rem .8rem;border:1.5px solid var(--bd);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--text-main);background:var(--bg-input);resize:vertical;line-height:1.5;" onfocus="this.style.borderColor='#1a9ed4'" onblur="this.style.borderColor=''"></textarea>
+      <textarea id="f-special" rows="2" placeholder="e.g. more soup, small rice..."></textarea>
     </div>
+
     <div id="csummary"></div>
-    <button class="btn" id="btn-add" onclick="doSubmit()" disabled>Place Order</button>
+    <button class="btn" id="btn-add" onclick="doSubmit()" disabled>Place Order →</button>
   </div>
 </div>
 
-<!-- LOG PAGE -->
 <div class="pg" id="pg-log">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
-    <h2 style="font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--text-main);">Orders Log</h2>
-    <select id="lf" onchange="renderLog()" style="width:auto;height:36px;font-size:.82rem;padding:0 .7rem;appearance:none;border:1.5px solid var(--bd);border-radius:10px;background:var(--bg-input);color:var(--text-main);"></select>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.1rem;">
+    <h2 style="font-family:'DM Serif Display',serif;font-size:1.35rem;color:var(--text-main);">Orders Log</h2>
+    <select id="lf" onchange="renderLog()" style="width:auto;height:38px;font-size:.82rem;padding:0 .75rem;border:1.5px solid var(--bd);border-radius:10px;background:rgba(255,255,255,0.6);backdrop-filter:blur(6px);color:var(--text-main);appearance:none;"></select>
   </div>
   <div id="log-body"></div>
 </div>
 
-<!-- REPORT PAGE -->
 <div class="pg" id="pg-report">
   <div class="ph no-print">
     <h2>Report</h2>
@@ -264,22 +822,22 @@ body.dark .rw{border-color:#30363d;}
     </div>
   </div>
   <div id="report-weekly-controls" class="no-print" style="margin-bottom:1.25rem;">
-    <select id="rf" onchange="renderRepTable()" style="width:100%;max-width:320px;height:38px;font-size:.88rem;padding:0 .8rem;border:1.5px solid var(--bd);border-radius:10px;background:var(--bg-input);color:var(--text-main);appearance:none;"><option value="">Select a week...</option></select>
+    <select id="rf" onchange="renderRepTable()" style="width:100%;max-width:320px;height:38px;font-size:.88rem;padding:0 .8rem;border:1.5px solid var(--bd);border-radius:10px;background:rgba(255,255,255,0.6);backdrop-filter:blur(6px);color:var(--text-main);appearance:none;"><option value="">Select a week...</option></select>
   </div>
   <div id="report-monthly-controls" style="display:none;margin-bottom:1.25rem;">
-    <select id="rm" onchange="renderMonthly()" style="width:100%;max-width:320px;height:38px;font-size:.88rem;padding:0 .8rem;border:1.5px solid var(--bd);border-radius:10px;background:var(--bg-input);color:var(--text-main);appearance:none;"><option value="">Select a month...</option></select>
+    <select id="rm" onchange="renderMonthly()" style="width:100%;max-width:320px;height:38px;font-size:.88rem;padding:0 .8rem;border:1.5px solid var(--bd);border-radius:10px;background:rgba(255,255,255,0.6);backdrop-filter:blur(6px);color:var(--text-main);appearance:none;"><option value="">Select a month...</option></select>
   </div>
-
   <div id="rep-body"></div>
 </div>
 
-<!-- SETTINGS PAGE -->
 <div class="pg" id="pg-cfg">
   <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;"><div style="font-family:'DM Serif Display',serif;font-size:1rem;color:var(--text-main);">Your Name</div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <div style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--text-main);">Your Name</div>
+    </div>
     <p style="font-size:.83rem;color:var(--text-muted);margin-bottom:.9rem;">Update your display name.</p>
     <div id="emp-list"></div>
-    <button class="btn" onclick="saveEmp()" style="max-width:200px;margin-top:.7rem;">Save Name</button>
+    <button class="btn" onclick="saveEmp()" style="max-width:200px;margin-top:.75rem;">Save Name</button>
   </div>
   <div class="card">
     <div class="ct">Pricing Reference</div>
@@ -288,26 +846,57 @@ body.dark .rw{border-color:#30363d;}
       <thead><tr><th>Sauce</th><th style="text-align:right">Price</th><th style="text-align:right">Top-up Mon-Thu</th><th style="text-align:right">Top-up Fri</th></tr></thead>
       <tbody id="ptbl"></tbody>
     </table></div>
-    <p style="font-size:.76rem;color:var(--text-muted);margin-top:.8rem;">Company covers <strong>UGX 3,000</strong> Mon-Thu and <strong>UGX 5,000</strong> on Fridays.</p>
+    <p style="font-size:.76rem;color:var(--text-muted);margin-top:.9rem;">Company covers <strong>UGX 3,000</strong> Mon-Thu and <strong>UGX 5,000</strong> on Fridays.</p>
   </div>
 </div>
 
-</div><!-- end #app -->
-<div class="toast" id="toast"></div>
+</div><div class="toast" id="toast"></div>
 
 <script>
+// ════════════════════════════════════════════
+// SECTION: App Data — Sauces, Staff, Passes
+// WHAT:    Hard-coded lookup tables for meals, names, and passwords.
+// WHY:     Single source of truth — change once, reflected everywhere.
+// ════════════════════════════════════════════
+
+// SC = Sauce Catalogue — key, label, price in UGX
 var SC=[
-  {k:'beans',l:'Beans',p:3000},{k:'gnuts',l:'G.nuts',p:3000},
-  {k:'offals',l:'Offals',p:4000},{k:'peas',l:'Peas',p:4000},
-  {k:'meat',l:'Meat',p:5000},{k:'fish_mid',l:'Fish (mid/tail)',p:5000},
-  {k:'fish_head',l:'Fish Head',p:6000},{k:'chicken',l:'Chicken',p:7000}
+  {k:'beans',  l:'Beans',        p:3000, icon:'🫘'},
+  {k:'gnuts',  l:'G.nuts',       p:3000, icon:'🥜'},
+  {k:'offals', l:'Offals',       p:4000, icon:'🍖'},
+  {k:'peas',   l:'Peas',         p:4000, icon:'🟢'},
+  {k:'meat',   l:'Meat',         p:5000, icon:'🥩'},
+  {k:'fish_mid',l:'Fish (mid/tail)',p:5000,icon:'🐟'},
+  {k:'fish_head',l:'Fish Head',  p:6000, icon:'🐠'},
+  {k:'chicken',l:'Chicken',      p:7000, icon:'🍗'}
 ];
+
+// AV = Avatar colour pairs for staff initials
 var AV=[{bg:'#d1fae5',fg:'#065f46'},{bg:'#dbeafe',fg:'#1e40af'},{bg:'#fce7f3',fg:'#9d174d'}];
+
+// NAMES = staff roster; index matches employee index (ei)
 var NAMES=['Hilda','Paul','Comfort','Admin'];
+
+// PASSES = login passwords keyed by name index or 'admin'
 var PASSES={'0':'H001','1':'J002','2':'C003','admin':'A004'};
 
+// ════════════════════════════════════════════
+// SECTION: Edit State Tracker
+// WHAT:    Holds the Firebase key of an order being edited.
+// WHY:     Without tracking the edit target, we can't delete the old record before saving the new one.
+// ════════════════════════════════════════════
+
+// editingFbKey = the Firebase key of the order being edited (null if not editing)
+var editingFbKey = null;
+
+// ════════════════════════════════════════════
+// SECTION: Storage Helpers
+// WHAT:    Wrappers around localStorage and sessionStorage for orders and session.
+// WHY:     Firebase overrides these at module load — the wrappers let that happen cleanly.
+// ════════════════════════════════════════════
+
+// Returns the current employee name array (always fresh from hardcoded NAMES)
 function gE(){return NAMES.slice();}
-// Always use hardcoded names - ignore stale localStorage
 function sE(e){localStorage.setItem('lt-e',JSON.stringify(e));}
 function gO(){try{var s=localStorage.getItem('lt-o');return s?JSON.parse(s):[];}catch(e){return[];}}
 function sO(o){localStorage.setItem('lt-o',JSON.stringify(o));}
@@ -315,8 +904,45 @@ function getSess(){try{var s=sessionStorage.getItem('lt-s');return s?JSON.parse(
 function isAdmin(){var sess=getSess();return sess&&sess.admin===true;}
 function setSess(s){sessionStorage.setItem('lt-s',JSON.stringify(s));}
 
+// ════════════════════════════════════════════
+// SECTION: Pricing Helpers
+// WHAT:    Day-rate lookup and cost/top-up splitter.
+// WHY:     Friday is a higher allowance day — this drives all pricing decisions.
+// ════════════════════════════════════════════
+
+// Returns 5000 on Fridays, 3000 otherwise — this is the company's contribution
 function dayRate(d){return new Date(d+'T00:00:00').getDay()===5?5000:3000;}
+
+// Splits a sauce price into company cost and employee top-up
 function calcCost(p,d){var r=dayRate(d);return{co:Math.min(r,p),tu:Math.max(0,p-r)};}
+
+// ════════════════════════════════════════════
+// SECTION: Cancel Button Visibility Logic
+// WHAT:    Determines whether Cancel Order button should show for an order.
+// WHY:     FIX #2 — Cancel should disappear after lunch time each day (1pm cutoff).
+// ════════════════════════════════════════════
+
+// Returns true if the order can still be cancelled
+// An order can be cancelled only if:
+// (a) It was placed for today AND it is before 1pm today, OR
+// (b) It was placed for a future date
+function canCancel(orderDate){
+  var now = new Date();
+  var today = now.toISOString().slice(0,10);
+  // If the order is for a past date — not cancellable
+  if(orderDate < today) return false;
+  // If the order is for a future date — always cancellable
+  if(orderDate > today) return true;
+  // If the order is for today — only cancellable before 1pm (13:00)
+  return now.getHours() < 13;
+}
+
+// ════════════════════════════════════════════
+// SECTION: Date & Format Helpers
+// WHAT:    Week-key generator, week label, and day label formatters.
+// WHY:     Orders are grouped by ISO week — these keep that logic consistent.
+// ════════════════════════════════════════════
+
 function wkKey(d){var dt=new Date(d+'T00:00:00'),dy=dt.getDay(),m=new Date(dt);m.setDate(dt.getDate()-dy+(dy===0?-6:1));return m.toISOString().slice(0,10);}
 function fmtWk(w){
   var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -329,18 +955,31 @@ function fmtDay(d){
   var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   return days[dt.getDay()]+', '+dt.getDate()+' '+months[dt.getMonth()]+' '+dt.getFullYear();
 }
-function N(n){return n.toLocaleString('en-UG');}
-function ini(n){return n.trim().split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase()||'?';}
-function showToast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('on');},3000);}
 
-// LOGIN
+// N = number formatter for UGX display (e.g. 3000 → "3,000")
+function N(n){return n.toLocaleString('en-UG');}
+
+// ini = generates up-to-2-letter initials from a name
+function ini(n){return n.trim().split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase()||'?';}
+
+// showToast = slides up a brief notification message at the bottom
+function showToast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('on');},3200);}
+
+// ════════════════════════════════════════════
+// SECTION: Authentication — Login & Logout
+// WHAT:    Validates name+pass, sets session, routes to correct starting page.
+// WHY:     FIX #1 — Admin is routed to Report; non-admins see Orders.
+//          Admin sees Report nav only; staff see Orders/Log/Settings only.
+// ════════════════════════════════════════════
+
+// This function runs when the Sign In button is clicked
 function doLogin(){
   var ni=document.getElementById('ln').value;
   var pw=document.getElementById('lp').value.replace(/\s/g,'');
   var err=document.getElementById('lerr');
   err.style.display='none';
-  if(!ni){err.textContent='Please select your name.';err.style.cssText='display:block;padding:.5rem .75rem;background:#fdecea;border-radius:8px;border:1px solid #fca5a5;color:#c0392b;font-size:.82rem;margin-bottom:.75rem;';return;}
-  if(!pw){err.textContent='Please enter your pass.';err.style.cssText='display:block;padding:.5rem .75rem;background:#fdecea;border-radius:8px;border:1px solid #fca5a5;color:#c0392b;font-size:.82rem;margin-bottom:.75rem;';return;}
+  if(!ni){err.textContent='Please select your name.';err.style.cssText='display:block;padding:.5rem .75rem;background:#fdecea;border-radius:10px;border:1px solid #fca5a5;color:#c0392b;font-size:.82rem;margin-bottom:.75rem;';return;}
+  if(!pw){err.textContent='Please enter your pass.';err.style.cssText='display:block;padding:.5rem .75rem;background:#fdecea;border-radius:10px;border:1px solid #fca5a5;color:#c0392b;font-size:.82rem;margin-bottom:.75rem;';return;}
   var ok=(PASSES[ni]===pw);
   if(ok){
     var em=gE();
@@ -348,22 +987,20 @@ function doLogin(){
     setSess({ei:isAdm?-1:parseInt(ni), en:isAdm?'Admin':em[parseInt(ni)], admin:isAdm});
     document.getElementById('ls').style.display='none';
     document.getElementById('app').style.display='block';
-    if(isAdm){
-      go('report');
-    } else {
-      refEmp();
-      go('order');
-    }
+    // FIX #1: Admin goes directly to Report; staff go to Orders
+    if(isAdm){go('report');}else{refEmp();go('order');}
   } else {
     err.textContent='Wrong pass. Try again.';
-    err.style.cssText='display:block;padding:.5rem .75rem;background:#fdecea;border-radius:8px;border:1px solid #fca5a5;color:#c0392b;font-size:.82rem;margin-bottom:.75rem;';
+    err.style.cssText='display:block;padding:.5rem .75rem;background:#fdecea;border-radius:10px;border:1px solid #fca5a5;color:#c0392b;font-size:.82rem;margin-bottom:.75rem;';
     document.getElementById('lp').value='';
     document.getElementById('lp').focus();
   }
 }
 
+// This function clears session and returns to the login screen
 function doLogout(){
   sessionStorage.removeItem('lt-s');
+  editingFbKey=null;
   document.getElementById('app').style.display='none';
   document.getElementById('ls').style.display='flex';
   document.getElementById('lp').value='';
@@ -371,55 +1008,95 @@ function doLogout(){
   document.getElementById('lerr').style.display='none';
 }
 
-// STATE
+// ════════════════════════════════════════════
+// SECTION: App State
+// WHAT:    The current form selections (employee, date, starches, sauce).
+// WHY:     JS doesn't have two-way binding — state is the single source of truth.
+// ════════════════════════════════════════════
 var S={emp:'',date:'',st:[],sauce:''};
 
+// ════════════════════════════════════════════
+// SECTION: Navigation — go(page)
+// WHAT:    Shows the requested page, hides all others, manages nav tab highlights.
+// WHY:     FIX #1 — Report tab is hidden entirely from non-admin users.
+// ════════════════════════════════════════════
+
+// This function switches between pages and controls which nav tabs are visible
 function go(p){
   var sess=getSess();
-  // Admin: hide Orders/Log, show Report+Settings. Employee: hide nothing
-  document.querySelectorAll('.nb').forEach(function(nb,i){
-    if(sess&&sess.admin){nb.style.display=(i===0||i===1)?'none':'block';}
-    else{nb.style.display='block';}
+  var nbs=document.querySelectorAll('.nb');
+
+  // FIX #1: If admin, hide Orders and Log tabs; show Report only
+  // If non-admin, hide the Report tab completely
+  nbs.forEach(function(nb,i){
+    if(sess&&sess.admin){
+      // Admin sees: Report (index 2) and Settings (index 3) only
+      nb.style.display=(i===0||i===1)?'none':'block';
+    } else {
+      // Staff see: Orders (0), Log (1), Settings (3) — Report (2) is hidden
+      nb.style.display=(i===2)?'none':'block';
+    }
   });
+
+  // Hide all pages, deactivate all nav tabs
   document.querySelectorAll('.pg').forEach(function(x){x.classList.remove('on');});
-  document.querySelectorAll('.nb').forEach(function(x){x.classList.remove('on');});
+  nbs.forEach(function(x){x.classList.remove('on');});
+
+  // Show the target page
   document.getElementById('pg-'+p).classList.add('on');
+
+  // Activate the matching nav tab
   var tabs={order:0,log:1,report:2,cfg:3};
-  document.querySelectorAll('.nb')[tabs[p]].classList.add('on');
+  nbs[tabs[p]].classList.add('on');
+
+  // Run the page-specific render function
   if(p==='log') renderLog();
+  // FIX #1: Only admin can see the report — staff get the unauthorised screen
   if(p==='report'){if(isAdmin()){renderReport();}else{showUnauth();}}
   if(p==='cfg') renderCfg();
   if(p==='order'){
+    // Admin cannot place orders — show a message instead of the form
     if(isAdmin()){
-      document.getElementById('pg-order').innerHTML='<div class="card" style="text-align:center;padding:2.5rem 1rem;">'
-        +'<div style="font-size:3rem;margin-bottom:.75rem;">&#127860;</div>'
-        +'<div style="font-family:\'DM Serif Display\',serif;font-size:1.1rem;color:var(--text-main);margin-bottom:.4rem;">Orders not available</div>'
-        +'<div style="font-size:.85rem;color:var(--text-muted);">You need a Mealtime pass to make an order.</div></div>';
+      document.getElementById('pg-order').innerHTML='<div class="card" style="text-align:center;padding:3rem 1rem;">'
+        +'<div style="font-size:3.5rem;margin-bottom:.85rem;">🍽️</div>'
+        +'<div style="font-family:\'DM Serif Display\',serif;font-size:1.15rem;color:var(--text-main);margin-bottom:.5rem;">Admin View</div>'
+        +'<div style="font-size:.85rem;color:var(--text-muted);">Use the Report tab to view all orders and financial summaries.</div></div>';
     } else { refEmp(); }
   }
 }
 
+// ════════════════════════════════════════════
+// SECTION: Employee Reference Update
+// WHAT:    Reads the current session and updates greeting + hidden emp field.
+// WHY:     After login or edit, the form needs to know who is ordering.
+// ════════════════════════════════════════════
+
+// This function syncs the logged-in user's name into the order form
 function refEmp(){
   var sess=getSess();
   if(sess&&!isAdmin()){
     S.emp=String(sess.ei);
     document.getElementById('f-emp').value=String(sess.ei);
     var name=NAMES[sess.ei];
-    document.getElementById('greeting-text').innerHTML="It's mealtime "+name+" &#128513;";
-  } else if(isAdmin()){
-    S.emp='';
-    document.getElementById('f-emp').value='';
-    document.getElementById('greeting-text').innerHTML='&#128274; You need a Mealtime pass to place an order.';
-    document.getElementById('greeting-text').style.fontSize='.85rem';
-    document.getElementById('greeting-text').style.color='var(--text-muted)';
+    document.getElementById('greeting-text').innerHTML="It's mealtime, "+name+" &#128513;";
+    document.getElementById('greeting-text').style.fontSize='.92rem';
+    document.getElementById('greeting-text').style.color='var(--text-main)';
   }
   updSummary();chk();
 }
 
+// ════════════════════════════════════════════
+// SECTION: Pill Click Handlers (Starch Selection)
+// WHAT:    Toggles starch items on/off and updates the hint text.
+// WHY:     Multiple starches can be selected — the toggle pattern enables that.
+// ════════════════════════════════════════════
+
+// This runs once at page load — attaches click handlers to all starch pills
 document.querySelectorAll('.pill').forEach(function(pill){
   pill.onclick=function(){
     var v=this.dataset.v;
     var idx=S.st.indexOf(v);
+    // If already selected, remove it; otherwise add it
     if(idx>-1){S.st.splice(idx,1);}else{S.st.push(v);}
     this.classList.toggle('on',S.st.indexOf(v)>-1);
     document.getElementById('st-hint').textContent=S.st.length?S.st.join(', '):'Nothing selected yet';
@@ -427,21 +1104,40 @@ document.querySelectorAll('.pill').forEach(function(pill){
   };
 });
 
+// ════════════════════════════════════════════
+// SECTION: Sauce Render — Visual Food Card Grid
+// WHAT:    Builds the emoji food card grid from SC data and current date's day rate.
+// WHY:     The visual food cards with icons make ordering enjoyable and intuitive.
+// ════════════════════════════════════════════
+
+// This function re-renders the sauce card grid whenever date or selection changes
 function renderSauces(){
   var r=S.date?dayRate(S.date):3000;
-  var fri=S.date?(new Date(S.date+'T00:00:00').getDay()===5):false;
+  // Render each sauce as a beautiful food card
   document.getElementById('sauces').innerHTML=SC.map(function(s){
     var tu=Math.max(0,s.p-r);
-    return '<div class="sr'+(S.sauce===s.k?' on':'')+'" onclick="pickSauce(\''+s.k+'\')">'
-      +'<span class="sn">'+s.l+'</span><span class="si">UGX '+N(s.p)
-      +(tu>0?'<span class="tut">+'+N(tu)+' top-up</span>':'<span class="okt">covered</span>')
-      +(fri&&s.k==='meat'?'<span style="font-size:.67rem;color:#1565c0;margin-left:4px;">(Fri)</span>':'')
-      +'</span></div>';
+    var isOn=S.sauce===s.k;
+    return '<div class="food-card'+(isOn?' on':'')+'" onclick="pickSauce(\''+s.k+'\')">'
+      +'<span class="tick">✓</span>'
+      +'<span class="food-icon">'+s.icon+'</span>'
+      +'<div class="food-name">'+s.l+'</div>'
+      +'<div class="food-price">UGX '+N(s.p)+'</div>'
+      +'<span class="food-badge '+(tu>0?'badge-topup':'badge-covered')+'">'
+      +(tu>0?'+'+N(tu)+' top-up':'✓ Covered')+'</span>'
+      +'</div>';
   }).join('');
 }
 
+// This runs whenever a sauce card is clicked — updates state then re-renders
 function pickSauce(k){S.sauce=k;renderSauces();updSummary();chk();}
 
+// ════════════════════════════════════════════
+// SECTION: Cost Summary Update
+// WHAT:    Calculates and renders the company vs top-up breakdown box.
+// WHY:     Staff must see BEFORE submitting whether they owe a top-up.
+// ════════════════════════════════════════════
+
+// This runs any time sauce or date changes to show updated pricing
 function updSummary(){
   var el=document.getElementById('csummary');
   if(!S.sauce||!S.date){el.innerHTML='';return;}
@@ -458,18 +1154,46 @@ function updSummary(){
     +(tu>0?'<div class="tual"><strong>'+empName+'</strong>, please top up <strong>UGX '+N(tu)+'</strong> for your '+s.l+'.</div>':'');
 }
 
+// This enables/disables the Place Order button based on all required fields
 function chk(){document.getElementById('btn-add').disabled=!(S.emp!==''&&S.date&&S.st.length>0&&S.sauce);}
 
-
+// Re-render sauces and cost whenever the date changes
 document.getElementById('f-date').onchange=function(){S.date=this.value;renderSauces();updSummary();chk();};
 
+// ════════════════════════════════════════════
+// SECTION: Order Submission — doSubmit()
+// WHAT:    Assembles the order object and saves it; resets the form.
+// WHY:     FIX #3 — If editing, delete the old order first, THEN add the new one.
+//          This prevents duplicate orders when editing.
+// ════════════════════════════════════════════
+
+// This function runs when Place Order is clicked
 function doSubmit(){
   var em=gE();
   var s=null;for(var i=0;i<SC.length;i++){if(SC[i].k===S.sauce){s=SC[i];break;}}
   var c=calcCost(s.p,S.date),co=c.co,tu=c.tu;
   var special=document.getElementById('f-special').value.trim();
-  var order={id:Date.now(),ei:parseInt(S.emp),en:em[parseInt(S.emp)],date:S.date,st:S.st.slice(),sauce:s.l,sp:s.p,co:co,tu:tu,special:special};
-  sO([order].concat(gO()));
+  var order={
+    id:Date.now(),
+    ei:parseInt(S.emp),
+    en:em[parseInt(S.emp)],
+    date:S.date,
+    st:S.st.slice(),
+    sauce:s.l,sp:s.p,co:co,tu:tu,
+    special:special
+  };
+
+  // FIX #3: If we're in edit mode, delete the old Firebase record first
+  if(editingFbKey){
+    window.delOFB(editingFbKey);  // Remove old order from Firebase
+    editingFbKey=null;            // Clear edit tracking state
+    hideBanner();                 // Hide the edit mode banner
+  }
+
+  // Save the (new or updated) order
+  window.doSubmitFB(order);
+
+  // Reset all form fields
   S.sauce='';S.st=[];S.emp='';
   document.getElementById('f-emp').value='';
   document.querySelectorAll('.pill').forEach(function(x){x.classList.remove('on');});
@@ -478,10 +1202,17 @@ function doSubmit(){
   document.getElementById('csummary').innerHTML='';
   document.getElementById('f-special').value='';
   document.getElementById('btn-add').disabled=true;
-  showToast('Order placed'+(tu>0?' - remember to top up UGX '+N(tu):''));
+  showToast('Order placed'+(tu>0?' — remember to top up UGX '+N(tu):''));
   refEmp();renderSauces();
 }
 
+// ════════════════════════════════════════════
+// SECTION: Log Render — renderLog()
+// WHAT:    Groups all orders by week and day, then renders them with orHTML().
+// WHY:     The log is the team's shared view of all daily orders.
+// ════════════════════════════════════════════
+
+// This function fetches all orders and builds the grouped HTML log view
 function renderLog(){
   var orders=gO();
   var wks=[];
@@ -510,46 +1241,143 @@ function renderLog(){
   }).join('');
 }
 
+// ════════════════════════════════════════════
+// SECTION: Order HTML Builder — orHTML(o)
+// WHAT:    Renders one order row with avatar, meal details, cost, and action buttons.
+// WHY:     FIX #2 — Cancel button only shows if canCancel(o.date) returns true.
+//          FIX #3 — Edit button always shows for own orders (editing replaces, not duplicates).
+// ════════════════════════════════════════════
+
+// This function builds the HTML string for a single order row
 function orHTML(o){
   var ac=AV[o.ei%3];
   var sl=Array.isArray(o.st)?o.st.join(', '):(o.starch||'');
   var sess=getSess();
   var isOwn=sess&&sess.ei===o.ei;
+
+  // Build action buttons — only for the order's owner
+  var btns='';
+  if(isOwn){
+    btns='<div style="display:flex;flex-direction:column;gap:.3rem;flex-shrink:0;">';
+    // Edit is always available for own orders
+    btns+='<button class="bsm bedit" onclick="editO('+o.id+')">Edit order</button>';
+    // FIX #2: Cancel only shows if the order can still be cancelled (before 1pm today)
+    if(canCancel(o.date)){
+      btns+='<button class="bsm bdel" onclick="delO('+o.id+')">Cancel order</button>';
+    }
+    btns+='</div>';
+  }
+
   return '<div class="or">'
     +'<div class="av" style="background:'+ac.bg+';color:'+ac.fg+';">'+ini(o.en)+'</div>'
-    +'<div class="oi"><div class="nm">'+o.en+'</div><div class="ml">'+sl+' + '+o.sauce+'</div>'+(o.special?'<div class="spreq">'+o.special+'</div>':'')+'</div>'
-    +'<div class="oc"><div class="cp2">Company: UGX '+N(o.co)+'</div>'+(o.tu>0?'<div class="tub">Top-up: UGX '+N(o.tu)+'</div>':'<div class="okb">No top-up</div>')+'</div>'
-    +(isOwn?'<div style="display:flex;flex-direction:column;gap:.3rem;flex-shrink:0;"><button class="bsm bedit" onclick="editO('+o.id+')">Edit order</button><button class="bsm bdel" onclick="delO('+o.id+')">Cancel order</button></div>':'')
+    +'<div class="oi"><div class="nm">'+o.en+'</div><div class="ml">'+sl+' + '+o.sauce+'</div>'+(o.special?'<div class="spreq">💬 '+o.special+'</div>':'')+'</div>'
+    +'<div class="oc"><div class="cp2">Company: UGX '+N(o.co)+'</div>'+(o.tu>0?'<div class="tub">Top-up: UGX '+N(o.tu)+'</div>':'<div class="okb">✓ No top-up</div>')+'</div>'
+    +btns
     +'</div>';
 }
 
-function delO(id){if(!confirm('Cancel this order?'))return;sO(gO().filter(function(o){return o.id!==id;}));renderLog();showToast('Order cancelled');}
+// ════════════════════════════════════════════
+// SECTION: Order Delete — delO(id)
+// WHAT:    Confirms and then removes an order from Firebase.
+// WHY:     The local version is overridden by Firebase — this bridges the gap.
+// ════════════════════════════════════════════
 
+// This runs when Cancel order is clicked — asks for confirmation first
+function delO(id){
+  if(!confirm('Cancel this order?'))return;
+  sO(gO().filter(function(o){return o.id!==id;}));
+  renderLog();
+  showToast('Order cancelled');
+}
+
+// ════════════════════════════════════════════
+// SECTION: Order Edit — editO(id)
+// WHAT:    Loads an existing order into the form and stores its Firebase key.
+// WHY:     FIX #3 — We store editingFbKey so doSubmit() can delete the OLD record
+//          before saving the new one — preventing duplicate orders.
+// ════════════════════════════════════════════
+
+// This function loads an existing order into the form for editing
 function editO(id){
   var orders=gO();
-  var o=null;for(var i=0;i<orders.length;i++){if(orders[i].id===id){o=orders[i];break;}}
+  var o=null;
+  for(var i=0;i<orders.length;i++){if(orders[i].id===id){o=orders[i];break;}}
   if(!o)return;
+
+  // Store the Firebase key so doSubmit() knows what to delete
+  editingFbKey=o._fbKey||null;
+
+  // Load the existing order values into the form fields
   refEmp();
   document.getElementById('f-date').value=o.date;S.date=o.date;
   S.st=Array.isArray(o.st)?o.st.slice():(o.starch?[o.starch]:[]);
-  document.querySelectorAll('.pill').forEach(function(p){p.classList.toggle('on',S.st.indexOf(p.dataset.v)>-1);});
+  document.querySelectorAll('.pill').forEach(function(p){
+    p.classList.toggle('on',S.st.indexOf(p.dataset.v)>-1);
+  });
   document.getElementById('st-hint').textContent=S.st.length?S.st.join(', '):'Nothing selected yet';
-  var sc=null;for(var j=0;j<SC.length;j++){if(SC[j].l===o.sauce){sc=SC[j];break;}}
+
+  // Find the sauce key from the sauce label stored on the order
+  var sc=null;
+  for(var j=0;j<SC.length;j++){if(SC[j].l===o.sauce){sc=SC[j];break;}}
   S.sauce=sc?sc.k:'';
   renderSauces();updSummary();
   document.getElementById('f-special').value=o.special||'';
-  sO(gO().filter(function(x){return x.id!==id;}));
-  chk();go('order');
+  chk();
+
+  // Show the edit mode banner at the top of the orders page
+  showBanner();
+
+  // Navigate to the order form page
+  go('order');
   showToast('Edit your order then tap Place Order');
 }
 
-function showUnauth(){
-  document.getElementById('rep-body').innerHTML='<div style="text-align:center;padding:3rem 1rem;">'
-    +'<div style="font-size:3rem;margin-bottom:.75rem;">&#128274;</div>'
-    +'<div style="font-family:DM Serif Display,serif;font-size:1.1rem;color:var(--text-main);margin-bottom:.4rem;">Unauthorised Access</div>'
-    +'<div style="font-size:.85rem;color:var(--text-muted);">You need a report pass to view this section.</div></div>';
+// ════════════════════════════════════════════
+// SECTION: Edit Banner Show/Hide
+// WHAT:    Controls the visible "you are editing" banner at the top of orders page.
+// WHY:     Without a visual cue, users don't know they're editing vs creating.
+// ════════════════════════════════════════════
+
+function showBanner(){var b=document.getElementById('edit-banner');if(b)b.classList.add('on');}
+function hideBanner(){var b=document.getElementById('edit-banner');if(b)b.classList.remove('on');}
+
+// cancelEdit clears the edit state and hides the banner without saving
+function cancelEdit(){
+  editingFbKey=null;
+  hideBanner();
+  // Reset form fields back to blank state
+  S.sauce='';S.st=[];
+  document.querySelectorAll('.pill').forEach(function(x){x.classList.remove('on');});
+  document.getElementById('st-hint').textContent='Nothing selected yet';
+  document.getElementById('sauces').innerHTML='';
+  document.getElementById('csummary').innerHTML='';
+  document.getElementById('f-special').value='';
+  document.getElementById('btn-add').disabled=true;
+  refEmp();renderSauces();
+  showToast('Edit cancelled');
 }
 
+// ════════════════════════════════════════════
+// SECTION: Unauthorised Report Message
+// WHAT:    Renders a lock screen inside the report page for non-admin users.
+// WHY:     FIX #1 — Even if staff somehow navigate to Report, they see a lock screen.
+// ════════════════════════════════════════════
+
+// This replaces the report body with an access denied message
+function showUnauth(){
+  document.getElementById('rep-body').innerHTML='<div style="text-align:center;padding:3.5rem 1rem;">'
+    +'<div style="font-size:3.5rem;margin-bottom:.85rem;">&#128274;</div>'
+    +'<div style="font-family:DM Serif Display,serif;font-size:1.1rem;color:var(--text-main);margin-bottom:.5rem;">Admin Access Only</div>'
+    +'<div style="font-size:.85rem;color:var(--text-muted);">Only the admin account can view financial reports.</div></div>';
+}
+
+// ════════════════════════════════════════════
+// SECTION: Report Render — renderReport() + renderRepTable() + renderMonthly()
+// WHAT:    Builds the weekly and monthly financial summary tables for admin.
+// WHY:     Admin needs accurate company cost and top-up totals for budgeting.
+// ════════════════════════════════════════════
+
+// This function populates the week selector and loads the first week's table
 function renderReport(){
   var orders=gO();
   var wks=[];
@@ -563,6 +1391,7 @@ function renderReport(){
   renderRepTable();
 }
 
+// This function renders the detailed order table for the selected week
 function renderRepTable(){
   var w=document.getElementById('rf').value;
   var body=document.getElementById('rep-body');
@@ -572,27 +1401,19 @@ function renderRepTable(){
   var tc=orders.reduce(function(s,o){return s+o.co;},0);
   var tt=orders.reduce(function(s,o){return s+o.tu;},0);
 
-  var summaryHtml='<div class="sc3">'
-    +'<div class="sc"><div class="scl">Company Total</div><div class="scv">UGX '+N(tc)+'</div><div class="scs">'+orders.length+' orders</div></div>'
-    +'<div class="sc"><div class="scl">Employee Top-ups</div><div class="scv">UGX '+N(tt)+'</div><div class="scs">Paid by staff</div></div>'
-    +'<div class="sc"><div class="scl">Grand Total</div><div class="scv">UGX '+N(tc+tt)+'</div><div class="scs">All meals</div></div>'
-    +'</div>';
-
   var mainRows=orders.map(function(o){
     var sl=Array.isArray(o.st)?o.st.join(', '):(o.starch||'');
     return '<tr>'
       +'<td>'+new Date(o.date+'T00:00:00').toLocaleDateString('en-UG',{weekday:'short',month:'short',day:'numeric'})+'</td>'
       +'<td><strong>'+o.en+'</strong></td>'
-      +'<td>'+sl+'</td>'
-      +'<td>'+o.sauce+'</td>'
+      +'<td>'+sl+'</td><td>'+o.sauce+'</td>'
       +'<td style="text-align:right;">UGX '+N(o.sp)+'</td>'
       +'<td style="text-align:right;color:#1565c0;font-weight:600;">UGX '+N(o.co)+'</td>'
       +'<td style="text-align:right;'+(o.tu>0?'color:#92400e;font-weight:600;':'color:#0284c7;')+'">'+(o.tu>0?'UGX '+N(o.tu):'—')+'</td>'
       +'</tr>';
   }).join('');
 
-  var empNames=NAMES.slice(0,3);
-  var empRows=empNames.map(function(n,i){
+  var empRows=NAMES.slice(0,3).map(function(n,i){
     var m=orders.filter(function(o){return o.ei===i;});
     if(!m.length)return '';
     var ec=m.reduce(function(s,o){return s+o.co;},0);
@@ -603,13 +1424,17 @@ function renderRepTable(){
       +'<td style="text-align:right;font-weight:600;">UGX '+N(ec+et)+'</td></tr>';
   }).join('');
 
-  body.innerHTML=summaryHtml
+  body.innerHTML='<div class="sc3">'
+    +'<div class="sc"><div class="scl">Company Total</div><div class="scv">UGX '+N(tc)+'</div><div class="scs">'+orders.length+' orders</div></div>'
+    +'<div class="sc"><div class="scl">Employee Top-ups</div><div class="scv">UGX '+N(tt)+'</div><div class="scs">Paid by staff</div></div>'
+    +'<div class="sc"><div class="scl">Grand Total</div><div class="scv">UGX '+N(tc+tt)+'</div><div class="scs">All meals</div></div>'
+    +'</div>'
     +'<div class="card"><div class="ct">All Orders — '+fmtWk(w)+'</div>'
     +'<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="rtb" style="min-width:560px;">'
     +'<thead><tr><th>Day</th><th>Employee</th><th>Main Course</th><th>Sauce</th><th style="text-align:right">Price</th><th style="text-align:right">Company Pays</th><th style="text-align:right">Top-up</th></tr></thead>'
     +'<tbody>'+mainRows+'</tbody></table></div></div>'
     +'<div class="card"><div class="ct">Per-Employee Summary</div>'
-    +'<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="rtb" style="min-width:420px;">'
+    +'<div style="overflow-x:auto;"><table class="rtb" style="min-width:420px;">'
     +'<thead><tr><th>Employee</th><th>Orders</th><th style="text-align:right">Company Paid</th><th style="text-align:right">Top-ups</th><th style="text-align:right">Total</th></tr></thead>'
     +'<tbody>'+empRows
     +'<tr class="ttr"><td>TOTAL</td><td>'+orders.length+'</td>'
@@ -619,128 +1444,16 @@ function renderRepTable(){
     +'</tbody></table></div></div>';
 }
 
+// renderAdminReport is an alias that populates the week selector before rendering
 function renderAdminReport(){
-  var orders=gO();
-  var wks=[];
-  orders.forEach(function(o){var w=wkKey(o.date);if(wks.indexOf(w)===-1)wks.push(w);});
-  wks.sort(function(a,b){return b.localeCompare(a);});
-  var fEl=document.getElementById('rf'),pv=fEl.value;
-  fEl.innerHTML='<option value="">Select a week...</option>'+wks.map(function(w){return '<option value="'+w+'"'+(pv===w?' selected':'')+'>'+fmtWk(w)+'</option>';}).join('');
-  if(!fEl.value&&wks.length)fEl.value=wks[0];
-  renderRepTable();
+  renderReport();
 }
 
-function renderRepTable(){
-  var w=document.getElementById('rf').value,body=document.getElementById('rep-body');
-  if(!w){body.innerHTML='<div class="empty">Select a week to view the report.</div>';return;}
-  var orders=gO().filter(function(o){return wkKey(o.date)===w;});
-  if(!orders.length){body.innerHTML='<div class="empty">No orders for this week.</div>';return;}
-  var tc=orders.reduce(function(s,o){return s+o.co;},0);
-  var tt=orders.reduce(function(s,o){return s+o.tu;},0);
-  var mainRows=orders.map(function(o){
-    var sl=Array.isArray(o.st)?o.st.join(', '):(o.starch||'');
-    return '<tr><td>'+new Date(o.date+'T00:00:00').toLocaleDateString('en-UG',{weekday:'short',month:'short',day:'numeric'})+'</td>'
-      +'<td><strong>'+o.en+'</strong></td><td>'+sl+'</td><td>'+o.sauce+'</td>'
-      +'<td style="text-align:right;">UGX '+N(o.sp)+'</td>'
-      +'<td style="text-align:right;color:#1565c0;font-weight:600;">UGX '+N(o.co)+'</td>'
-      +'<td style="text-align:right;'+(o.tu>0?'color:#92400e;font-weight:600;':'color:#0284c7;')+'">'+(o.tu>0?'UGX '+N(o.tu):'—')+'</td></tr>';
-  }).join('');
-  var empRows=NAMES.map(function(n,i){
-    var m=orders.filter(function(o){return o.ei===i;});
-    if(!m.length)return '';
-    var ec=m.reduce(function(s,o){return s+o.co;},0);
-    var et=m.reduce(function(s,o){return s+o.tu;},0);
-    return '<tr><td><strong>'+n+'</strong></td><td>'+m.length+'</td>'
-      +'<td style="text-align:right;color:#1565c0;font-weight:600;">UGX '+N(ec)+'</td>'
-      +'<td style="text-align:right;'+(et>0?'color:#92400e;font-weight:600;':'color:#0284c7;')+'">'+(et>0?'UGX '+N(et):'—')+'</td>'
-      +'<td style="text-align:right;font-weight:600;">UGX '+N(ec+et)+'</td></tr>';
-  }).join('');
-  body.innerHTML='<div class="sc3">'
-    +'<div class="sc"><div class="scl">Company Total</div><div class="scv">UGX '+N(tc)+'</div><div class="scs">'+orders.length+' orders</div></div>'
-    +'<div class="sc"><div class="scl">Top-ups</div><div class="scv">UGX '+N(tt)+'</div><div class="scs">Paid by staff</div></div>'
-    +'<div class="sc"><div class="scl">Grand Total</div><div class="scv">UGX '+N(tc+tt)+'</div><div class="scs">All meals</div></div>'
-    +'</div>'
-    +'<div class="card"><div class="ct">All Orders — '+fmtWk(w)+'</div>'
-    +'<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="rtb" style="min-width:560px;">'
-    +'<thead><tr><th>Day</th><th>Employee</th><th>Main Course</th><th>Sauce</th><th style="text-align:right">Price</th><th style="text-align:right">Company</th><th style="text-align:right">Top-up</th></tr></thead>'
-    +'<tbody>'+mainRows+'</tbody></table></div></div>'
-    +'<div class="card"><div class="ct">Per-Employee Summary</div>'
-    +'<div style="overflow-x:auto;"><table class="rtb" style="min-width:420px;">'
-    +'<thead><tr><th>Employee</th><th>Orders</th><th style="text-align:right">Company</th><th style="text-align:right">Top-ups</th><th style="text-align:right">Total</th></tr></thead>'
-    +'<tbody>'+empRows
-    +'<tr class="ttr"><td>TOTAL</td><td>'+orders.length+'</td>'
-    +'<td style="text-align:right;">UGX '+N(tc)+'</td>'
-    +'<td style="text-align:right;">'+(tt?'UGX '+N(tt):'—')+'</td>'
-    +'<td style="text-align:right;">UGX '+N(tc+tt)+'</td></tr>'
-    +'</tbody></table></div></div>';
-}
-
-function renderCfg(){
-  var em=gE(),sess=getSess();
-  if(isAdmin()){
-    document.getElementById('emp-list').innerHTML='<div style="font-size:.85rem;color:var(--text-muted);padding:.5rem 0;">Admin account — no name to update.</div>';
-  } else {
-    var idx=sess?sess.ei:0;
-    var ac=AV[idx];
-    document.getElementById('emp-list').innerHTML='<div class="er">'
-      +'<div class="av" style="width:38px;height:38px;background:'+ac.bg+';color:'+ac.fg+';flex-shrink:0;" id="avx">'+ini(em[idx])+'</div>'
-      +'<input type="text" id="eix" value="'+em[idx]+'" placeholder="Your name" oninput="document.getElementById(\'avx\').textContent=this.value.trim().split(\' \').map(function(w){return w[0];}).join(\'\').slice(0,2).toUpperCase()||\'?\'"></div>';
-  }
-  document.getElementById('ptbl').innerHTML=SC.map(function(s){
-    var t1=Math.max(0,s.p-3000),t2=Math.max(0,s.p-5000);
-    return '<tr><td>'+s.l+'</td><td style="text-align:right;">'+N(s.p)+'</td>'
-      +'<td style="text-align:right;'+(t1>0?'color:#92400e;font-weight:600;':'color:#0284c7;')+'">'+(t1?'+'+N(t1):'Covered')+'</td>'
-      +'<td style="text-align:right;'+(t2>0?'color:#92400e;font-weight:600;':'color:#0284c7;')+'">'+(t2?'+'+N(t2):'Covered')+'</td></tr>';
-  }).join('');
-}
-
-function saveEmp(){
-  var em=gE(),sess=getSess(),idx=sess?sess.ei:0;
-  var v=document.getElementById('eix');
-  if(v&&v.value.trim()){em[idx]=v.value.trim();}
-  sE(em);
-  if(sess)setSess({ei:sess.ei,en:em[sess.ei]});
-  refEmp();showToast('Name saved');
-}
-
-function toggleTheme(){
-  var dark=document.body.classList.toggle('dark');
-  localStorage.setItem('lt-theme',dark?'dark':'light');
-  document.getElementById('theme-icon').innerHTML=dark?'&#9728;':'&#127769;';
-}
-
-// INIT
-(function(){
-  var saved=localStorage.getItem('lt-theme');
-  var prefersDark=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches;
-  if(saved==='dark'||(saved===null&&prefersDark)){
-    document.body.classList.add('dark');
-    document.getElementById('theme-icon').innerHTML='&#9728;';
-  }
-  var today=new Date().toISOString().slice(0,10);
-  document.getElementById('f-date').value=today;
-  S.date=today;
-  var sess=getSess();
-  if(sess){
-    document.getElementById('ls').style.display='none';
-    document.getElementById('app').style.display='block';
-    var r=dayRate(today);
-    var d=new Date(today+'T00:00:00');
-
-    refEmp();
-  }
-  renderSauces();
-})();
-
-
-function switchReportTab(tab){
-  document.getElementById('report-weekly-controls').style.display=tab==='weekly'?'block':'none';
-  document.getElementById('report-monthly-controls').style.display=tab==='monthly'?'block':'none';
-  document.getElementById('tab-weekly').style.background=tab==='weekly'?'var(--g)':'var(--text-muted)';
-  document.getElementById('tab-monthly').style.background=tab==='monthly'?'var(--g)':'var(--text-muted)';
-  if(tab==='monthly') renderMonthly();
-  else renderAdminReport();
-}
+// ════════════════════════════════════════════
+// SECTION: Monthly Report — renderMonthly()
+// WHAT:    Groups orders by calendar month and shows per-employee monthly summary.
+// WHY:     Useful for end-of-month reconciliation and payroll deductions.
+// ════════════════════════════════════════════
 
 function renderMonthly(){
   var orders=gO();
@@ -752,8 +1465,6 @@ function renderMonthly(){
   });
   var mkeys=Object.keys(months).sort(function(a,b){return b.localeCompare(a);});
   var mnames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-
-  // Populate month select
   var sel=document.getElementById('rm'),pv=sel.value;
   sel.innerHTML='<option value="">Select a month...</option>'+mkeys.map(function(m){
     var parts=m.split('-');
@@ -761,17 +1472,14 @@ function renderMonthly(){
     return '<option value="'+m+'"'+(pv===m?' selected':'')+'>'+label+'</option>';
   }).join('');
   if(!sel.value&&mkeys.length)sel.value=mkeys[0];
-
   var selMonth=sel.value;
   if(!selMonth){document.getElementById('rep-body').innerHTML='<div class="empty">Select a month.</div>';return;}
   var mo=months[selMonth]||[];
   if(!mo.length){document.getElementById('rep-body').innerHTML='<div class="empty">No orders this month.</div>';return;}
-
   var parts=selMonth.split('-');
   var monthLabel=mnames[parseInt(parts[1])-1]+' '+parts[0];
   var tc=mo.reduce(function(s,o){return s+o.co;},0);
   var tt=mo.reduce(function(s,o){return s+o.tu;},0);
-
   var empRows=NAMES.map(function(n,i){
     var m2=mo.filter(function(o){return o.ei===i;});
     if(!m2.length)return '';
@@ -782,7 +1490,6 @@ function renderMonthly(){
       +'<td style="text-align:right;'+(et>0?'color:#92400e;font-weight:600;':'color:#0284c7;')+'">'+(et>0?'UGX '+N(et):'—')+'</td>'
       +'<td style="text-align:right;font-weight:600;">UGX '+N(ec+et)+'</td></tr>';
   }).join('');
-
   document.getElementById('rep-body').innerHTML='<div class="sc3">'
     +'<div class="sc"><div class="scl">Company Total</div><div class="scv">UGX '+N(tc)+'</div><div class="scs">'+mo.length+' orders in '+monthLabel+'</div></div>'
     +'<div class="sc"><div class="scl">Top-ups</div><div class="scv">UGX '+N(tt)+'</div><div class="scs">Paid by staff</div></div>'
@@ -799,31 +1506,99 @@ function renderMonthly(){
     +'</tbody></table></div></div>';
 }
 
-// Expose functions for Firebase module
-window.gE = gE;
-window.sE = sE;
-window.gO = gO;
-window.sO = sO;
-window.getSess = getSess;
-window.setSess = setSess;
-window.SC = SC;
-window.S = S;
-window.N = N;
-window.calcCost = calcCost;
-window.showToast = showToast;
-window.refEmp = refEmp;
-window.renderSauces = renderSauces;
-window.renderLog = renderLog;
-window.renderAdminReport = renderAdminReport;
-window.doSubmit = doSubmit;
-window.delO = delO;
+// ════════════════════════════════════════════
+// SECTION: Settings Render — renderCfg()
+// WHAT:    Shows name editor for current user and the pricing reference table.
+// WHY:     Staff shouldn't need to ask what things cost — the table is always here.
+// ════════════════════════════════════════════
 
+function renderCfg(){
+  var em=gE(),sess=getSess();
+  if(isAdmin()){
+    document.getElementById('emp-list').innerHTML='<div style="font-size:.85rem;color:var(--text-muted);padding:.5rem 0;">Admin account — no name to update.</div>';
+  } else {
+    var idx=sess?sess.ei:0;
+    var ac=AV[idx];
+    document.getElementById('emp-list').innerHTML='<div class="er">'
+      +'<div class="av" style="width:38px;height:38px;background:'+ac.bg+';color:'+ac.fg+';flex-shrink:0;" id="avx">'+ini(em[idx])+'</div>'
+      +'<input type="text" id="eix" value="'+em[idx]+'" placeholder="Your name" oninput="document.getElementById(\'avx\').textContent=this.value.trim().split(\' \').map(function(w){return w[0];}).join(\'\').slice(0,2).toUpperCase()||\'?\'"></div>';
+  }
+  document.getElementById('ptbl').innerHTML=SC.map(function(s){
+    var t1=Math.max(0,s.p-3000),t2=Math.max(0,s.p-5000);
+    return '<tr>'
+      +'<td>'+s.icon+' '+s.l+'</td>'
+      +'<td style="text-align:right;">'+N(s.p)+'</td>'
+      +'<td style="text-align:right;'+(t1>0?'color:#92400e;font-weight:600;':'color:#0284c7;')+'">'+(t1?'+'+N(t1):'Covered')+'</td>'
+      +'<td style="text-align:right;'+(t2>0?'color:#92400e;font-weight:600;':'color:#0284c7;')+'">'+(t2?'+'+N(t2):'Covered')+'</td></tr>';
+  }).join('');
+}
+
+// This saves the employee name to localStorage and refreshes the greeting
+function saveEmp(){
+  var em=gE(),sess=getSess(),idx=sess?sess.ei:0;
+  var v=document.getElementById('eix');
+  if(v&&v.value.trim()){em[idx]=v.value.trim();}
+  sE(em);
+  if(sess)setSess({ei:sess.ei,en:em[sess.ei]});
+  refEmp();showToast('Name saved');
+}
+
+// ════════════════════════════════════════════
+// SECTION: Report Tab Switcher
+// WHAT:    Switches between the Weekly and Monthly report views.
+// WHY:     Two time horizons serve different management needs.
+// ════════════════════════════════════════════
+
+function switchReportTab(tab){
+  document.getElementById('report-weekly-controls').style.display=tab==='weekly'?'block':'none';
+  document.getElementById('report-monthly-controls').style.display=tab==='monthly'?'block':'none';
+  document.getElementById('tab-weekly').style.background=tab==='weekly'?'var(--g)':'var(--text-muted)';
+  document.getElementById('tab-monthly').style.background=tab==='monthly'?'var(--g)':'var(--text-muted)';
+  if(tab==='monthly') renderMonthly();
+  else renderReport();
+}
+
+// ════════════════════════════════════════════
+// SECTION: Initialisation — runs on page load
+// WHAT:    Sets default date, and restores session if one exists.
+// WHY:     Refreshing the page should not log you out if the session is still valid.
+// ════════════════════════════════════════════
+
+(function(){
+  // Set the date picker to today's date
+  var today=new Date().toISOString().slice(0,10);
+  document.getElementById('f-date').value=today;
+  S.date=today;
+
+  // If a valid session already exists, skip the login screen
+  var sess=getSess();
+  if(sess){
+    document.getElementById('ls').style.display='none';
+    document.getElementById('app').style.display='block';
+    if(sess.admin){go('report');}else{refEmp();go('order');}
+  }
+
+  // Always render sauces in case we're restoring to the orders page
+  renderSauces();
+})();
+
+// ════════════════════════════════════════════
+// SECTION: Window Exports for Firebase Module
+// WHAT:    Makes core functions accessible to the Firebase module loaded below.
+// WHY:     ES modules have separate scope — window.* is the bridge.
+// ════════════════════════════════════════════
+window.gE=gE;window.sE=sE;window.gO=gO;window.sO=sO;window.getSess=getSess;
+window.setSess=setSess;window.SC=SC;window.S=S;window.N=N;
+window.calcCost=calcCost;window.showToast=showToast;window.refEmp=refEmp;
+window.renderSauces=renderSauces;window.renderLog=renderLog;
+window.renderAdminReport=renderAdminReport;window.doSubmit=doSubmit;window.delO=delO;
 </script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, onValue, remove, push } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
+// Firebase project configuration — do not edit these values
 const firebaseConfig = {
   apiKey: "AIzaSyAwW31V5RCTfhQMdqm9-Vx7YK6IQtFbY00",
   authDomain: "mealtime-ha.firebaseapp.com",
@@ -838,59 +1613,53 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const ordersRef = ref(db, 'orders');
 
-// ── OVERRIDE localStorage order functions with Firebase ───────────────────
-// Listen for real-time updates from Firebase
+// In-memory order store — Firebase populates this via real-time listener
 window._fbOrders = [];
 window._fbReady = false;
 window._fbListeners = [];
 
+// This listener fires immediately and on every Firebase data change
 onValue(ordersRef, function(snapshot) {
   var data = snapshot.val();
   var orders = [];
   if(data){
     Object.keys(data).forEach(function(key){
       var o = data[key];
-      o._fbKey = key;
+      o._fbKey = key; // Store Firebase key on each order for later delete
       orders.push(o);
     });
-    // Sort by id descending (newest first)
+    // Sort newest first so the log always shows the most recent at the top
     orders.sort(function(a,b){ return b.id - a.id; });
   }
   window._fbOrders = orders;
   window._fbReady = true;
-  // Notify any listeners (log, report re-render)
+  // Notify registered listeners (log page, report page) to re-render
   window._fbListeners.forEach(function(fn){ fn(); });
 });
 
-// Override gO to return Firebase orders
+// Override gO to return Firebase orders instead of localStorage
 window.gO = function(){ return window._fbOrders.slice(); };
 
-// Override sO to write to Firebase
-// sO receives the full array - find what changed
-window.sO = function(orders){
-  // This is called with the full new array after add/delete
-  // We handle add and delete separately via Firebase push/remove
-  // so sO is now a no-op (handled by doSubmitFB and delOFB)
-};
+// sO is a no-op — Firebase handles writes through doSubmitFB and delOFB
+window.sO = function(orders){};
 
-// Add order to Firebase
+// doSubmitFB pushes a new order to Firebase — generates a unique key automatically
 window.doSubmitFB = function(order){
-  push(ordersRef, order).then(function(){
-    // success
-  }).catch(function(e){ alert('Could not save order. Check your connection.'); });
+  push(ordersRef, order).catch(function(e){ alert('Could not save order. Check your connection.'); });
 };
 
-// Delete order from Firebase by fbKey
+// delOFB removes an order from Firebase by its unique key
 window.delOFB = function(fbKey){
   remove(ref(db, 'orders/'+fbKey));
 };
 
-// Patch doSubmit to use Firebase
+// Patch doSubmit to use Firebase — replaces the localStorage version
 var _origDoSubmit = window.doSubmit;
 window.doSubmit = function(){
   var em = window.gE();
   var SC = window.SC;
   var S = window.S;
+  // Find the selected sauce object from SC
   var s = null; for(var i=0;i<SC.length;i++){if(SC[i].k===S.sauce){s=SC[i];break;}}
   if(!s) return;
   var c = window.calcCost(s.p, S.date);
@@ -907,8 +1676,16 @@ window.doSubmit = function(){
     tu: c.tu,
     special: special
   };
+
+  // FIX #3 (Firebase layer): If editing, delete the old record before pushing new one
+  if(window._editingFbKey){
+    window.delOFB(window._editingFbKey);
+    window._editingFbKey = null;
+  }
+
   window.doSubmitFB(order);
-  // Reset form
+
+  // Reset the form after submission
   S.sauce=''; S.st=[]; S.emp='';
   document.getElementById('f-emp').value='';
   document.querySelectorAll('.pill').forEach(function(x){x.classList.remove('on');});
@@ -917,12 +1694,15 @@ window.doSubmit = function(){
   document.getElementById('csummary').innerHTML='';
   document.getElementById('f-special').value='';
   document.getElementById('btn-add').disabled=true;
-  window.showToast('Order placed'+(c.tu>0?' - remember to top up UGX '+window.N(c.tu):''));
+  window.showToast('Order placed'+(c.tu>0?' — remember to top up UGX '+window.N(c.tu):''));
   window.refEmp();
   window.renderSauces();
+
+  // Hide the edit banner if it was showing
+  var b=document.getElementById('edit-banner');if(b)b.classList.remove('on');
 };
 
-// Patch delO to use Firebase
+// Patch delO to use Firebase by matching the order's Firebase key
 window.delO = function(id){
   if(!confirm('Cancel this order?')) return;
   var orders = window._fbOrders;
@@ -934,7 +1714,7 @@ window.delO = function(id){
   }
 };
 
-// Re-render log/report when Firebase data updates
+// Re-render the active page whenever Firebase data updates
 window._fbListeners.push(function(){
   var active = document.querySelector('.pg.on');
   if(!active) return;
@@ -946,7 +1726,22 @@ window._fbListeners.push(function(){
   }
 });
 
-console.log('Firebase connected to mealtime-ha');
+// Make the editing FB key accessible from the non-module editO function
+// editO() sets this before calling go('order'), doSubmit() reads and clears it
+window._editingFbKey = null;
+var _origEditO = window.editO;
+// Patch editO to also set window._editingFbKey for the Firebase doSubmit override
+var originalScript = document.querySelector('script:not([type])');
+var _eo_orig = window.editO;
+window.editO = function(id){
+  var orders = window._fbOrders;
+  var o = null;
+  for(var i=0;i<orders.length;i++){if(orders[i].id===id){o=orders[i];break;}}
+  if(o&&o._fbKey){ window._editingFbKey = o._fbKey; }
+  _eo_orig(id);
+};
+
+console.log('Firebase connected to mealtime-ha — glassmorphism upgrade active');
 </script>
 </body>
 </html>
