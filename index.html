@@ -1653,9 +1653,74 @@ window.delOFB = function(fbKey){
   remove(ref(db, 'orders/'+fbKey));
 };
 
-// Patch doSubmit to use Firebase — replaces the localStorage version
+// ════════════════════════════════════════════
+// ZOHO TABLES INTEGRATION
+// Credentials discovered and tested via the OAuth workflow.
+// The column IDs (RUxi5Q, emi2sQ, Lvw7Dw) are Zoho's internal
+// field codes decoded from a GET request on the live table.
+// ════════════════════════════════════════════
+const ZOHO_CLIENT_ID     = '1000.DFO7JKI0AHTJHHQ57F5CK1LP1AUCPZ';
+const ZOHO_CLIENT_SECRET = 'e2ed459a6ad80c311e1d4ce58752da27b175dbd90d';
+const ZOHO_REFRESH_TOKEN = '1000.735ea2f1f845fa3b4ce9d676e84b26ba.41ac966c28ec1dc56cff7eebf205b381';
+const ZOHO_BASE_ID       = 'w4ka7d06f6309608f4bb9be39e6bcd13b7d85';
+const ZOHO_TABLE_ID      = '6hFs7Q';
+
+async function pushOrderToZoho(order) {
+  try {
+    // Step 1 — Exchange refresh token for a fresh 1-hour access token
+    const tokenRes = await fetch(
+      `https://accounts.zoho.com/oauth/v2/token` +
+      `?refresh_token=${ZOHO_REFRESH_TOKEN}` +
+      `&client_id=${ZOHO_CLIENT_ID}` +
+      `&client_secret=${ZOHO_CLIENT_SECRET}` +
+      `&grant_type=refresh_token`,
+      { method: 'POST' }
+    );
+    const tokenData = await tokenRes.json();
+    const accessToken = tokenData.access_token;
+
+    if (!accessToken) {
+      console.error('Zoho: could not get access token', tokenData);
+      return;
+    }
+
+    // Step 2 — Build the record using Zoho's internal column IDs
+    // RUxi5Q = Employee Name | emi2sQ = Order Date | Lvw7Dw = Price(UGX)
+    const zohoRecord = {
+      'RUxi5Q': order.en,    // Employee Name
+      'emi2sQ': order.date,  // Order Date (YYYY-MM-DD)
+      'Lvw7Dw': String(order.sp) // Meal Price — the full restaurant cost
+    };
+
+    const formData = new URLSearchParams();
+    formData.append('field_ids_with_values', JSON.stringify(zohoRecord));
+
+    // Step 3 — POST the record to Zoho Tables
+    const recordRes = await fetch(
+      `https://tables.zoho.com/api/v1/records` +
+      `?base_id=${ZOHO_BASE_ID}&table_id=${ZOHO_TABLE_ID}`,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: formData.toString()
+      }
+    );
+
+    const result = await recordRes.text();
+    console.log('Zoho sync:', result);
+
+  } catch (err) {
+    // Zoho failure is silent to the user — Firebase is the source of truth
+    console.error('Zoho sync failed (order still saved to Firebase):', err);
+  }
+}
+
+// Patch doSubmit to use Firebase AND Zoho — replaces the localStorage version
 var _origDoSubmit = window.doSubmit;
-window.doSubmit = function(){
+window.doSubmit = async function(){
   var em = window.gE();
   var SC = window.SC;
   var S = window.S;
@@ -1677,13 +1742,17 @@ window.doSubmit = function(){
     special: special
   };
 
-  // FIX #3 (Firebase layer): If editing, delete the old record before pushing new one
+  // If editing, delete the old record before pushing new one
   if(window._editingFbKey){
     window.delOFB(window._editingFbKey);
     window._editingFbKey = null;
   }
 
+  // 1. Save to Firebase (primary source of truth — always runs first)
   window.doSubmitFB(order);
+
+  // 2. Mirror to Zoho Tables (async, non-blocking — does not affect the UI)
+  pushOrderToZoho(order);
 
   // Reset the form after submission
   S.sauce=''; S.st=[]; S.emp='';
