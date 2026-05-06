@@ -9,74 +9,28 @@
 <style>
 /* ════════════════════════════════════════════
    SECTION: Reset & Root Variables
-   WHAT:    Zeroes browser defaults and defines brand colour tokens.
-   WHY:     Consistent spacing and colours everywhere — nothing inherits unexpected defaults.
    ════════════════════════════════════════════ */
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{width:100%;overflow-x:hidden;}
 :root{
-  /* Brand core */
-  --g:#0a1628;
-  --gm:#1565c0;
-  --gl:#dbeeff;
-  --gp:#eef6ff;
-  --al:#fef3c7;
-  --bd:#e2e8f0;
-  --mu:#6b7280;
-
-  /* Light theme surfaces */
-  --bg-page:#e8eef8;
-  --bg-card:#ffffff;
-  --bg-input:#ffffff;
-  --text-main:#1a1a2e;
-  --text-muted:#6b7280;
-  --text-light:#9ca3af;
-
-  /* Glass effect tokens */
-  --glass-bg:rgba(255,255,255,0.65);
-  --glass-border:rgba(255,255,255,0.85);
+  --g:#0a1628; --gm:#1565c0; --gl:#dbeeff; --gp:#eef6ff; --al:#fef3c7; --bd:#e2e8f0; --mu:#6b7280;
+  --bg-page:#e8eef8; --bg-card:#ffffff; --bg-input:#ffffff;
+  --text-main:#1a1a2e; --text-muted:#6b7280; --text-light:#9ca3af;
+  --glass-bg:rgba(255,255,255,0.65); --glass-border:rgba(255,255,255,0.85);
   --glass-shadow:0 8px 32px rgba(10,22,40,0.10), 0 1.5px 4px rgba(10,22,40,0.06);
   --glass-blur:blur(18px) saturate(1.6);
-
-  /* Meal icon colours */
-  --food-warm:#ff6b35;
-  --food-green:#22c55e;
-  --food-gold:#f59e0b;
-  --food-blue:#3b82f6;
 }
 
-/* Dark theme overrides */
 body.dark{
-  --bg-page:#0d1117;
-  --bg-card:#161b22;
-  --bg-input:#1c2333;
-  --text-main:#e6edf3;
-  --text-muted:#8b949e;
-  --text-light:#484f58;
-  --bd:#30363d;
-  --mu:#8b949e;
-  --gl:#0d2137;
-  --gp:#0d1f35;
-  --al:#2d1f00;
-  --glass-bg:rgba(22,27,34,0.75);
-  --glass-border:rgba(255,255,255,0.08);
+  --bg-page:#0d1117; --bg-card:#161b22; --bg-input:#1c2333;
+  --text-main:#e6edf3; --text-muted:#8b949e; --text-light:#484f58; --bd:#30363d; --mu:#8b949e;
+  --glass-bg:rgba(22,27,34,0.75); --glass-border:rgba(255,255,255,0.08);
   --glass-shadow:0 8px 32px rgba(0,0,0,0.4), 0 1.5px 4px rgba(0,0,0,0.2);
 }
 
-/* ════════════════════════════════════════════
-   SECTION: Body Base
-   WHAT:    Font, background with mesh gradient, and animation base.
-   WHY:     The gradient mesh creates depth — the app feels alive, not flat.
-   ════════════════════════════════════════════ */
 body{
-  font-family:'DM Sans',sans-serif;
-  color:var(--text-main);
-  font-size:14px;
-  min-height:100vh;
-  -webkit-text-size-adjust:100%;
-  transition:background .3s,color .3s;
-  background-color:var(--bg-page);
-  /* Layered gradient mesh — brand colours only */
+  font-family:'DM Sans',sans-serif; color:var(--text-main); font-size:14px; min-height:100vh;
+  -webkit-text-size-adjust:100%; transition:background .3s,color .3s; background-color:var(--bg-page);
   background-image:
     radial-gradient(ellipse at 20% 10%, rgba(21,101,192,0.18) 0%, transparent 55%),
     radial-gradient(ellipse at 80% 5%, rgba(10,22,40,0.12) 0%, transparent 50%),
@@ -93,599 +47,139 @@ body.dark{
 }
 
 /* ════════════════════════════════════════════
-   SECTION: Login Screen
-   WHAT:    Full-screen centered login overlay with glass card.
-   WHY:     Covers the entire app until authentication is confirmed.
+   SECTION: Core Layout & Cards
    ════════════════════════════════════════════ */
-#ls{
-  position:fixed;top:0;left:0;width:100%;height:100%;
-  background:transparent;z-index:500;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;
-}
-/* Glass login card */
-.lc{
-  background:var(--glass-bg);
-  border:1px solid var(--glass-border);
-  border-radius:20px;
-  padding:1.75rem;
-  backdrop-filter:var(--glass-blur);
-  -webkit-backdrop-filter:var(--glass-blur);
-  box-shadow:var(--glass-shadow);
-}
+#ls{position:fixed;top:0;left:0;width:100%;height:100%;background:transparent;z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;}
+.lc{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:1.75rem;backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);box-shadow:var(--glass-shadow);}
 .lf{margin-bottom:1rem;}
-.lf label{
-  display:block;font-size:.68rem;font-weight:600;
-  color:var(--text-muted);text-transform:uppercase;
-  letter-spacing:.07em;margin-bottom:.3rem;
-}
-/* Login inputs — glass inset look */
-.lf select,.lf input{
-  height:46px;padding:0 .9rem;
-  border:1.5px solid var(--glass-border);
-  border-radius:12px;
-  font-family:'DM Sans',sans-serif;font-size:16px;
-  color:var(--text-main);
-  background:rgba(255,255,255,0.55);
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-  width:100%;appearance:none;
-  transition:border-color .2s, box-shadow .2s;
-}
-.lf select:focus,.lf input:focus{
-  outline:none;
-  border-color:#1a9ed4;
-  box-shadow:0 0 0 3px rgba(26,158,212,0.15);
-}
-body.dark .lf select,body.dark .lf input{
-  background:rgba(28,35,51,0.7);
-  border-color:rgba(255,255,255,0.12);
-  color:#e6edf3;
-}
-.lf select{
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 12px center;
-}
-#lerr{
-  display:none;font-size:.82rem;color:#c0392b;margin-bottom:.75rem;
-  padding:.5rem .75rem;background:#fdecea;border-radius:10px;border:1px solid #fca5a5;
-}
-.lbtn{
-  background:linear-gradient(135deg,#0a1628 0%,#1565c0 100%);
-  color:#fff;border:none;border-radius:12px;height:46px;
-  font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;
-  cursor:pointer;width:100%;
-  box-shadow:0 4px 16px rgba(10,22,40,0.25);
-  transition:all .2s;letter-spacing:.02em;
-}
-.lbtn:hover{
-  background:linear-gradient(135deg,#1565c0 0%,#1a9ed4 100%);
-  transform:translateY(-1px);box-shadow:0 6px 20px rgba(10,22,40,0.35);
-}
+.lf label{display:block;font-size:.68rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.3rem;}
+.lf select,.lf input{height:46px;padding:0 .9rem;border:1.5px solid var(--glass-border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--text-main);background:rgba(255,255,255,0.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);width:100%;appearance:none;transition:border-color .2s, box-shadow .2s;}
+.lf select:focus,.lf input:focus{outline:none;border-color:#1a9ed4;box-shadow:0 0 0 3px rgba(26,158,212,0.15);}
+body.dark .lf select,body.dark .lf input{background:rgba(28,35,51,0.7);border-color:rgba(255,255,255,0.12);color:#e6edf3;}
+.lf select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;}
+#lerr{display:none;font-size:.82rem;color:#c0392b;margin-bottom:.75rem;padding:.5rem .75rem;background:#fdecea;border-radius:10px;border:1px solid #fca5a5;}
+.lbtn{background:linear-gradient(135deg,#0a1628 0%,#1565c0 100%);color:#fff;border:none;border-radius:12px;height:46px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;width:100%;box-shadow:0 4px 16px rgba(10,22,40,0.25);transition:all .2s;letter-spacing:.02em;}
+.lbtn:hover{background:linear-gradient(135deg,#1565c0 0%,#1a9ed4 100%);transform:translateY(-1px);box-shadow:0 6px 20px rgba(10,22,40,0.35);}
 .lbtn:active{transform:translateY(0);}
 
-/* ════════════════════════════════════════════
-   SECTION: Top Navigation Bar
-   WHAT:    Sticky app bar with logo and nav tabs.
-   WHY:     Glass effect ties the bar visually to the page without blocking the gradient.
-   ════════════════════════════════════════════ */
-.bar{
-  background:rgba(10,22,40,0.82);
-  backdrop-filter:blur(20px) saturate(1.8);
-  -webkit-backdrop-filter:blur(20px) saturate(1.8);
-  border-bottom:1px solid rgba(255,255,255,0.07);
-  padding:0 1rem;display:flex;align-items:center;
-  justify-content:space-between;min-height:58px;
-  width:100%;box-sizing:border-box;
-  position:sticky;top:0;z-index:50;gap:.5rem;overflow-x:auto;
-}
+.bar{background:rgba(10,22,40,0.82);backdrop-filter:blur(20px) saturate(1.8);-webkit-backdrop-filter:blur(20px) saturate(1.8);border-bottom:1px solid rgba(255,255,255,0.07);padding:0 1rem;display:flex;align-items:center;justify-content:space-between;min-height:58px;width:100%;box-sizing:border-box;position:sticky;top:0;z-index:50;gap:.5rem;overflow-x:auto;}
 .bar-t{color:#fff;font-family:'DM Serif Display',serif;font-size:.95rem;letter-spacing:.01em;}
 .bar-s{color:rgba(255,255,255,.45);font-size:.68rem;margin-top:1px;}
 .nav{display:flex;align-items:center;gap:.2rem;}
-.nb{
-  background:none;border:none;
-  color:rgba(255,255,255,.55);
-  font-family:'DM Sans',sans-serif;font-size:.73rem;font-weight:600;
-  padding:.45rem .65rem;cursor:pointer;
-  border-bottom:2px solid transparent;
-  text-transform:uppercase;letter-spacing:.04em;
-  transition:all .2s;white-space:nowrap;flex-shrink:0;
-  border-radius:6px 6px 0 0;
-}
+.nb{background:none;border:none;color:rgba(255,255,255,.55);font-family:'DM Sans',sans-serif;font-size:.73rem;font-weight:600;padding:.45rem .65rem;cursor:pointer;border-bottom:2px solid transparent;text-transform:uppercase;letter-spacing:.04em;transition:all .2s;white-space:nowrap;flex-shrink:0;border-radius:6px 6px 0 0;}
 .nb.on{color:#fff;border-bottom-color:#00d4f5;background:rgba(255,255,255,0.06);}
 .nb:hover:not(.on){color:rgba(255,255,255,.9);background:rgba(255,255,255,0.05);}
 
-/* ════════════════════════════════════════════
-   SECTION: Page Layout
-   WHAT:    Centred content wrapper and animated page sections.
-   WHY:     Pages slide in on switch — this prevents jarring instant-swap.
-   ════════════════════════════════════════════ */
-.pg{
-  display:none;max-width:800px;margin:0 auto;
-  padding:1.75rem 1.25rem;
-  animation:pgIn .3s ease;
-}
+/* Wide PG Width to accommodate the 75/25 layout */
+.pg{display:none;max-width:800px;margin:0 auto;padding:1.75rem 1.25rem;animation:pgIn .3s ease;}
 .pg.on{display:block;}
+.pg.wide{max-width:1300px; padding: 2.5rem 1.5rem;} 
 @keyframes pgIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
 
-/* ════════════════════════════════════════════
-   SECTION: Glass Card
-   WHAT:    The core UI container — frosted glass aesthetic.
-   WHY:     Every content block floats off the gradient background with depth.
-   ════════════════════════════════════════════ */
-.card{
-  background:var(--glass-bg);
-  border:1px solid var(--glass-border);
-  border-radius:20px;padding:1.5rem;margin-bottom:1.25rem;
-  backdrop-filter:var(--glass-blur);
-  -webkit-backdrop-filter:var(--glass-blur);
-  box-shadow:var(--glass-shadow);
-  transition:background .3s, box-shadow .2s;
-}
+.card{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:1.5rem;margin-bottom:1.25rem;backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);box-shadow:var(--glass-shadow);transition:background .3s, box-shadow .2s;}
 .card:hover{box-shadow:0 12px 40px rgba(10,22,40,0.14), 0 2px 6px rgba(10,22,40,0.07);}
-.ct{
-  font-family:'DM Serif Display',serif;font-size:1.05rem;
-  color:var(--text-main);margin-bottom:1.1rem;
-  letter-spacing:.01em;
-}
-.lbl{
-  display:block;font-size:.67rem;font-weight:600;
-  color:var(--text-muted);text-transform:uppercase;
-  letter-spacing:.07em;margin-bottom:.35rem;
-}
+.ct{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--text-main);margin-bottom:1.1rem;letter-spacing:.01em;}
+.lbl{display:block;font-size:.67rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.35rem;}
 .r2{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:.9rem;}
 .field{margin-bottom:.9rem;}
 
-/* Inputs — glass style */
-select,input[type=date]{
-  height:42px;padding:0 .85rem;
-  border:1.5px solid rgba(203,213,225,0.7);
-  border-radius:12px;
-  font-family:'DM Sans',sans-serif;font-size:16px;
-  color:var(--text-main);
-  background:rgba(255,255,255,0.6);
-  backdrop-filter:blur(6px);
-  -webkit-backdrop-filter:blur(6px);
-  width:100%;
-  transition:border-color .2s,background .2s,box-shadow .2s;
-}
-body.dark select,body.dark input[type=date]{
-  background:rgba(28,35,51,0.65);
-  border-color:rgba(255,255,255,0.10);
-  color:#e6edf3;
-}
-select{
-  appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 10px center;
-}
-select:focus,input:focus{
-  outline:none;border-color:#1a9ed4;
-  box-shadow:0 0 0 3px rgba(26,158,212,0.15);
-  background:rgba(255,255,255,0.8);
-}
-body.dark select:focus,body.dark input:focus{
-  background:rgba(28,35,51,0.9);
-}
+select,input[type=date]{height:42px;padding:0 .85rem;border:1.5px solid rgba(203,213,225,0.7);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--text-main);background:rgba(255,255,255,0.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);width:100%;transition:border-color .2s,background .2s,box-shadow .2s;}
+body.dark select,body.dark input[type=date]{background:rgba(28,35,51,0.65);border-color:rgba(255,255,255,0.10);color:#e6edf3;}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;}
+select:focus,input:focus{outline:none;border-color:#1a9ed4;box-shadow:0 0 0 3px rgba(26,158,212,0.15);background:rgba(255,255,255,0.8);}
+body.dark select:focus,body.dark input:focus{background:rgba(28,35,51,0.9);}
 
 /* ════════════════════════════════════════════
-   SECTION: Meal Pills (Starch Selection)
-   WHAT:    Clickable pill buttons for selecting main course starches.
-   WHY:     Multi-select needs visual toggle state — pills communicate selection at a glance.
+   SECTION: Meal Selection & UI Components
    ════════════════════════════════════════════ */
-.pills{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.4rem;}
-.pill{
-  padding:.4rem 1rem;
-  border:1.5px solid rgba(203,213,225,0.6);
-  border-radius:50px;
-  font-size:.83rem;font-weight:500;
-  cursor:pointer;
-  background:rgba(255,255,255,0.5);
-  backdrop-filter:blur(6px);
-  -webkit-backdrop-filter:blur(6px);
-  color:var(--text-muted);
-  user-select:none;
-  transition:all .2s;
-}
-.pill.on{
-  border-color:#1a9ed4;
-  background:linear-gradient(135deg,rgba(26,158,212,0.15),rgba(21,101,192,0.1));
-  color:var(--text-main);
-  box-shadow:0 0 0 2px rgba(26,158,212,0.2);
-}
+.pills{display:grid;grid-template-columns:repeat(3,1fr);gap:.55rem;margin-top:.4rem;}
+.pill{padding:.65rem .5rem;border:1.5px solid rgba(203,213,225,0.6);border-radius:14px;font-size:.92rem;font-weight:600;text-align:center;cursor:pointer;background:rgba(255,255,255,0.5);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:var(--text-muted);user-select:none;transition:all .2s;}
+.pill.on{border-color:#1a9ed4;background:linear-gradient(135deg,rgba(26,158,212,0.15),rgba(21,101,192,0.1));color:var(--text-main);box-shadow:0 0 0 2px rgba(26,158,212,0.2);}
 .pill:hover:not(.on){border-color:#9ca3af;background:rgba(255,255,255,0.7);}
 .hint{font-size:.72rem;color:var(--text-light);margin-top:.45rem;}
 
-/* ════════════════════════════════════════════
-   SECTION: Meal Menu Cards (Sauce Selection)
-   WHAT:    Rich visual food cards with emoji icons, price, and selection state.
-   WHY:     Makes the ordering experience feel exciting — not just a form.
-   ════════════════════════════════════════════ */
-.menu-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
-  gap:.75rem;
-  margin-top:.35rem;
-}
-/* Each sauce becomes a beautiful food card */
-.food-card{
-  position:relative;
-  background:rgba(255,255,255,0.55);
-  border:1.5px solid rgba(203,213,225,0.5);
-  border-radius:16px;
-  padding:1rem .9rem .85rem;
-  cursor:pointer;
-  transition:all .22s cubic-bezier(.34,1.56,.64,1);
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-  overflow:hidden;
-  text-align:center;
-}
-body.dark .food-card{
-  background:rgba(22,27,34,0.6);
-  border-color:rgba(255,255,255,0.08);
-}
-/* Shimmer layer on hover */
-.food-card::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(255,255,255,0.3) 0%,transparent 60%);
-  opacity:0;transition:opacity .2s;border-radius:inherit;
-  pointer-events:none;
-}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.75rem;margin-top:.35rem;}
+.food-card{position:relative;background:rgba(255,255,255,0.55);border:1.5px solid rgba(203,213,225,0.5);border-radius:16px;padding:1rem .9rem .85rem;cursor:pointer;transition:all .22s cubic-bezier(.34,1.56,.64,1);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);overflow:hidden;text-align:center;}
+body.dark .food-card{background:rgba(22,27,34,0.6);border-color:rgba(255,255,255,0.08);}
+.food-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.3) 0%,transparent 60%);opacity:0;transition:opacity .2s;border-radius:inherit;pointer-events:none;}
 .food-card:hover::before{opacity:1;}
-.food-card:hover{
-  transform:translateY(-4px) scale(1.02);
-  box-shadow:0 12px 28px rgba(10,22,40,0.13);
-  border-color:rgba(26,158,212,0.4);
-}
-/* Selected state — glow + fill */
-.food-card.on{
-  border-color:#1a9ed4;
-  background:linear-gradient(135deg,rgba(26,158,212,0.18),rgba(21,101,192,0.12));
-  box-shadow:0 0 0 3px rgba(26,158,212,0.2), 0 8px 24px rgba(10,22,40,0.12);
-  transform:translateY(-2px);
-}
-body.dark .food-card.on{
-  background:linear-gradient(135deg,rgba(26,158,212,0.22),rgba(21,101,192,0.15));
-}
-/* Selected tick badge */
-.food-card .tick{
-  position:absolute;top:8px;right:8px;
-  width:20px;height:20px;
-  background:#1a9ed4;
-  border-radius:50%;
-  display:none;align-items:center;justify-content:center;
-  font-size:10px;color:#fff;font-weight:700;
-  box-shadow:0 2px 8px rgba(26,158,212,0.4);
-}
+.food-card:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 12px 28px rgba(10,22,40,0.13);border-color:rgba(26,158,212,0.4);}
+.food-card.on{border-color:#1a9ed4;background:linear-gradient(135deg,rgba(26,158,212,0.18),rgba(21,101,192,0.12));box-shadow:0 0 0 3px rgba(26,158,212,0.2), 0 8px 24px rgba(10,22,40,0.12);transform:translateY(-2px);}
+body.dark .food-card.on{background:linear-gradient(135deg,rgba(26,158,212,0.22),rgba(21,101,192,0.15));}
+.food-card .tick{position:absolute;top:8px;right:8px;width:20px;height:20px;background:#1a9ed4;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:700;box-shadow:0 2px 8px rgba(26,158,212,0.4);}
 .food-card.on .tick{display:flex;}
-/* Big emoji food icon */
-.food-icon{
-  font-size:2.4rem;
-  display:block;
-  text-align:center;
-  margin:0 auto .5rem;
-  line-height:1;
-  filter:drop-shadow(0 2px 6px rgba(0,0,0,0.12));
-  transition:transform .2s;
-}
+.food-icon{font-size:2.4rem;display:block;text-align:center;margin:0 auto .5rem;line-height:1;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.12));transition:transform .2s;}
 .food-card:hover .food-icon{transform:scale(1.15) rotate(-5deg);}
 .food-card.on .food-icon{transform:scale(1.1);}
-.food-name{
-  font-size:.85rem;font-weight:600;
-  color:var(--text-main);margin-bottom:.3rem;
-  line-height:1.2;
-}
-.food-price{
-  font-size:.78rem;color:var(--text-muted);
-  font-weight:500;margin-bottom:.2rem;
-}
-.food-badge{
-  display:inline-block;
-  font-size:.65rem;font-weight:700;
-  padding:2px 8px;border-radius:50px;
-  margin-top:.25rem;
-  letter-spacing:.03em;
-}
+.food-name{font-size:.85rem;font-weight:600;color:var(--text-main);margin-bottom:.3rem;line-height:1.2;}
+.food-price{font-size:.78rem;color:var(--text-muted);font-weight:500;margin-bottom:.2rem;}
+.food-badge{display:inline-block;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:50px;margin-top:.25rem;letter-spacing:.03em;}
 .badge-topup{background:rgba(254,243,199,0.8);color:#92400e;border:1px solid #fcd34d;}
 body.dark .badge-topup{background:rgba(45,31,0,0.8);color:#fbbf24;border-color:#854d0e;}
 .badge-covered{background:rgba(219,238,255,0.8);color:#1565c0;border:1px solid #7dd3fc;}
 body.dark .badge-covered{background:rgba(13,33,55,0.8);color:#38bdf8;border-color:#1e4a7a;}
 
-/* ════════════════════════════════════════════
-   SECTION: Cost Summary Box
-   WHAT:    The coloured breakdown card showing company cost vs top-up.
-   WHY:     Staff need to know immediately if they owe money before placing the order.
-   ════════════════════════════════════════════ */
-.cbox{
-  border-radius:14px;padding:1rem 1.1rem;
-  display:flex;gap:.9rem;flex-wrap:wrap;margin-top:.9rem;
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-}
-.cbox.cg{
-  background:rgba(219,238,255,0.65);
-  border:1px solid rgba(125,211,252,0.6);
-}
-.cbox.ca{
-  background:rgba(254,243,199,0.65);
-  border:1px solid rgba(252,211,77,0.6);
-}
+.cbox{border-radius:14px;padding:1rem 1.1rem;display:flex;gap:.9rem;flex-wrap:wrap;margin-top:.9rem;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
+.cbox.cg{background:rgba(219,238,255,0.65);border:1px solid rgba(125,211,252,0.6);}
+.cbox.ca{background:rgba(254,243,199,0.65);border:1px solid rgba(252,211,77,0.6);}
 body.dark .cbox.ca{background:rgba(45,31,0,0.6);border-color:#854d0e;}
 body.dark .cbox.cg{background:rgba(13,33,55,0.6);border-color:#1e4a7a;}
 .ci .cl{font-size:.66rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;margin-bottom:.2rem;letter-spacing:.06em;}
 .ci .cv{font-size:1.05rem;font-weight:700;color:var(--text-main);}
-.tual{
-  background:rgba(254,243,199,0.7);
-  border:1px solid rgba(252,211,77,0.5);
-  border-radius:12px;padding:.7rem 1rem;
-  margin-top:.7rem;font-size:.86rem;color:#92400e;font-weight:500;
-  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-}
+.tual{background:rgba(254,243,199,0.7);border:1px solid rgba(252,211,77,0.5);border-radius:12px;padding:.7rem 1rem;margin-top:.7rem;font-size:.86rem;color:#92400e;font-weight:500;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
 body.dark .tual{background:rgba(45,31,0,0.7);border-color:#854d0e;color:#fbbf24;}
 
-/* ════════════════════════════════════════════
-   SECTION: Buttons
-   WHAT:    Primary CTA, small utility, delete, and edit button styles.
-   WHY:     Visual weight signals importance — the main CTA must dominate.
-   ════════════════════════════════════════════ */
-.btn{
-  background:linear-gradient(135deg,#0a1628 0%,#1565c0 100%);
-  color:#fff;border:none;border-radius:12px;height:46px;
-  font-family:'DM Sans',sans-serif;font-size:.92rem;font-weight:600;
-  cursor:pointer;width:100%;margin-top:.9rem;
-  transition:all .2s;letter-spacing:.02em;
-  box-shadow:0 4px 14px rgba(10,22,40,0.2);
-}
-.btn:hover{
-  background:linear-gradient(135deg,#1565c0 0%,#1a9ed4 100%);
-  transform:translateY(-1px);box-shadow:0 6px 20px rgba(10,22,40,0.3);
-}
+.btn{background:linear-gradient(135deg,#0a1628 0%,#1565c0 100%);color:#fff;border:none;border-radius:12px;height:46px;font-family:'DM Sans',sans-serif;font-size:.92rem;font-weight:600;cursor:pointer;width:100%;margin-top:.9rem;transition:all .2s;letter-spacing:.02em;box-shadow:0 4px 14px rgba(10,22,40,0.2);}
+.btn:hover{background:linear-gradient(135deg,#1565c0 0%,#1a9ed4 100%);transform:translateY(-1px);box-shadow:0 6px 20px rgba(10,22,40,0.3);}
 .btn:active{transform:translateY(0);}
-.btn:disabled{
-  background:linear-gradient(135deg,#94a3b8 0%,#cbd5e1 100%);
-  cursor:not-allowed;transform:none;box-shadow:none;
-}
-/* Small utility button base */
-.bsm{
-  background:rgba(255,255,255,0.5);
-  border:1.5px solid var(--bd);border-radius:8px;
-  padding:.32rem .75rem;
-  font-family:'DM Sans',sans-serif;font-size:.75rem;
-  color:var(--text-muted);cursor:pointer;
-  transition:all .18s;
-  backdrop-filter:blur(4px);
-}
+.btn:disabled{background:linear-gradient(135deg,#94a3b8 0%,#cbd5e1 100%);cursor:not-allowed;transform:none;box-shadow:none;}
+.bsm{background:rgba(255,255,255,0.5);border:1.5px solid var(--bd);border-radius:8px;padding:.32rem .75rem;font-family:'DM Sans',sans-serif;font-size:.75rem;color:var(--text-muted);cursor:pointer;transition:all .18s;backdrop-filter:blur(4px);}
 .bsm:hover{border-color:#1a9ed4;color:var(--g);}
 .bdel{border-color:#fca5a5;color:#c0392b;}
 .bdel:hover{background:rgba(253,236,234,0.8);border-color:#c0392b;}
 .bedit{border-color:#bfdbfe;color:#1565c0;}
 .bedit:hover{background:rgba(239,246,255,0.8);border-color:#1565c0;}
-body.dark .bsm{background:rgba(22,27,34,0.5);}
-body.dark .bdel{border-color:#6b2020;color:#f87171;}
-body.dark .bdel:hover{background:rgba(45,21,21,0.7);border-color:#f87171;}
-body.dark .bedit{border-color:#1e3a5f;color:#60a5fa;}
-body.dark .bedit:hover{background:rgba(13,33,55,0.7);border-color:#60a5fa;}
 
-/* ════════════════════════════════════════════
-   SECTION: Orders Log
-   WHAT:    Grouped list of orders by week and day.
-   WHY:     Grouping by date helps everyone track meal history at a glance.
-   ════════════════════════════════════════════ */
 .wbk{margin-bottom:2rem;}
-.wh{
-  display:flex;justify-content:space-between;align-items:center;
-  border-bottom:2px solid rgba(26,158,212,0.4);
-  padding-bottom:.5rem;margin-bottom:.75rem;
-}
+.wh{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid rgba(26,158,212,0.4);padding-bottom:.5rem;margin-bottom:.75rem;}
 .wh h3{font-family:'DM Serif Display',serif;font-size:.95rem;color:var(--text-main);}
 .wh .wt{font-size:.82rem;font-weight:700;color:var(--text-main);}
-.dlb{
-  font-size:.67rem;font-weight:600;color:var(--text-muted);
-  text-transform:uppercase;letter-spacing:.07em;margin:.7rem 0 .4rem;
-}
-/* Individual order row */
-.or{
-  background:var(--glass-bg);
-  border:1px solid var(--glass-border);
-  border-radius:14px;padding:.7rem 1rem;
-  display:flex;align-items:center;gap:.7rem;
-  margin-bottom:.4rem;
-  backdrop-filter:var(--glass-blur);
-  -webkit-backdrop-filter:var(--glass-blur);
-  box-shadow:var(--glass-shadow);
-  transition:all .2s;
-}
+.dlb{font-size:.67rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;margin:.7rem 0 .4rem;}
+.or{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:14px;padding:.7rem 1rem;display:flex;align-items:center;gap:.7rem;margin-bottom:.4rem;backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);box-shadow:var(--glass-shadow);transition:all .2s;}
 .or:hover{transform:translateX(3px);}
-.av{
-  width:36px;height:36px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:.73rem;font-weight:700;flex-shrink:0;
-  border:2px solid rgba(255,255,255,0.6);
-  box-shadow:0 2px 8px rgba(0,0,0,0.1);
-}
+.av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.73rem;font-weight:700;flex-shrink:0;border:2px solid rgba(255,255,255,0.6);box-shadow:0 2px 8px rgba(0,0,0,0.1);}
 .oi{flex:1;min-width:0;}
 .nm{font-size:.88rem;font-weight:600;color:var(--text-main);}
 .ml{font-size:.78rem;color:var(--text-muted);margin-top:1px;}
 .spreq{font-size:.74rem;color:#1565c0;margin-top:3px;font-style:italic;}
-body.dark .spreq{color:#60a5fa;}
 .oc{text-align:right;flex-shrink:0;}
 .cp2{font-size:.75rem;color:var(--text-muted);}
-.tub{
-  display:inline-block;background:rgba(254,243,199,0.8);
-  color:#92400e;font-size:.69rem;font-weight:700;
-  padding:1px 7px;border-radius:5px;margin-top:2px;
-  border:1px solid #fcd34d;
-}
+.tub{display:inline-block;background:rgba(254,243,199,0.8);color:#92400e;font-size:.69rem;font-weight:700;padding:1px 7px;border-radius:5px;margin-top:2px;border:1px solid #fcd34d;}
 .okb{font-size:.71rem;color:#0284c7;font-weight:600;}
-body.dark .tub{background:rgba(45,31,0,0.8);color:#fbbf24;}
-body.dark .okb{color:#38bdf8;}
-.empty{
-  text-align:center;padding:3.5rem 1rem;
-  color:var(--text-light);font-size:.9rem;
-}
+.empty{text-align:center;padding:3.5rem 1rem;color:var(--text-light);font-size:.9rem;}
 
-/* ════════════════════════════════════════════
-   SECTION: Report Tables
-   WHAT:    Summary stats grid and detailed order tables for admin view.
-   WHY:     Admin needs clean data export-ready layouts, not fancy cards.
-   ════════════════════════════════════════════ */
 .sc3{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;margin-bottom:1.35rem;}
-.sc{
-  background:var(--glass-bg);border:1px solid var(--glass-border);
-  border-radius:14px;padding:1rem 1.1rem;
-  backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
-  box-shadow:var(--glass-shadow);transition:all .2s;
-}
+.sc{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:14px;padding:1rem 1.1rem;backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);box-shadow:var(--glass-shadow);transition:all .2s;}
 .sc:hover{transform:translateY(-2px);}
 .scl{font-size:.67rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;margin-bottom:.28rem;letter-spacing:.06em;}
 .scv{font-size:1.25rem;font-weight:700;color:var(--text-main);}
 .scs{font-size:.71rem;color:var(--text-light);margin-top:.18rem;}
 .rtb{width:100%;border-collapse:collapse;font-size:.82rem;}
-.rtb th{
-  background:rgba(10,22,40,0.85);color:#fff;
-  padding:.6rem .85rem;text-align:left;
-  font-size:.7rem;text-transform:uppercase;font-weight:600;letter-spacing:.05em;
-}
+.rtb th{background:rgba(10,22,40,0.85);color:#fff;padding:.6rem .85rem;text-align:left;font-size:.7rem;text-transform:uppercase;font-weight:600;letter-spacing:.05em;}
 .rtb th:first-child{border-radius:8px 0 0 0;}
 .rtb th:last-child{border-radius:0 8px 0 0;}
-.rtb td{
-  padding:.58rem .85rem;border-bottom:1px solid var(--bd);
-  vertical-align:middle;color:var(--text-main);
-}
-.rtb tr:last-child td{border-bottom:none;}
+.rtb td{padding:.58rem .85rem;border-bottom:1px solid var(--bd);vertical-align:middle;color:var(--text-main);}
 .rtb tr:hover td{background:rgba(26,158,212,0.05);}
-body.dark .rtb td{border-bottom-color:#30363d;}
-.ttr td{
-  background:rgba(219,238,255,0.5);font-weight:700;
-  color:var(--g);border-top:2px solid #1a9ed4;
-}
-body.dark .ttr td{background:rgba(13,33,55,0.6);color:#93c5fd;}
-.rw{border:1px solid var(--bd);border-radius:14px;overflow:hidden;box-shadow:var(--glass-shadow);}
-body.dark .rw{border-color:#30363d;}
-.ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.35rem;}
-.ph h2{font-family:'DM Serif Display',serif;font-size:1.35rem;color:var(--text-main);}
-.bpr{
-  background:rgba(10,22,40,0.85);
-  color:#fff;border:none;border-radius:10px;
-  padding:0 1.1rem;height:38px;
-  font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;
-  backdrop-filter:blur(8px);transition:all .18s;
-}
-.bpr:hover{background:var(--gm);}
+.ttr td{background:rgba(219,238,255,0.5);font-weight:700;color:var(--g);border-top:2px solid #1a9ed4;}
 
-/* ════════════════════════════════════════════
-   SECTION: Settings
-   WHAT:    Employee name editor and pricing reference table.
-   WHY:     Staff can update display names; the pricing table prevents confusion about top-ups.
-   ════════════════════════════════════════════ */
-.er{
-  display:flex;align-items:center;gap:.65rem;
-  padding:.8rem 1rem;border:1px solid var(--glass-border);
-  border-radius:12px;margin-bottom:.4rem;
-  background:rgba(255,255,255,0.45);
-  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-}
-.er input[type=text]{
-  height:38px;padding:0 .75rem;
-  border:1.5px solid var(--bd);border-radius:10px;
-  font-family:'DM Sans',sans-serif;font-size:.9rem;
-  flex:1;color:var(--text-main);
-  background:rgba(255,255,255,0.6);
-  transition:border-color .2s,background .2s;
-}
-.er input:focus{outline:none;border-color:#1a9ed4;background:rgba(255,255,255,0.9);}
-body.dark .er{background:rgba(22,27,34,0.5);}
-body.dark .er input[type=text]{background:rgba(28,35,51,0.7);color:#e6edf3;}
+.er{display:flex;align-items:center;gap:.65rem;padding:.8rem 1rem;border:1px solid var(--glass-border);border-radius:12px;margin-bottom:.4rem;background:rgba(255,255,255,0.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
+.er input[type=text]{height:38px;padding:0 .75rem;border:1.5px solid var(--bd);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.9rem;flex:1;color:var(--text-main);background:rgba(255,255,255,0.6);transition:border-color .2s,background .2s;}
 
-/* ════════════════════════════════════════════
-   SECTION: Toast Notification
-   WHAT:    Slide-up confirmation message at bottom of screen.
-   WHY:     Tells the user their action succeeded without interrupting the flow.
-   ════════════════════════════════════════════ */
-.toast{
-  position:fixed;bottom:1.5rem;left:50%;
-  transform:translateX(-50%) translateY(12px);
-  background:rgba(10,22,40,0.92);
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  border:1px solid rgba(255,255,255,0.1);
-  color:#fff;padding:.6rem 1.5rem;
-  border-radius:50px;font-size:.84rem;font-weight:600;
-  opacity:0;transition:all .28s cubic-bezier(.34,1.56,.64,1);
-  pointer-events:none;z-index:999;white-space:nowrap;
-  box-shadow:0 8px 32px rgba(0,0,0,0.25);
-}
-.toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
-
-/* ════════════════════════════════════════════
-   SECTION: Greeting Box
-   WHAT:    The welcome message area that shows the logged-in user's name.
-   WHY:     Personalisation — the user knows they're in the right account.
-   ════════════════════════════════════════════ */
-#greeting-box{
-  display:flex;align-items:center;padding:.7rem 1rem;
-  background:linear-gradient(135deg,rgba(26,158,212,0.15),rgba(21,101,192,0.1));
-  border:1.5px solid rgba(26,158,212,0.3);
-  border-radius:12px;height:42px;
-  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-}
-#greeting-text{font-size:.92rem;font-weight:500;color:var(--text-main);}
-
-/* ════════════════════════════════════════════
-   SECTION: Special Request Textarea
-   WHAT:    Text area for custom meal requests.
-   WHY:     Some users have dietary needs — this captures them without a separate form.
-   ════════════════════════════════════════════ */
-#f-special{
-  width:100%;padding:.65rem .9rem;
-  border:1.5px solid rgba(203,213,225,0.6);
-  border-radius:12px;
-  font-family:'DM Sans',sans-serif;font-size:16px;
-  color:var(--text-main);
-  background:rgba(255,255,255,0.55);
-  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-  resize:vertical;line-height:1.55;
-  transition:border-color .2s, box-shadow .2s;
-}
-#f-special:focus{
-  outline:none;border-color:#1a9ed4;
-  box-shadow:0 0 0 3px rgba(26,158,212,0.12);
-  background:rgba(255,255,255,0.8);
-}
-body.dark #f-special{
-  background:rgba(28,35,51,0.65);
-  border-color:rgba(255,255,255,0.10);
-  color:#e6edf3;
-}
-
-/* ════════════════════════════════════════════
-   SECTION: Edit Mode Banner
-   WHAT:    Visible banner when user is in edit mode.
-   WHY:     Prevents confusion — user must know they're editing, not creating new.
-   ════════════════════════════════════════════ */
-#edit-banner{
-  display:none;
-  background:linear-gradient(135deg,rgba(21,101,192,0.2),rgba(26,158,212,0.15));
-  border:1.5px solid rgba(26,158,212,0.4);
-  border-radius:12px;padding:.7rem 1rem;
-  margin-bottom:1rem;font-size:.85rem;
-  color:#1565c0;font-weight:600;
-  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-  align-items:center;gap:.5rem;
-}
-body.dark #edit-banner{color:#60a5fa;}
+#greeting-box{display:flex;align-items:center;padding:.7rem 1rem;background:linear-gradient(135deg,rgba(26,158,212,0.15),rgba(21,101,192,0.1));border:1.5px solid rgba(26,158,212,0.3);border-radius:12px;height:42px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
+#f-special{width:100%;padding:.65rem .9rem;border:1.5px solid rgba(203,213,225,0.6);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--text-main);background:rgba(255,255,255,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);resize:vertical;line-height:1.55;}
+#edit-banner{display:none;background:linear-gradient(135deg,rgba(21,101,192,0.2),rgba(26,158,212,0.15));border:1.5px solid rgba(26,158,212,0.4);border-radius:12px;padding:.7rem 1rem;margin-bottom:1rem;font-size:.85rem;color:#1565c0;font-weight:600;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);align-items:center;gap:.5rem;}
 #edit-banner.on{display:flex;}
 
-/* ════════════════════════════════════════════
-   SECTION: Report Access Lock (Non-Admin)
-   WHAT:    Lock screen shown to non-admin users who navigate to Report.
-   WHY:     The report page must be hidden from staff — only admin sees full financials.
-   ════════════════════════════════════════════ */
-/* Styles handled inline in showUnauth() */
-
-/* ════════════════════════════════════════════
-   SECTION: Print Styles
-   WHAT:    Hides interactive UI elements when page is printed.
-   WHY:     Reports need clean paper output without buttons or nav bars.
-   ════════════════════════════════════════════ */
 @media print{
   .bar,.nb,.bpr,.bsm,.no-print{display:none!important;}
   .pg{display:block!important;padding:0;max-width:100%;}
@@ -695,154 +189,35 @@ body.dark #edit-banner{color:#60a5fa;}
 }
 
 /* ════════════════════════════════════════════
-   SECTION: Responsive Breakpoints
-   WHAT:    Adjusts grid and layout at tablet and mobile widths.
-   WHY:     Without this, 3-column grids and side-by-side elements break on phones.
-   ════════════════════════════════════════════ */
-@media(max-width:640px){
-  .sc3{grid-template-columns:1fr 1fr;}
-  .r2{grid-template-columns:1fr;}
-  .pg{padding:1rem .85rem;}
-  .card{padding:1.1rem;}
-  .menu-grid{grid-template-columns:repeat(2,1fr);}
-  .or{flex-wrap:wrap;}
-  .oc{width:100%;text-align:left;margin-top:.35rem;}
-}
-@media(max-width:400px){
-  .nb{padding:.35rem .4rem;font-size:.6rem;}
-  .bar-t{font-size:.85rem;}
-  .menu-grid{grid-template-columns:repeat(2,1fr);}
-}
-
-/* ════════════════════════════════════════════
    SECTION: Sign-in Splash Animation
-   WHAT:    Full-screen food anticipation animation shown before the login card.
-   WHY:     Sets the mood — you're about to order something delicious.
    ════════════════════════════════════════════ */
-#splash{
-  position:fixed;inset:0;z-index:600;
-  background:linear-gradient(160deg,#0a1628 0%,#1565c0 60%,#1a9ed4 100%);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:1.5rem;
-  animation:splashExit .55s cubic-bezier(.77,0,.18,1) 2.6s forwards;
-  pointer-events:none;
-}
-@keyframes splashExit{
-  0%{opacity:1;transform:scale(1);}
-  60%{opacity:1;transform:scale(1.04);}
-  100%{opacity:0;transform:scale(0.96);}
-}
+#splash{position:fixed;inset:0;z-index:600;background:linear-gradient(160deg,#0a1628 0%,#1565c0 60%,#1a9ed4 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;animation:splashExit .55s cubic-bezier(.77,0,.18,1) 2.6s forwards;pointer-events:none;}
+@keyframes splashExit{0%{opacity:1;transform:scale(1);}60%{opacity:1;transform:scale(1.04);}100%{opacity:0;transform:scale(0.96);}}
 #splash.gone{display:none;}
-
-/* Scene SVG wrapper */
-#splash-scene{
-  animation:scenePop .6s cubic-bezier(.34,1.56,.64,1) .2s both;
-}
-@keyframes scenePop{
-  from{opacity:0;transform:scale(.7) translateY(30px);}
-  to{opacity:1;transform:scale(1) translateY(0);}
-}
-
-/* Steam puffs */
-.steam{
-  animation:steamRise 1.2s ease-in-out infinite;
-  opacity:0;
-}
-.steam:nth-child(1){animation-delay:.1s;}
-.steam:nth-child(2){animation-delay:.4s;}
-.steam:nth-child(3){animation-delay:.7s;}
-@keyframes steamRise{
-  0%{opacity:0;transform:translateY(0) scaleX(1);}
-  30%{opacity:.75;}
-  100%{opacity:0;transform:translateY(-28px) scaleX(1.4);}
-}
-
-/* Fork tap */
-.fork-tap{
-  transform-origin:50% 95%;
-  animation:forkBang .45s cubic-bezier(.36,.07,.19,.97) 0.9s 3 both;
-}
-@keyframes forkBang{
-  0%,100%{transform:rotate(0deg);}
-  25%{transform:rotate(-18deg);}
-  75%{transform:rotate(8deg);}
-}
-
-/* Spoon arc swing */
-.spoon-swing{
-  transform-origin:50% 90%;
-  animation:spoonSwing .5s cubic-bezier(.36,.07,.19,.97) 1.05s 3 both;
-}
-@keyframes spoonSwing{
-  0%,100%{transform:rotate(0deg);}
-  30%{transform:rotate(20deg);}
-  70%{transform:rotate(-8deg);}
-}
-
-/* Plate bounce */
-.plate-bounce{
-  animation:platePulse 1.8s ease-in-out .5s infinite;
-}
-@keyframes platePulse{
-  0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-5px);}
-}
-
-/* Sparkle blinks */
-.sparkle{
-  animation:blink 1s ease-in-out infinite;
-}
-.sparkle:nth-child(1){animation-delay:0s;}
-.sparkle:nth-child(2){animation-delay:.35s;}
-.sparkle:nth-child(3){animation-delay:.65s;}
-@keyframes blink{
-  0%,100%{opacity:0;transform:scale(.5);}
-  50%{opacity:1;transform:scale(1);}
-}
-
-/* Tagline fade-in */
-#splash-tagline{
-  font-family:'DM Serif Display',serif;
-  font-size:1.35rem;
-  color:rgba(255,255,255,.95);
-  letter-spacing:.04em;
-  text-align:center;
-  animation:tagIn .5s ease .75s both;
-}
-#splash-sub{
-  font-family:'DM Sans',sans-serif;
-  font-size:.78rem;
-  font-weight:600;
-  color:rgba(255,255,255,.45);
-  text-transform:uppercase;
-  letter-spacing:.12em;
-  animation:tagIn .5s ease 1s both;
-}
-@keyframes tagIn{
-  from{opacity:0;transform:translateY(8px);}
-  to{opacity:1;transform:translateY(0);}
-}
-
-/* Dots pulse loader */
-#splash-dots{
-  display:flex;gap:.45rem;
-  animation:tagIn .4s ease 1.3s both;
-}
-#splash-dots span{
-  width:7px;height:7px;border-radius:50%;
-  background:rgba(255,255,255,.5);
-  animation:dotPulse 1s ease-in-out infinite;
-}
-#splash-dots span:nth-child(2){animation-delay:.18s;}
-#splash-dots span:nth-child(3){animation-delay:.36s;}
-@keyframes dotPulse{
-  0%,100%{transform:scale(.7);opacity:.4;}
-  50%{transform:scale(1);opacity:1;}
-}
+#splash-scene{animation:scenePop .6s cubic-bezier(.34,1.56,.64,1) .2s both;}
+@keyframes scenePop{from{opacity:0;transform:scale(.7) translateY(30px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.steam{animation:steamRise 1.2s ease-in-out infinite;opacity:0;}
+.steam:nth-child(1){animation-delay:.1s;} .steam:nth-child(2){animation-delay:.4s;} .steam:nth-child(3){animation-delay:.7s;}
+@keyframes steamRise{0%{opacity:0;transform:translateY(0) scaleX(1);}30%{opacity:.75;}100%{opacity:0;transform:translateY(-28px) scaleX(1.4);}}
+.fork-tap{transform-origin:50% 95%;animation:forkBang .45s cubic-bezier(.36,.07,.19,.97) 0.9s 3 both;}
+@keyframes forkBang{0%,100%{transform:rotate(0deg);}25%{transform:rotate(-18deg);}75%{transform:rotate(8deg);}}
+.spoon-swing{transform-origin:50% 90%;animation:spoonSwing .5s cubic-bezier(.36,.07,.19,.97) 1.05s 3 both;}
+@keyframes spoonSwing{0%,100%{transform:rotate(0deg);}30%{transform:rotate(20deg);}70%{transform:rotate(-8deg);}}
+.plate-bounce{animation:platePulse 1.8s ease-in-out .5s infinite;}
+@keyframes platePulse{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
+.sparkle{animation:blink 1s ease-in-out infinite;}
+.sparkle:nth-child(1){animation-delay:0s;} .sparkle:nth-child(2){animation-delay:.35s;} .sparkle:nth-child(3){animation-delay:.65s;}
+@keyframes blink{0%,100%{opacity:0;transform:scale(.5);}50%{opacity:1;transform:scale(1);}}
+#splash-tagline{font-family:'DM Serif Display',serif;font-size:1.35rem;color:rgba(255,255,255,.95);letter-spacing:.04em;text-align:center;animation:tagIn .5s ease .75s both;}
+#splash-sub{font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.12em;animation:tagIn .5s ease 1s both;}
+@keyframes tagIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+#splash-dots{display:flex;gap:.45rem;animation:tagIn .4s ease 1.3s both;}
+#splash-dots span{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.5);animation:dotPulse 1s ease-in-out infinite;}
+#splash-dots span:nth-child(2){animation-delay:.18s;} #splash-dots span:nth-child(3){animation-delay:.36s;}
+@keyframes dotPulse{0%,100%{transform:scale(.7);opacity:.4;}50%{transform:scale(1);opacity:1;}}
 
 /* ════════════════════════════════════════════
    SECTION: Food Icon Animations
-   Each food card icon gets its own looping animation.
    ════════════════════════════════════════════ */
 @keyframes icon-bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
 @keyframes icon-wobble{0%,100%{transform:rotate(-6deg);}50%{transform:rotate(6deg);}}
@@ -850,8 +225,6 @@ body.dark #edit-banner{color:#60a5fa;}
 @keyframes icon-sway{0%,100%{transform:rotate(-8deg) translateY(0);}50%{transform:rotate(8deg) translateY(-3px);}}
 @keyframes icon-swim{0%,100%{transform:translateX(0);}40%{transform:translateX(4px);}70%{transform:translateX(-3px);}}
 @keyframes icon-shake{0%,100%{transform:rotate(0deg);}25%{transform:rotate(-10deg);}75%{transform:rotate(10deg);}}
-
-/* Apply a different animation to each food card icon by nth-child */
 .menu-grid .food-card:nth-child(1) .food-icon{animation:icon-bounce 1.8s ease-in-out infinite;}
 .menu-grid .food-card:nth-child(2) .food-icon{animation:icon-wobble 2.2s ease-in-out infinite;}
 .menu-grid .food-card:nth-child(3) .food-icon{animation:icon-pulse 1.6s ease-in-out infinite;}
@@ -861,240 +234,167 @@ body.dark #edit-banner{color:#60a5fa;}
 .menu-grid .food-card:nth-child(7) .food-icon{animation:icon-wobble 2.6s ease-in-out infinite;}
 .menu-grid .food-card:nth-child(8) .food-icon{animation:icon-bounce 1.5s ease-in-out infinite;}
 
-/* ════════════════════════════════════════════
-   SECTION: Order Confirmation Overlay
-   WHAT:    Full-screen celebration shown after a successful order.
-   WHY:     A satisfying moment beats a plain toast — makes ordering feel rewarding.
-   ════════════════════════════════════════════ */
-#order-confirm{
-  position:fixed;inset:0;z-index:800;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  background:rgba(10,22,40,0.72);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  opacity:0;pointer-events:none;
-  transition:opacity .25s ease;
-}
-#order-confirm.show{opacity:1;pointer-events:all;}
 
-/* White glass card */
-#oc-card{
-  background:rgba(255,255,255,0.96);
-  border-radius:28px;
-  padding:2.5rem 2rem 2rem;
-  text-align:center;
-  width:min(340px,88vw);
-  box-shadow:0 24px 64px rgba(10,22,40,0.3);
-  transform:scale(0.8) translateY(30px);
-  transition:transform .4s cubic-bezier(.34,1.56,.64,1);
-  position:relative;overflow:hidden;
+/* ══════════════════════════════════════════════
+   SECTION: SPLIT LAYOUT FOR ORDERS PAGE (75/25)
+   ══════════════════════════════════════════════ */
+.order-layout {
+  display: grid;
+  grid-template-columns: 3fr 1fr; /* Exactly 75% / 25% */
+  gap: 1.5rem;
+  align-items: stretch;
 }
-#order-confirm.show #oc-card{transform:scale(1) translateY(0);}
-body.dark #oc-card{background:rgba(22,27,34,0.97);color:#e6edf3;}
+.order-col-main { min-width: 0; }
+.order-col-side { display: block; }
 
-/* Animated checkmark ring */
-#oc-ring{
-  width:80px;height:80px;margin:0 auto 1.2rem;
-  border-radius:50%;
-  background:linear-gradient(135deg,#0a1628,#1565c0);
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 8px 24px rgba(21,101,192,0.4);
-  animation:oc-ring-pop .5s cubic-bezier(.34,1.56,.64,1) .1s both;
-}
-@keyframes oc-ring-pop{
-  from{transform:scale(0) rotate(-180deg);}
-  to{transform:scale(1) rotate(0deg);}
+@media(max-width:950px){
+  /* Hide the chef side-panel on smaller screens to keep form usable */
+  .order-layout { grid-template-columns: 1fr; }
+  .order-col-side { display: none; }
 }
 
-/* Plate emoji inside ring */
-#oc-plate{
-  font-size:2.2rem;
-  animation:oc-plate-spin .6s cubic-bezier(.34,1.56,.64,1) .15s both;
-  display:block;
+/* ══════════════════════════════════════════════
+   SECTION: THE CHEF STATION (Production Grade)
+   ══════════════════════════════════════════════ */
+.chef-card {
+  padding: 0; 
+  overflow: hidden; 
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 580px; 
 }
-@keyframes oc-plate-spin{
-  from{transform:scale(0) rotate(-90deg);}
-  to{transform:scale(1) rotate(0deg);}
-}
-
-/* Big "Order Placed!" text */
-#oc-title{
-  font-family:'DM Serif Display',serif;
-  font-size:1.6rem;
-  color:#0a1628;
-  margin-bottom:.4rem;
-  animation:oc-fade-up .4s ease .3s both;
-}
-body.dark #oc-title{color:#e6edf3;}
-
-/* Sub-line */
-#oc-sub{
-  font-size:.85rem;
-  color:#6b7280;
-  margin-bottom:1.4rem;
-  animation:oc-fade-up .4s ease .4s both;
-  line-height:1.5;
+#chef-station {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  z-index: 10; pointer-events: none; user-select: none;
 }
 
-/* Top-up pill */
-#oc-topup{
-  display:none;
-  background:rgba(254,243,199,0.9);
-  border:1.5px solid #fcd34d;
-  border-radius:12px;
-  padding:.6rem 1rem;
-  font-size:.82rem;
-  color:#92400e;
-  font-weight:600;
-  margin-bottom:1.2rem;
-  animation:oc-fade-up .4s ease .45s both;
+/* Layer 1: Frosted Kitchen Background */
+.cs-bg {
+  position: absolute; inset: 0; background: rgba(255, 255, 255, 0.2); z-index: 1;
 }
-body.dark #oc-topup{background:rgba(45,31,0,0.8);border-color:#854d0e;color:#fbbf24;}
+body.dark .cs-bg { background: rgba(22, 27, 34, 0.2); }
+.cs-bg svg { width: 100%; height: 100%; opacity: 0.15; filter: blur(1px); }
 
-/* Dismiss button */
-#oc-btn{
-  background:linear-gradient(135deg,#0a1628,#1565c0);
-  color:#fff;border:none;border-radius:14px;
-  height:46px;width:100%;
-  font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;
-  cursor:pointer;letter-spacing:.02em;
-  box-shadow:0 4px 14px rgba(10,22,40,0.25);
-  transition:all .2s;
-  animation:oc-fade-up .4s ease .5s both;
+/* Layer 2: Countertop */
+.cs-counter {
+  position: absolute; bottom: 0; left: 0; width: 100%; height: 120px;
+  background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-top: 3px solid rgba(255,255,255,0.7); box-shadow: 0 -4px 16px rgba(0,0,0,0.03); z-index: 3;
 }
-#oc-btn:hover{background:linear-gradient(135deg,#1565c0,#1a9ed4);transform:translateY(-1px);}
-#oc-btn:active{transform:translateY(0);}
+body.dark .cs-counter { background: rgba(28, 35, 51, 0.5); border-top-color: rgba(255,255,255,0.1); }
+.cs-counter-shadow { position: absolute; bottom: 120px; left: 0; width: 100%; height: 20px; background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.1)); z-index: 2; }
 
-@keyframes oc-fade-up{
-  from{opacity:0;transform:translateY(10px);}
-  to{opacity:1;transform:translateY(0);}
+/* Layer 3: The Chef Character */
+.cs-chef-wrap {
+  position: absolute; bottom: 110px; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 250px; z-index: 2;
 }
 
-/* Confetti particles */
-.oc-confetti{
-  position:absolute;
-  width:8px;height:8px;
-  border-radius:2px;
-  opacity:0;
-  animation:oc-confetti-fall 1.2s ease forwards;
+/* -- Idle Animations -- */
+@keyframes chef-breathe { 0%, 100% { transform: translateY(0) scaleY(1); } 50% { transform: translateY(-2px) scaleY(1.01); } }
+@keyframes chef-blink { 0%, 96%, 100% { transform: scaleY(1); } 98% { transform: scaleY(0.1); } }
+.chef-torso { animation: chef-breathe 3.5s ease-in-out infinite; transform-origin: center bottom; }
+.chef-head { animation: chef-breathe 3.5s ease-in-out infinite; animation-delay: 0.2s; transform-origin: center bottom; }
+.chef-eye { animation: chef-blink 4.5s infinite; transform-origin: center; transition: transform 0.2s; }
+
+/* -- Smooth Plating Motion -- */
+@keyframes headLook { 0%, 100% { transform: rotate(0deg) translate(0,0); } 20%, 80% { transform: rotate(-4deg) translate(-1px, 2px); } }
+.is-plating .chef-head-group { animation: headLook 0.8s ease-in-out; transform-origin: 75px 80px; }
+
+.chef-arm-shoulder, .chef-arm-elbow { transform-origin: 45px 85px; }
+.chef-arm-elbow { transform-origin: 30px 125px; }
+@keyframes armReachShoulder { 0%, 100% { transform: rotate(0deg); } 40%, 60% { transform: rotate(-20deg); } }
+@keyframes armReachElbow { 0%, 100% { transform: rotate(0deg); } 40%, 60% { transform: rotate(-30deg); } }
+.is-plating .chef-arm-shoulder { animation: armReachShoulder 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+.is-plating .chef-arm-elbow { animation: armReachElbow 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+
+/* -- Celebration: "Chef's Kiss" -- */
+@keyframes kissShoulder { 0% { transform: rotate(0deg); } 20%, 40% { transform: rotate(-100deg); } 60%, 100% { transform: rotate(-130deg); } }
+@keyframes kissElbow { 0% { transform: rotate(0deg); } 20%, 40% { transform: rotate(115deg); } 60%, 100% { transform: rotate(35deg); } }
+.is-celebrating .chef-arm-shoulder { animation: kissShoulder 1.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+.is-celebrating .chef-arm-elbow { animation: kissElbow 1.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+.is-celebrating .chef-head-group { transform: rotate(-5deg); transition: transform 0.4s; }
+
+/* Hand/Face states */
+.chef-hand-rest, .chef-hand-pinch, .chef-hand-open { opacity: 0; transition: opacity 0.1s; }
+.chef-hand-rest { opacity: 1; }
+.is-plating .chef-hand-rest { opacity: 1; }
+.celebrate-phase-1 .chef-hand-rest { opacity: 0; }
+.celebrate-phase-1 .chef-hand-pinch { opacity: 1; }
+.celebrate-phase-2 .chef-hand-rest { opacity: 0; }
+.celebrate-phase-2 .chef-hand-open { opacity: 1; } 
+.chef-mouth-rest { opacity: 1; } .chef-mouth-smile { opacity: 0; } .chef-eye-happy { opacity: 0; }
+.is-celebrating .chef-mouth-rest, .is-celebrating .chef-eye { opacity: 0; }
+.is-celebrating .chef-mouth-smile, .is-celebrating .chef-eye-happy { opacity: 1; }
+
+/* Layer 4: The Wide Food Spread */
+.cs-plate-wrap {
+  position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 300px; z-index: 4;
 }
-@keyframes oc-confetti-fall{
-  0%{opacity:1;transform:translateY(-10px) rotate(0deg);}
-  100%{opacity:0;transform:translateY(200px) rotate(720deg);}
+
+@keyframes elegantPlate {
+  0%   { opacity: 0; transform: translateY(-12px) scale(0.96); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
+
+.av-food { opacity: 0; transform-origin: center bottom; }
+.av-food.show { animation: elegantPlate 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; animation-delay: 0.35s; }
+.cs-plate-shadow { transition: all 0.5s ease; fill: rgba(0,0,0,0.1); }
+.has-food .cs-plate-shadow { fill: rgba(0,0,0,0.22); transform: scale(1.05) translateY(2px); transform-origin: center; }
+
+/* Speech Bubble (Replaces all Toasts) */
+#cs-bubble {
+  position: absolute; top: 30px; left: 50%; transform: translateX(-50%) scale(0.8);
+  width: 90%; max-width: 280px;
+  background: rgba(255,255,255,0.98); border: 2px solid #1a9ed4; border-radius: 14px;
+  padding: 15px 20px; font-size: 0.9rem; font-weight: 600; color: #0a1628; line-height: 1.4; text-align: center;
+  box-shadow: 0 10px 24px rgba(10,22,40,0.12);
+  opacity: 0; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none; z-index: 20;
+}
+#cs-bubble::after {
+  content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%) rotate(45deg);
+  width: 10px; height: 10px; background: #fff; border-right: 2px solid #1a9ed4; border-bottom: 2px solid #1a9ed4;
+}
+#cs-bubble.show { opacity: 1; transform: translateX(-50%) scale(1); pointer-events: auto; }
+body.dark #cs-bubble { background: #1c2333; color: #e6edf3; border-color: #1a9ed4; }
+body.dark #cs-bubble::after { background: #1c2333; }
+
+.chef-confetti { position: absolute; width: 6px; height: 6px; border-radius: 2px; opacity: 0; z-index: 10; }
+@keyframes chefConfettiBurst { 0% { opacity: 1; transform: scale(0.5) translate(0, 0) rotate(0deg); } 100% { opacity: 0; transform: scale(1.2) translate(var(--cx), var(--cy)) rotate(720deg); } }
+
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════
-     SIGN-IN SPLASH: Food anticipation scene
-     Fades out after 2.6s, revealing login.
-     ═══════════════════════════════════════ -->
 <div id="splash" role="presentation" aria-hidden="true">
-
   <div id="splash-scene">
     <svg width="220" height="240" viewBox="0 0 220 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-
-      <!-- ── Steam wisps above the plate ── -->
-      <g class="steam" style="animation-delay:.1s">
-        <path d="M88 68 Q84 58 88 50 Q92 42 88 34" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-      </g>
-      <g class="steam" style="animation-delay:.4s">
-        <path d="M110 62 Q106 52 110 44 Q114 36 110 28" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-      </g>
-      <g class="steam" style="animation-delay:.7s">
-        <path d="M132 68 Q128 58 132 50 Q136 42 132 34" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-      </g>
-
-      <!-- ── Fork (left hand) — taps with excitement ── -->
-      <g class="fork-tap" style="transform-origin:66px 205px">
-        <!-- Handle -->
-        <rect x="62" y="130" width="8" height="75" rx="4" fill="#e2e8f0"/>
-        <!-- Neck -->
-        <rect x="64" y="108" width="4" height="26" rx="2" fill="#cbd5e1"/>
-        <!-- Tines -->
-        <rect x="60" y="90" width="2.5" height="22" rx="1.2" fill="#94a3b8"/>
-        <rect x="64" y="88" width="2.5" height="24" rx="1.2" fill="#94a3b8"/>
-        <rect x="68" y="90" width="2.5" height="22" rx="1.2" fill="#94a3b8"/>
-        <!-- Tine base bar -->
-        <rect x="59" y="110" width="13" height="3" rx="1.5" fill="#94a3b8"/>
-        <!-- Highlight -->
-        <rect x="64" y="132" width="2" height="30" rx="1" fill="rgba(255,255,255,0.3)"/>
-      </g>
-
-      <!-- ── Spoon (right hand) — swings with anticipation ── -->
-      <g class="spoon-swing" style="transform-origin:154px 205px">
-        <!-- Handle -->
-        <rect x="150" y="135" width="8" height="70" rx="4" fill="#e2e8f0"/>
-        <!-- Neck -->
-        <rect x="152" y="110" width="4" height="28" rx="2" fill="#cbd5e1"/>
-        <!-- Bowl of spoon -->
-        <ellipse cx="154" cy="100" rx="10" ry="13" fill="#cbd5e1"/>
-        <ellipse cx="154" cy="101" rx="7" ry="9" fill="rgba(255,255,255,0.25)"/>
-        <!-- Highlight -->
-        <rect x="152" y="137" width="2" height="28" rx="1" fill="rgba(255,255,255,0.3)"/>
-      </g>
-
-      <!-- ── Hands holding the cutlery ── -->
-      <!-- Left hand -->
-      <ellipse cx="66" cy="208" rx="13" ry="10" fill="#c68642"/>
-      <rect x="53" y="200" width="26" height="14" rx="7" fill="#c68642"/>
-      <!-- Right hand -->
-      <ellipse cx="154" cy="208" rx="13" ry="10" fill="#c68642"/>
-      <rect x="141" y="200" width="26" height="14" rx="7" fill="#c68642"/>
-
-      <!-- ── Plate shadow (ground) ── -->
+      <g class="steam" style="animation-delay:.1s"><path d="M88 68 Q84 58 88 50 Q92 42 88 34" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" stroke-linecap="round" fill="none"/></g>
+      <g class="steam" style="animation-delay:.4s"><path d="M110 62 Q106 52 110 44 Q114 36 110 28" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" stroke-linecap="round" fill="none"/></g>
+      <g class="steam" style="animation-delay:.7s"><path d="M132 68 Q128 58 132 50 Q136 42 132 34" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" stroke-linecap="round" fill="none"/></g>
+      <g class="fork-tap" style="transform-origin:66px 205px"><rect x="62" y="130" width="8" height="75" rx="4" fill="#e2e8f0"/><rect x="64" y="108" width="4" height="26" rx="2" fill="#cbd5e1"/><rect x="60" y="90" width="2.5" height="22" rx="1.2" fill="#94a3b8"/><rect x="64" y="88" width="2.5" height="24" rx="1.2" fill="#94a3b8"/><rect x="68" y="90" width="2.5" height="22" rx="1.2" fill="#94a3b8"/><rect x="59" y="110" width="13" height="3" rx="1.5" fill="#94a3b8"/><rect x="64" y="132" width="2" height="30" rx="1" fill="rgba(255,255,255,0.3)"/></g>
+      <g class="spoon-swing" style="transform-origin:154px 205px"><rect x="150" y="135" width="8" height="70" rx="4" fill="#e2e8f0"/><rect x="152" y="110" width="4" height="28" rx="2" fill="#cbd5e1"/><ellipse cx="154" cy="100" rx="10" ry="13" fill="#cbd5e1"/><ellipse cx="154" cy="101" rx="7" ry="9" fill="rgba(255,255,255,0.25)"/><rect x="152" y="137" width="2" height="28" rx="1" fill="rgba(255,255,255,0.3)"/></g>
+      <ellipse cx="66" cy="208" rx="13" ry="10" fill="#c68642"/><rect x="53" y="200" width="26" height="14" rx="7" fill="#c68642"/>
+      <ellipse cx="154" cy="208" rx="13" ry="10" fill="#c68642"/><rect x="141" y="200" width="26" height="14" rx="7" fill="#c68642"/>
       <ellipse cx="110" cy="195" rx="60" ry="8" fill="rgba(0,0,0,0.18)"/>
-
-      <!-- ── Plate group: bounces gently ── -->
-      <g class="plate-bounce">
-        <!-- Outer plate rim -->
-        <ellipse cx="110" cy="172" rx="62" ry="18" fill="#dbeafe"/>
-        <ellipse cx="110" cy="172" rx="62" ry="18" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-        <!-- Inner plate dish -->
-        <ellipse cx="110" cy="168" rx="50" ry="13" fill="#eff6ff"/>
-        <!-- Food: rice mound -->
-        <ellipse cx="110" cy="162" rx="32" ry="12" fill="#fef9c3"/>
-        <ellipse cx="110" cy="158" rx="22" ry="8" fill="#fef08a"/>
-        <ellipse cx="110" cy="155" rx="13" ry="5" fill="#fde047"/>
-        <!-- Food: sauce drizzle -->
-        <path d="M94 162 Q104 155 116 162 Q122 165 130 160" stroke="#f97316" stroke-width="3" stroke-linecap="round" fill="none"/>
-        <!-- Food: herb dots -->
-        <circle cx="100" cy="160" r="2.5" fill="#22c55e"/>
-        <circle cx="118" cy="158" r="2" fill="#22c55e"/>
-        <circle cx="108" cy="156" r="1.8" fill="#4ade80"/>
-        <!-- Plate highlight -->
-        <ellipse cx="85" cy="162" rx="12" ry="4" fill="rgba(255,255,255,0.18)" transform="rotate(-15 85 162)"/>
-      </g>
-
-      <!-- ── Sparkles around the scene ── -->
-      <g class="sparkle" style="animation-delay:0s">
-        <path d="M48 120 L50 114 L52 120 L58 122 L52 124 L50 130 L48 124 L42 122Z" fill="rgba(255,220,80,0.9)" transform="scale(0.8) translate(12,0)"/>
-      </g>
-      <g class="sparkle" style="animation-delay:.35s">
-        <path d="M162 108 L164 102 L166 108 L172 110 L166 112 L164 118 L162 112 L156 110Z" fill="rgba(255,255,255,0.7)" transform="scale(0.65) translate(82,16)"/>
-      </g>
-      <g class="sparkle" style="animation-delay:.65s">
-        <path d="M110 75 L112 70 L114 75 L119 77 L114 79 L112 84 L110 79 L105 77Z" fill="rgba(253,186,116,0.85)" transform="scale(0.7) translate(47,30)"/>
-      </g>
-
+      <g class="plate-bounce"><ellipse cx="110" cy="172" rx="62" ry="18" fill="#dbeafe"/><ellipse cx="110" cy="172" rx="62" ry="18" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/><ellipse cx="110" cy="168" rx="50" ry="13" fill="#eff6ff"/><ellipse cx="110" cy="162" rx="32" ry="12" fill="#fef9c3"/><ellipse cx="110" cy="158" rx="22" ry="8" fill="#fef08a"/><ellipse cx="110" cy="155" rx="13" ry="5" fill="#fde047"/><path d="M94 162 Q104 155 116 162 Q122 165 130 160" stroke="#f97316" stroke-width="3" stroke-linecap="round" fill="none"/><circle cx="100" cy="160" r="2.5" fill="#22c55e"/><circle cx="118" cy="158" r="2" fill="#22c55e"/><circle cx="108" cy="156" r="1.8" fill="#4ade80"/><ellipse cx="85" cy="162" rx="12" ry="4" fill="rgba(255,255,255,0.18)" transform="rotate(-15 85 162)"/></g>
+      <g class="sparkle" style="animation-delay:0s"><path d="M48 120 L50 114 L52 120 L58 122 L52 124 L50 130 L48 124 L42 122Z" fill="rgba(255,220,80,0.9)" transform="scale(0.8) translate(12,0)"/></g>
+      <g class="sparkle" style="animation-delay:.35s"><path d="M162 108 L164 102 L166 108 L172 110 L166 112 L164 118 L162 112 L156 110Z" fill="rgba(255,255,255,0.7)" transform="scale(0.65) translate(82,16)"/></g>
+      <g class="sparkle" style="animation-delay:.65s"><path d="M110 75 L112 70 L114 75 L119 77 L114 79 L112 84 L110 79 L105 77Z" fill="rgba(253,186,116,0.85)" transform="scale(0.7) translate(47,30)"/></g>
     </svg>
   </div>
-
   <div id="splash-tagline">Your lunch is waiting.</div>
   <div id="splash-sub">Highway Academy · Mealtime</div>
   <div id="splash-dots"><span></span><span></span><span></span></div>
-
 </div>
-
 <script>
-// Remove splash from DOM after animation completes so it doesn't block interactions
 (function(){
   var s=document.getElementById('splash');
-  if(s){
-    s.addEventListener('animationend',function(e){
-      if(e.animationName==='splashExit'){ s.classList.add('gone'); }
-    });
-  }
+  if(s){ s.addEventListener('animationend',function(e){ if(e.animationName==='splashExit'){ s.classList.add('gone'); } }); }
 })();
 </script>
 
@@ -1131,9 +431,7 @@ body.dark #oc-topup{background:rgba(45,31,0,0.8);border-color:#854d0e;color:#fbb
 <div class="bar">
   <span style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
     <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KICA8Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0OCIgZmlsbD0iIzBhMTYyOCIvPgogIDxlbGxpcHNlIGN4PSI1MCIgY3k9IjU4IiByeD0iMzIiIHJ5PSI5IiBmaWxsPSJub25lIiBzdHJva2U9IiMxYTllZDQiIHN0cm9rZS13aWR0aD0iMi41Ii8+CiAgPGVsbGlwc2UgY3g9IjUwIiBjeT0iNTUiIHJ4PSIyNSIgcnk9IjciIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzFhOWVkNCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICA8ZWxsaXBzZSBjeD0iNTAiIGN5PSI1NiIgcng9IjI1IiByeT0iNyIgZmlsbD0iI2RiZWVmZiIgb3BhY2l0eT0iMC4xMiIvPgogIDxsaW5lIHgxPSIyOCIgeTE9IjI1IiB4Mj0iMjgiIHkyPSI2OCIgc3Ryb2tlPSIjMWE5ZWQ0IiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjI0IiB5MT0iMjUiIHgyPSIyNCIgeTI9IjM4IiBzdHJva2U9IiMxYTllZDQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjI4IiB5MT0iMjUiIHgyPSIyOCIgeTI9IjM4IiBzdHJva2U9IiMxYTllZDQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjMyIiB5MT0iMjUiIHgyPSIzMiIgeTI9IjM4IiBzdHJva2U9IiMxYTllZDQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjI0IiB5MT0iMzgiIHgyPSIzMiIgeTI9IjM4IiBzdHJva2U9IiMxYTllZDQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjcyIiB5MT0iMjUiIHgyPSI3MiIgeTI9IjY4IiBzdHJva2U9IiMwMGQ0ZjUiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8cGF0aCBkPSJNNzIgMjUgUTgwIDMwIDgwIDQyIEw3MiA0MiBaIiBmaWxsPSIjMDBkNGY1IiBvcGFjaXR5PSIwLjkiLz4KICA8ZWxsaXBzZSBjeD0iNDAiIGN5PSI1MyIgcng9IjgiIHJ5PSIzIiBmaWxsPSJ3aGl0ZSIgb3BhY2l0eT0iMC4wNyIgdHJhbnNmb3JtPSJyb3RhdGUoLTE1IDQwIDUzKSIvPgo8L3N2Zz4=" id="bar-logo" style="height:38px;width:38px;object-fit:contain;mix-blend-mode:screen;">
-    <span>
-      <div class="bar-t">Mealtime</div>
-    </span>
+    <span><div class="bar-t">Mealtime</div></span>
   </span>
   <div style="display:flex;align-items:center;flex-shrink:0;gap:.3rem;">
     <nav class="nav">
@@ -1146,43 +444,247 @@ body.dark #oc-topup{background:rgba(45,31,0,0.8);border-color:#854d0e;color:#fbb
   </div>
 </div>
 
-<div class="pg on" id="pg-order">
+<div class="pg on wide" id="pg-order">
   <div id="edit-banner">
     ✏️ <span>You're editing an existing order — make your changes and tap Place Order.</span>
     <button onclick="cancelEdit()" style="margin-left:auto;background:rgba(21,101,192,0.15);border:1.5px solid rgba(21,101,192,0.3);border-radius:8px;padding:.25rem .6rem;font-size:.72rem;font-weight:600;color:#1565c0;cursor:pointer;">Cancel Edit</button>
   </div>
-  <div class="card">
-    <div class="ct">🍽️ New Lunch Order</div>
-    <div class="r2">
-      <div id="greeting-box"><span id="greeting-text" style="font-size:.92rem;font-weight:500;color:var(--text-main);">Welcome</span></div>
-      <input type="hidden" id="f-emp" value="">
-      <div><label class="lbl">Date</label><input type="date" id="f-date"></div>
-    </div>
 
-    <div class="field">
-      <label class="lbl">Main Course <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-light);font-size:.68rem;">— select one or more</span></label>
-      <div class="pills" id="starches">
-        <div class="pill" data-v="Posho">🌽 Posho</div>
-        <div class="pill" data-v="Brown Rice">🍚 Brown Rice</div>
-        <div class="pill" data-v="White Rice">🍚 White Rice</div>
-        <div class="pill" data-v="Matooke">🍌 Matooke</div>
-        <div class="pill" data-v="Sweet Potatoes">🍠 Sweet Potatoes</div>
+  <div class="order-layout">
+    
+    <div class="order-col-main">
+      <div class="card" id="main-order-card">
+        <div class="ct">🍽️ New Lunch Order</div>
+        <div class="r2">
+          <div id="greeting-box"><span id="greeting-text" style="font-size:.92rem;font-weight:500;color:var(--text-main);">Welcome</span></div>
+          <input type="hidden" id="f-emp" value="">
+          <div><label class="lbl">Date</label><input type="date" id="f-date"></div>
+        </div>
+
+        <div class="field">
+          <label class="lbl">Main Course <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-light);font-size:.68rem;">— select one or more</span></label>
+          <div class="pills" id="starches">
+            <div class="pill" data-v="Posho">🌽 Posho</div>
+            <div class="pill" data-v="Brown Rice">🍚 Brown Rice</div>
+            <div class="pill" data-v="White Rice">🍚 White Rice</div>
+            <div class="pill" data-v="Matooke">🍌 Matooke</div>
+            <div class="pill" data-v="Pumpkin">🎃 Pumpkin</div>
+            <div class="pill" data-v="Sweet Potatoes">🍠 Sweet Potatoes</div>
+          </div>
+          <div class="hint" id="st-hint">Nothing selected yet</div>
+        </div>
+
+        <div class="field">
+          <label class="lbl">Sauce <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-light);font-size:.68rem;">— one only, determines cost</span></label>
+          <div class="menu-grid" id="sauces"></div>
+        </div>
+
+        <div class="field">
+          <label class="lbl">Any special requests? <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-light);font-size:.68rem;">— optional, no extra cost</span></label>
+          <textarea id="f-special" rows="2" placeholder="e.g. more soup, small rice..."></textarea>
+        </div>
+
+        <div id="csummary"></div>
+        <button class="btn" id="btn-add" onclick="doSubmit()" disabled>Place Order →</button>
       </div>
-      <div class="hint" id="st-hint">Nothing selected yet</div>
     </div>
 
-    <div class="field">
-      <label class="lbl">Sauce <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-light);font-size:.68rem;">— one only, determines cost</span></label>
-      <div class="menu-grid" id="sauces"></div>
-    </div>
+    <div class="order-col-side" id="chef-station-col">
+      <div class="card chef-card">
+        
+        <div id="cs-bubble"></div>
 
-    <div class="field">
-      <label class="lbl">Any special requests? <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-light);font-size:.68rem;">— optional, no extra cost</span></label>
-      <textarea id="f-special" rows="2" placeholder="e.g. more soup, small rice..."></textarea>
-    </div>
+        <div id="chef-station">
+          <div class="cs-bg">
+            <svg viewBox="0 0 220 300" preserveAspectRatio="none">
+              <defs>
+                <pattern id="tile-pattern" x="0" y="0" width="40" height="20" patternUnits="userSpaceOnUse">
+                  <rect width="40" height="20" fill="none" stroke="#64748b" stroke-width="1"/>
+                  <line x1="20" y1="0" x2="20" y2="20" stroke="#64748b" stroke-width="1"/>
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#tile-pattern)"/>
+              <rect x="0" y="40" width="220" height="8" fill="#334155"/>
+              <path d="M160,48 L160,80" stroke="#334155" stroke-width="2"/>
+              <ellipse cx="160" cy="85" rx="15" ry="5" fill="#475569"/>
+              <path d="M40,48 L40,70" stroke="#334155" stroke-width="2"/>
+              <rect x="36" y="70" width="8" height="15" fill="#475569" rx="2"/>
+            </svg>
+          </div>
 
-    <div id="csummary"></div>
-    <button class="btn" id="btn-add" onclick="doSubmit()" disabled>Place Order →</button>
+          <div class="cs-chef-wrap">
+            <svg viewBox="0 0 160 160" width="100%" height="100%">
+              <g class="chef-torso">
+                <path d="M40,160 C40,110 50,90 80,90 C110,90 120,110 120,160 Z" fill="#f8fafc"/>
+                <path d="M70,90 L80,120 L90,90" fill="#e2e8f0"/>
+                <circle cx="65" cy="115" r="3" fill="#1e293b"/>
+                <circle cx="65" cy="135" r="3" fill="#1e293b"/>
+                <circle cx="95" cy="115" r="3" fill="#1e293b"/>
+                <circle cx="95" cy="135" r="3" fill="#1e293b"/>
+                <rect x="70" y="75" width="20" height="20" fill="#c68642"/>
+                <path d="M70,85 Q80,95 90,85" stroke="#9a652f" stroke-width="2" fill="none"/>
+              </g>
+              
+              <g class="chef-head-group chef-head">
+                <ellipse cx="80" cy="65" rx="28" ry="32" fill="#c68642"/>
+                <ellipse cx="52" cy="68" rx="4" ry="7" fill="#b37335"/>
+                <ellipse cx="108" cy="68" rx="4" ry="7" fill="#b37335"/>
+                <path d="M52,65 Q56,50 60,40" stroke="#1c1917" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <path d="M108,65 Q104,50 100,40" stroke="#1c1917" stroke-width="4" fill="none" stroke-linecap="round"/>
+                
+                <circle class="chef-eye" cx="68" cy="62" r="3.5" fill="#1c1917"/>
+                <circle class="chef-eye" cx="92" cy="62" r="3.5" fill="#1c1917"/>
+                <circle class="chef-eye" cx="69" cy="61" r="1" fill="#fff"/>
+                <circle class="chef-eye" cx="93" cy="61" r="1" fill="#fff"/>
+                <path class="chef-eye-happy" d="M64,62 Q68,57 72,62" stroke="#1c1917" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <path class="chef-eye-happy" d="M88,62 Q92,57 96,62" stroke="#1c1917" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+                <path d="M62,54 Q68,52 74,54" stroke="#1c1917" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <path d="M86,54 Q92,52 98,54" stroke="#1c1917" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <path d="M80,65 L80,72 Q82,74 84,72" stroke="#9a652f" stroke-width="2" fill="none" stroke-linecap="round"/>
+                
+                <path class="chef-mouth-rest" d="M72,80 Q80,82 88,80" stroke="#4a2010" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <path class="chef-mouth-smile" d="M68,78 Q80,95 92,78 Z" fill="#4a2010"/>
+                
+                <g class="chef-hat">
+                  <path d="M60,35 C50,35 45,20 60,15 C65,0 95,0 100,15 C115,20 110,35 100,35 Z" fill="#ffffff"/>
+                  <rect x="58" y="32" width="44" height="12" fill="#f1f5f9" rx="2"/>
+                  <path d="M65,15 Q65,25 65,35 M75,10 Q75,25 75,35 M85,10 Q85,25 85,35 M95,15 Q95,25 95,35" stroke="#e2e8f0" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                </g>
+              </g>
+              
+              <g id="chef-arm-group">
+                <g class="chef-arm-shoulder">
+                  <path d="M45,85 C30,95 25,120 30,125 C38,125 45,115 50,95 Z" fill="#f8fafc"/>
+                  <g class="chef-arm-elbow">
+                    <path d="M28,122 L15,145 L25,150 L35,125 Z" fill="#f8fafc"/>
+                    
+                    <g class="chef-hand-rest">
+                      <ellipse cx="20" cy="150" rx="6" ry="5" fill="#c68642" transform="rotate(-30 20 150)"/>
+                      <rect x="15" y="145" width="3" height="30" fill="#94a3b8" rx="1.5"/>
+                      <ellipse cx="16.5" cy="175" rx="5" ry="8" fill="#cbd5e1"/>
+                    </g>
+                    
+                    <g class="chef-hand-pinch">
+                      <path d="M15,150 Q18,140 22,142 Q26,145 23,152 Z" fill="#c68642"/>
+                      <path d="M18,142 L22,142 M19,145 L21,145" stroke="#9a652f" stroke-width="1" fill="none"/>
+                    </g>
+
+                    <g class="chef-hand-open">
+                      <circle cx="20" cy="150" r="6" fill="#c68642"/>
+                      <path d="M20,150 L10,140 M20,150 L15,135 M20,150 L25,135 M20,150 L30,140 M20,150 L32,150" stroke="#c68642" stroke-width="3" stroke-linecap="round" fill="none"/>
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </svg>
+          </div>
+
+          <div class="cs-counter-shadow"></div>
+          <div class="cs-counter"></div>
+
+          <div class="cs-plate-wrap">
+            <svg viewBox="0 0 240 120" width="100%" height="100%">
+              <ellipse class="cs-plate-shadow" cx="120" cy="85" rx="100" ry="18" />
+              <ellipse cx="120" cy="80" rx="95" ry="25" fill="#f8fafc"/>
+              <ellipse cx="120" cy="80" rx="95" ry="25" fill="none" stroke="#e2e8f0" stroke-width="1.5"/>
+              <ellipse cx="120" cy="78" rx="75" ry="18" fill="#ffffff"/>
+
+              <g id="avf-Pumpkin" class="av-food">
+                <path d="M 30 75 Q 40 55 60 70 Q 50 90 30 75 Z" fill="#ea580c"/>
+                <path d="M 35 75 Q 45 60 55 72" stroke="#c2410c" stroke-width="1.5" fill="none"/>
+                <path d="M 40 85 Q 50 65 70 75 Q 55 95 40 85 Z" fill="#f97316"/>
+                <path d="M 45 82 Q 55 68 65 75" stroke="#ea580c" stroke-width="1.5" fill="none"/>
+                <path d="M 30 75 Q 40 85 50 85 M 40 85 Q 50 95 60 90" stroke="#14532d" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              </g>
+              
+              <g id="avf-Matooke" class="av-food">
+                <path d="M 40 92 Q 65 75 100 92 Q 70 105 40 92 Z" fill="#15803d"/>
+                <path d="M 50 88 C 50 70, 90 70, 90 88 C 90 98, 50 98, 50 88 Z" fill="#fde047"/>
+                <path d="M 60 82 Q 70 75 80 82 M 55 88 Q 70 82 85 88 M 65 92 Q 75 88 85 92" stroke="#eab308" stroke-width="2" fill="none" stroke-linecap="round"/>
+              </g>
+
+              <g id="avf-Posho" class="av-food">
+                <path d="M 55 72 C 55 52, 90 52, 90 72 C 90 82, 55 82, 55 72 Z" fill="#fdfbf7"/>
+                <path d="M 62 65 Q 72 58 82 65 M 65 72 Q 75 66 85 72" stroke="#f4f1ea" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              </g>
+
+              <g id="avf-Brown-Rice" class="av-food">
+                <path d="M 80 68 C 80 50, 115 50, 115 68 C 115 80, 80 80, 80 68 Z" fill="#d2b48c"/>
+                <path d="M 90 60 Q 95 55 100 60 M 100 65 Q 105 60 110 65 M 85 68 Q 95 62 105 68 M 90 75 Q 100 70 110 75" stroke="#a1887f" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="1 3"/>
+              </g>
+
+              <g id="avf-White-Rice" class="av-food">
+                <path d="M 75 82 C 75 65, 115 65, 115 82 C 115 95, 75 95, 75 82 Z" fill="#ffffff"/>
+                <path d="M 85 75 Q 90 70 95 75 M 95 80 Q 100 75 105 80 M 80 85 Q 90 80 100 85 M 85 92 Q 95 88 105 92" stroke="#e2e8f0" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="1 3"/>
+              </g>
+
+              <g id="avf-Sweet-Potatoes" class="av-food">
+                <path d="M 50 65 Q 60 55 65 65 Q 60 72 50 65 Z" fill="#d946ef" stroke="#a21caf" stroke-width="1.5"/>
+                <path d="M 75 60 Q 85 50 95 60 Q 85 68 75 60 Z" fill="#c026d3" stroke="#86198f" stroke-width="1.5"/>
+                <path d="M 45 82 Q 55 72 65 82 Q 55 90 45 82 Z" fill="#e879f9" stroke="#c026d3" stroke-width="1.5"/>
+              </g>
+
+              <g id="avf-sauce-beans" class="av-food">
+                <path d="M 125 80 C 125 60, 185 60, 185 80 C 185 95, 125 95, 125 80 Z" fill="#78350f"/>
+                <ellipse cx="145" cy="72" rx="4" ry="2.5" fill="#92400e" transform="rotate(15 145 72)"/>
+                <ellipse cx="160" cy="78" rx="4" ry="2.5" fill="#92400e" transform="rotate(-30 160 78)"/>
+                <ellipse cx="170" cy="70" rx="4" ry="2.5" fill="#92400e" transform="rotate(45 170 70)"/>
+                <ellipse cx="135" cy="80" rx="4" ry="2.5" fill="#92400e" transform="rotate(10 135 80)"/>
+                <ellipse cx="150" cy="85" rx="4" ry="2.5" fill="#92400e"/>
+              </g>
+              <g id="avf-sauce-gnuts" class="av-food">
+                <path d="M 125 80 C 125 60, 185 60, 185 80 C 185 95, 125 95, 125 80 Z" fill="#b45309"/>
+                <circle cx="145" cy="72" r="3" fill="#d97706"/>
+                <circle cx="160" cy="78" r="3" fill="#d97706"/>
+                <circle cx="170" cy="70" r="3" fill="#d97706"/>
+                <circle cx="135" cy="80" r="3" fill="#d97706"/>
+                <circle cx="150" cy="85" r="3" fill="#d97706"/>
+              </g>
+              <g id="avf-sauce-offals" class="av-food">
+                <path d="M 125 80 C 125 60, 185 60, 185 80 C 185 95, 125 95, 125 80 Z" fill="#451a03"/>
+                <path d="M 140 75 Q 150 65 160 75 M 155 80 Q 165 70 175 80" stroke="#78350f" stroke-width="4" fill="none" stroke-linecap="round"/>
+              </g>
+              <g id="avf-sauce-peas" class="av-food">
+                <path d="M 125 80 C 125 60, 185 60, 185 80 C 185 95, 125 95, 125 80 Z" fill="#14532d"/>
+                <circle cx="145" cy="72" r="3" fill="#22c55e"/>
+                <circle cx="160" cy="78" r="3" fill="#16a34a"/>
+                <circle cx="170" cy="70" r="3" fill="#22c55e"/>
+                <circle cx="135" cy="80" r="3" fill="#16a34a"/>
+                <circle cx="150" cy="85" r="3" fill="#22c55e"/>
+              </g>
+              <g id="avf-sauce-meat" class="av-food">
+                <path d="M 125 80 C 125 60, 185 60, 185 80 C 185 95, 125 95, 125 80 Z" fill="#451a03"/>
+                <path d="M 135 75 L 145 65 L 155 70 L 150 80 Z" fill="#7f1d1d"/>
+                <path d="M 160 80 L 170 70 L 180 75 L 170 85 Z" fill="#991b1b"/>
+                <path d="M 145 85 L 155 75 L 165 80 L 155 90 Z" fill="#7f1d1d"/>
+                <path d="M 135 80 Q 155 70 175 80" stroke="#78350f" stroke-width="3" fill="none" stroke-linecap="round"/>
+              </g>
+              <g id="avf-sauce-fish_mid" class="av-food">
+                <path d="M 125 80 C 125 60, 185 60, 185 80 C 185 95, 125 95, 125 80 Z" fill="#b45309"/>
+                <path d="M 145 75 Q 155 60 175 75 L 165 85 Q 150 90 135 80 Z" fill="#e2e8f0"/>
+                <path d="M 150 75 Q 160 70 170 75 M 147 80 Q 157 75 167 80" stroke="#94a3b8" stroke-width="2" fill="none" stroke-linecap="round"/>
+              </g>
+              <g id="avf-sauce-fish_head" class="av-food">
+                <path d="M 125 80 C 125 60, 185 60, 185 80 C 185 95, 125 95, 125 80 Z" fill="#b45309"/>
+                <path d="M 170 75 Q 155 60 130 75 Q 140 90 170 90 Z" fill="#cbd5e1"/>
+                <circle cx="150" cy="73" r="4" fill="#f8fafc"/>
+                <circle cx="148" cy="73" r="2" fill="#0f172a"/>
+                <path d="M 160 70 Q 170 75 160 85" stroke="#94a3b8" stroke-width="2" fill="none" stroke-linecap="round"/>
+              </g>
+              <g id="avf-sauce-chicken" class="av-food">
+                <path d="M 125 80 C 125 60, 185 60, 185 80 C 185 95, 125 95, 125 80 Z" fill="#b45309"/>
+                <path d="M 175 85 L 195 70" stroke="#f8fafc" stroke-width="6" stroke-linecap="round" fill="none"/>
+                <circle cx="193" cy="67" r="4" fill="#f8fafc"/>
+                <circle cx="197" cy="73" r="4" fill="#f8fafc"/>
+                <path d="M 150 78 Q 140 60 170 65 Q 185 70 185 85 Q 165 95 150 78 Z" fill="#d97706"/>
+                <path d="M 155 72 Q 160 68 165 72 M 160 80 Q 165 76 170 80" stroke="#f59e0b" stroke-width="2" fill="none" stroke-linecap="round"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1232,52 +734,24 @@ body.dark #oc-topup{background:rgba(45,31,0,0.8);border-color:#854d0e;color:#fbb
   </div>
 </div>
 
-</div><div class="toast" id="toast"></div>
+</div>
 
 <script>
-// ════════════════════════════════════════════
-// SECTION: App Data — Sauces, Staff, Passes
-// WHAT:    Hard-coded lookup tables for meals, names, and passwords.
-// WHY:     Single source of truth — change once, reflected everywhere.
-// ════════════════════════════════════════════
-
-// SC = Sauce Catalogue — key, label, price in UGX
 var SC=[
   {k:'beans',  l:'Beans',        p:3000, icon:'🫘'},
   {k:'gnuts',  l:'G.nuts',       p:3000, icon:'🥜'},
   {k:'offals', l:'Offals',       p:4000, icon:'🫀'},
-  {k:'peas',   l:'Peas',         p:4000, icon:'🫛'},
+  {k:'peas',   l:'Peas',         p:3000, icon:'🫛'},
   {k:'meat',   l:'Meat',         p:5000, icon:'🥩'},
-  {k:'fish_mid',l:'Fish (mid/tail)',p:5000,icon:'🐟'},
-  {k:'fish_head',l:'Fish Head',  p:6000, icon:'🐡'},
+  {k:'fish_mid',l:'Fish (mid/tail)',p:7000,icon:'🐟'},
+  {k:'fish_head',l:'Fish Head',  p:7000, icon:'🐡'},
   {k:'chicken',l:'Chicken',      p:7000, icon:'🍗'}
 ];
-
-// AV = Avatar colour pairs for staff initials
 var AV=[{bg:'#d1fae5',fg:'#065f46'},{bg:'#dbeafe',fg:'#1e40af'},{bg:'#fce7f3',fg:'#9d174d'}];
-
-// NAMES = staff roster; index matches employee index (ei)
 var NAMES=['Hilda','Paul','Comfort','Admin'];
-
-// PASSES = login passwords keyed by name index or 'admin'
 var PASSES={'0':'H001','1':'J002','2':'C003','admin':'A004'};
-
-// ════════════════════════════════════════════
-// SECTION: Edit State Tracker
-// WHAT:    Holds the Firebase key of an order being edited.
-// WHY:     Without tracking the edit target, we can't delete the old record before saving the new one.
-// ════════════════════════════════════════════
-
-// editingFbKey = the Firebase key of the order being edited (null if not editing)
 var editingFbKey = null;
 
-// ════════════════════════════════════════════
-// SECTION: Storage Helpers
-// WHAT:    Wrappers around localStorage and sessionStorage for orders and session.
-// WHY:     Firebase overrides these at module load — the wrappers let that happen cleanly.
-// ════════════════════════════════════════════
-
-// Returns the current employee name array (always fresh from hardcoded NAMES)
 function gE(){return NAMES.slice();}
 function sE(e){localStorage.setItem('lt-e',JSON.stringify(e));}
 function gO(){try{var s=localStorage.getItem('lt-o');return s?JSON.parse(s):[];}catch(e){return[];}}
@@ -1285,921 +759,478 @@ function sO(o){localStorage.setItem('lt-o',JSON.stringify(o));}
 function getSess(){try{var s=sessionStorage.getItem('lt-s');return s?JSON.parse(s):null;}catch(e){return null;}}
 function isAdmin(){var sess=getSess();return sess&&sess.admin===true;}
 function setSess(s){sessionStorage.setItem('lt-s',JSON.stringify(s));}
-
-// ════════════════════════════════════════════
-// SECTION: Pricing Helpers
-// WHAT:    Day-rate lookup and cost/top-up splitter.
-// WHY:     Friday is a higher allowance day — this drives all pricing decisions.
-// ════════════════════════════════════════════
-
-// Returns 5000 on Fridays, 3000 otherwise — this is the company's contribution
 function dayRate(d){return new Date(d+'T00:00:00').getDay()===5?5000:3000;}
-
-// Splits a sauce price into company cost and employee top-up
 function calcCost(p,d){var r=dayRate(d);return{co:Math.min(r,p),tu:Math.max(0,p-r)};}
-
-// ════════════════════════════════════════════
-// SECTION: Cancel Button Visibility Logic
-// WHAT:    Determines whether Cancel Order button should show for an order.
-// WHY:     FIX #2 — Cancel should disappear after lunch time each day (1pm cutoff).
-// ════════════════════════════════════════════
-
-// Returns true if the order can still be cancelled
-// An order can be cancelled only if:
-// (a) It was placed for today AND it is before 1pm today, OR
-// (b) It was placed for a future date
 function canCancel(orderDate){
-  var now = new Date();
-  var today = now.toISOString().slice(0,10);
-  // If the order is for a past date — not cancellable
-  if(orderDate < today) return false;
-  // If the order is for a future date — always cancellable
-  if(orderDate > today) return true;
-  // If the order is for today — only cancellable before 1pm (13:00)
+  var now = new Date(); var today = now.toISOString().slice(0,10);
+  if(orderDate < today) return false; if(orderDate > today) return true;
   return now.getHours() < 13;
 }
-
-// ════════════════════════════════════════════
-// SECTION: Date & Format Helpers
-// WHAT:    Week-key generator, week label, and day label formatters.
-// WHY:     Orders are grouped by ISO week — these keep that logic consistent.
-// ════════════════════════════════════════════
-
 function wkKey(d){var dt=new Date(d+'T00:00:00'),dy=dt.getDay(),m=new Date(dt);m.setDate(dt.getDate()-dy+(dy===0?-6:1));return m.toISOString().slice(0,10);}
 function fmtWk(w){
-  var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  var m=new Date(w+'T00:00:00'),f=new Date(m);f.setDate(f.getDate()+4);
+  var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], m=new Date(w+'T00:00:00'),f=new Date(m);f.setDate(f.getDate()+4);
   return m.getDate()+' '+months[m.getMonth()]+' - '+f.getDate()+' '+months[f.getMonth()]+', '+m.getFullYear();
 }
 function fmtDay(d){
-  var dt=new Date(d+'T00:00:00');
-  var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var dt=new Date(d+'T00:00:00'), days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'], months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   return days[dt.getDay()]+', '+dt.getDate()+' '+months[dt.getMonth()]+' '+dt.getFullYear();
 }
-
-// N = number formatter for UGX display (e.g. 3000 → "3,000")
 function N(n){return n.toLocaleString('en-UG');}
-
-// ini = generates up-to-2-letter initials from a name
 function ini(n){return n.trim().split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase()||'?';}
 
-// showToast = slides up a brief notification message at the bottom
-function showToast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('on');},3200);}
-
-// ════════════════════════════════════════════
-// SECTION: Authentication — Login & Logout
-// WHAT:    Validates name+pass, sets session, routes to correct starting page.
-// WHY:     FIX #1 — Admin is routed to Report; non-admins see Orders.
-//          Admin sees Report nav only; staff see Orders/Log/Settings only.
-// ════════════════════════════════════════════
-
-// This function runs when the Sign In button is clicked
-function doLogin(){
-  var ni=document.getElementById('ln').value;
-  var pw=document.getElementById('lp').value.replace(/\s/g,'');
-  var err=document.getElementById('lerr');
-  err.style.display='none';
-  if(!ni){err.textContent='Please select your name.';err.style.cssText='display:block;padding:.5rem .75rem;background:#fdecea;border-radius:10px;border:1px solid #fca5a5;color:#c0392b;font-size:.82rem;margin-bottom:.75rem;';return;}
-  if(!pw){err.textContent='Please enter your pass.';err.style.cssText='display:block;padding:.5rem .75rem;background:#fdecea;border-radius:10px;border:1px solid #fca5a5;color:#c0392b;font-size:.82rem;margin-bottom:.75rem;';return;}
-  var ok=(PASSES[ni]===pw);
-  if(ok){
-    var em=gE();
-    var isAdm=(ni==='admin');
-    setSess({ei:isAdm?-1:parseInt(ni), en:isAdm?'Admin':em[parseInt(ni)], admin:isAdm});
-    document.getElementById('ls').style.display='none';
-    document.getElementById('app').style.display='block';
-    // FIX #1: Admin goes directly to Report; staff go to Orders
-    if(isAdm){go('report');}else{refEmp();go('order');}
-  } else {
-    err.textContent='Wrong pass. Try again.';
-    err.style.cssText='display:block;padding:.5rem .75rem;background:#fdecea;border-radius:10px;border:1px solid #fca5a5;color:#c0392b;font-size:.82rem;margin-bottom:.75rem;';
-    document.getElementById('lp').value='';
-    document.getElementById('lp').focus();
+// System feedback routed exclusively to the Chef's Speech Bubble (no bottom toasts)
+function showToast(m){
+  var bubble = document.getElementById('cs-bubble');
+  if(bubble) {
+    bubble.textContent = m;
+    bubble.classList.add('show');
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(function(){ bubble.classList.remove('show'); }, 3000);
   }
 }
 
-// This function clears session and returns to the login screen
-function doLogout(){
-  sessionStorage.removeItem('lt-s');
-  editingFbKey=null;
-  document.getElementById('app').style.display='none';
-  document.getElementById('ls').style.display='flex';
-  document.getElementById('lp').value='';
-  document.getElementById('ln').value='';
-  document.getElementById('lerr').style.display='none';
+function doLogin(){
+  var ni=document.getElementById('ln').value, pw=document.getElementById('lp').value.replace(/\s/g,''), err=document.getElementById('lerr'); err.style.display='none';
+  if(!ni){err.textContent='Please select your name.';err.style.cssText='display:block;padding:.5rem .75rem;background:#fdecea;border-radius:10px;border:1px solid #fca5a5;color:#c0392b;font-size:.82rem;margin-bottom:.75rem;';return;}
+  if(!pw){err.textContent='Please enter your pass.';err.style.cssText='display:block;padding:.5rem .75rem;background:#fdecea;border-radius:10px;border:1px solid #fca5a5;color:#c0392b;font-size:.82rem;margin-bottom:.75rem;';return;}
+  if(PASSES[ni]===pw){
+    var em=gE(), isAdm=(ni==='admin');
+    setSess({ei:isAdm?-1:parseInt(ni), en:isAdm?'Admin':em[parseInt(ni)], admin:isAdm});
+    document.getElementById('ls').style.display='none'; document.getElementById('app').style.display='block';
+    if(isAdm){go('report');}else{refEmp();go('order');}
+  } else {
+    err.textContent='Wrong pass. Try again.'; err.style.cssText='display:block;padding:.5rem .75rem;background:#fdecea;border-radius:10px;border:1px solid #fca5a5;color:#c0392b;font-size:.82rem;margin-bottom:.75rem;';
+    document.getElementById('lp').value=''; document.getElementById('lp').focus();
+  }
 }
 
-// ════════════════════════════════════════════
-// SECTION: App State
-// WHAT:    The current form selections (employee, date, starches, sauce).
-// WHY:     JS doesn't have two-way binding — state is the single source of truth.
-// ════════════════════════════════════════════
+function doLogout(){
+  sessionStorage.removeItem('lt-s'); editingFbKey=null;
+  document.getElementById('app').style.display='none'; document.getElementById('ls').style.display='flex';
+  document.getElementById('lp').value=''; document.getElementById('ln').value=''; document.getElementById('lerr').style.display='none';
+}
+
 var S={emp:'',date:'',st:[],sauce:''};
 
-// ════════════════════════════════════════════
-// SECTION: Navigation — go(page)
-// WHAT:    Shows the requested page, hides all others, manages nav tab highlights.
-// WHY:     FIX #1 — Report tab is hidden entirely from non-admin users.
-// ════════════════════════════════════════════
-
-// This function switches between pages and controls which nav tabs are visible
 function go(p){
-  var sess=getSess();
-  var nbs=document.querySelectorAll('.nb');
-
-  // FIX #1: If admin, hide Orders and Log tabs; show Report only
-  // If non-admin, hide the Report tab completely
+  var sess=getSess(), nbs=document.querySelectorAll('.nb');
   nbs.forEach(function(nb,i){
-    if(sess&&sess.admin){
-      // Admin sees: Report (index 2) and Settings (index 3) only
-      nb.style.display=(i===0||i===1)?'none':'block';
-    } else {
-      // Staff see: Orders (0), Log (1), Settings (3) — Report (2) is hidden
-      nb.style.display=(i===2)?'none':'block';
-    }
+    if(sess&&sess.admin){ nb.style.display=(i===0)?'none':'block'; } else { nb.style.display=(i===2)?'none':'block'; }
   });
-
-  // Hide all pages, deactivate all nav tabs
-  document.querySelectorAll('.pg').forEach(function(x){x.classList.remove('on');});
-  nbs.forEach(function(x){x.classList.remove('on');});
-
-  // Show the target page
+  document.querySelectorAll('.pg').forEach(function(x){x.classList.remove('on');}); nbs.forEach(function(x){x.classList.remove('on');});
   document.getElementById('pg-'+p).classList.add('on');
-
-  // Activate the matching nav tab
-  var tabs={order:0,log:1,report:2,cfg:3};
-  nbs[tabs[p]].classList.add('on');
-
-  // Run the page-specific render function
+  var tabs={order:0,log:1,report:2,cfg:3}; nbs[tabs[p]].classList.add('on');
   if(p==='log') renderLog();
-  // FIX #1: Only admin can see the report — staff get the unauthorised screen
   if(p==='report'){if(isAdmin()){renderReport();}else{showUnauth();}}
   if(p==='cfg') renderCfg();
   if(p==='order'){
-    // Admin cannot place orders — show a message instead of the form
-    if(isAdmin()){
-      document.getElementById('pg-order').innerHTML='<div class="card" style="text-align:center;padding:3rem 1rem;">'
-        +'<div style="font-size:3.5rem;margin-bottom:.85rem;">🍽️</div>'
-        +'<div style="font-family:\'DM Serif Display\',serif;font-size:1.15rem;color:var(--text-main);margin-bottom:.5rem;">Admin View</div>'
-        +'<div style="font-size:.85rem;color:var(--text-muted);">Use the Report tab to view all orders and financial summaries.</div></div>';
-    } else { refEmp(); }
+    if(isAdmin()){ document.getElementById('main-order-card').innerHTML='<div style="text-align:center;padding:3rem 1rem;"><div style="font-size:3.5rem;margin-bottom:.85rem;">🍽️</div><div style="font-family:\'DM Serif Display\',serif;font-size:1.15rem;color:var(--text-main);margin-bottom:.5rem;">Admin View</div><div style="font-size:.85rem;color:var(--text-muted);">Use the Report tab to view all orders and financial summaries.</div></div>'; document.getElementById('chef-station-col').style.display='none'; } 
+    else { document.getElementById('chef-station-col').style.display='block'; refEmp(); }
   }
 }
 
-// ════════════════════════════════════════════
-// SECTION: Employee Reference Update
-// WHAT:    Reads the current session and updates greeting + hidden emp field.
-// WHY:     After login or edit, the form needs to know who is ordering.
-// ════════════════════════════════════════════
-
-// This function syncs the logged-in user's name into the order form
 function refEmp(){
   var sess=getSess();
   if(sess&&!isAdmin()){
-    S.emp=String(sess.ei);
-    document.getElementById('f-emp').value=String(sess.ei);
-    var name=NAMES[sess.ei];
-    document.getElementById('greeting-text').innerHTML="It's mealtime, "+name+" &#128513;";
-    document.getElementById('greeting-text').style.fontSize='.92rem';
-    document.getElementById('greeting-text').style.color='var(--text-main)';
+    S.emp=String(sess.ei); document.getElementById('f-emp').value=String(sess.ei);
+    var greetingText = document.getElementById('greeting-text');
+    if(greetingText) {
+      greetingText.innerHTML="It's mealtime, "+NAMES[sess.ei]+" &#128513;";
+      greetingText.style.fontSize='.92rem'; greetingText.style.color='var(--text-main)';
+    }
   }
   updSummary();chk();
 }
 
-// ════════════════════════════════════════════
-// SECTION: Pill Click Handlers (Starch Selection)
-// WHAT:    Toggles starch items on/off and updates the hint text.
-// WHY:     Multiple starches can be selected — the toggle pattern enables that.
-// ════════════════════════════════════════════
-
-// This runs once at page load — attaches click handlers to all starch pills
 document.querySelectorAll('.pill').forEach(function(pill){
   pill.onclick=function(){
-    var v=this.dataset.v;
-    var idx=S.st.indexOf(v);
-    // If already selected, remove it; otherwise add it
+    var v=this.dataset.v, idx=S.st.indexOf(v);
     if(idx>-1){S.st.splice(idx,1);}else{S.st.push(v);}
     this.classList.toggle('on',S.st.indexOf(v)>-1);
-    document.getElementById('st-hint').textContent=S.st.length?S.st.join(', '):'Nothing selected yet';
-    chk();
+    document.getElementById('st-hint').textContent=S.st.length?S.st.join(', '):'Nothing selected yet'; chk();
   };
 });
 
-// ════════════════════════════════════════════
-// SECTION: Sauce Render — Visual Food Card Grid
-// WHAT:    Builds the emoji food card grid from SC data and current date's day rate.
-// WHY:     The visual food cards with icons make ordering enjoyable and intuitive.
-// ════════════════════════════════════════════
-
-// This function re-renders the sauce card grid whenever date or selection changes
 function renderSauces(){
   var r=S.date?dayRate(S.date):3000;
-  // Render each sauce as a beautiful food card
-  document.getElementById('sauces').innerHTML=SC.map(function(s){
-    var tu=Math.max(0,s.p-r);
-    var isOn=S.sauce===s.k;
-    return '<div class="food-card'+(isOn?' on':'')+'" onclick="pickSauce(\''+s.k+'\')">'
-      +'<span class="tick">✓</span>'
-      +'<span class="food-icon">'+s.icon+'</span>'
-      +'<div class="food-name">'+s.l+'</div>'
-      +'<div class="food-price">UGX '+N(s.p)+'</div>'
-      +'<span class="food-badge '+(tu>0?'badge-topup':'badge-covered')+'">'
-      +(tu>0?'+'+N(tu)+' top-up':'✓ Covered')+'</span>'
-      +'</div>';
+  var saucesEl = document.getElementById('sauces');
+  if(!saucesEl) return;
+  saucesEl.innerHTML=SC.map(function(s){
+    var tu=Math.max(0,s.p-r), isOn=S.sauce===s.k;
+    return '<div class="food-card'+(isOn?' on':'')+'" onclick="pickSauce(\''+s.k+'\')"><span class="tick">✓</span><span class="food-icon">'+s.icon+'</span><div class="food-name">'+s.l+'</div><div class="food-price">UGX '+N(s.p)+'</div><span class="food-badge '+(tu>0?'badge-topup':'badge-covered')+'">'+(tu>0?'+'+N(tu)+' top-up':'✓ Covered')+'</span></div>';
   }).join('');
 }
-
-// This runs whenever a sauce card is clicked — updates state then re-renders
 function pickSauce(k){S.sauce=k;renderSauces();updSummary();chk();}
 
-// ════════════════════════════════════════════
-// SECTION: Cost Summary Update
-// WHAT:    Calculates and renders the company vs top-up breakdown box.
-// WHY:     Staff must see BEFORE submitting whether they owe a top-up.
-// ════════════════════════════════════════════
-
-// This runs any time sauce or date changes to show updated pricing
 function updSummary(){
   var el=document.getElementById('csummary');
+  if(!el) return;
   if(!S.sauce||!S.date){el.innerHTML='';return;}
-  var s=null;for(var i=0;i<SC.length;i++){if(SC[i].k===S.sauce){s=SC[i];break;}}
-  if(!s)return;
-  var c=calcCost(s.p,S.date),co=c.co,tu=c.tu;
-  var fri=new Date(S.date+'T00:00:00').getDay()===5;
-  var empName=S.emp!==''?gE()[parseInt(S.emp)]:'you';
-  el.innerHTML='<div class="cbox '+(tu>0?'ca':'cg')+'">'
-    +'<div class="ci"><div class="cl">Meal Total</div><div class="cv">UGX '+N(s.p)+'</div></div>'
-    +'<div class="ci"><div class="cl">Company Pays'+(fri?' (Fri)':'')+' </div><div class="cv" style="color:#1565c0;">UGX '+N(co)+'</div></div>'
-    +'<div class="ci"><div class="cl">Top-up</div><div class="cv" style="color:'+(tu>0?'#92400e':'#0284c7')+';">'+(tu>0?'UGX '+N(tu):'None')+'</div></div>'
-    +'</div>'
+  var s=null;for(var i=0;i<SC.length;i++){if(SC[i].k===S.sauce){s=SC[i];break;}} if(!s)return;
+  var c=calcCost(s.p,S.date),co=c.co,tu=c.tu, fri=new Date(S.date+'T00:00:00').getDay()===5, empName=S.emp!==''?gE()[parseInt(S.emp)]:'you';
+  el.innerHTML='<div class="cbox '+(tu>0?'ca':'cg')+'"><div class="ci"><div class="cl">Meal Total</div><div class="cv">UGX '+N(s.p)+'</div></div><div class="ci"><div class="cl">Company Pays'+(fri?' (Fri)':'')+' </div><div class="cv" style="color:#1565c0;">UGX '+N(co)+'</div></div><div class="ci"><div class="cl">Top-up</div><div class="cv" style="color:'+(tu>0?'#92400e':'#0284c7')+';">'+(tu>0?'UGX '+N(tu):'None')+'</div></div></div>'
     +(tu>0?'<div class="tual"><strong>'+empName+'</strong>, please top up <strong>UGX '+N(tu)+'</strong> for your '+s.l+'.</div>':'');
 }
 
-// This enables/disables the Place Order button based on all required fields
-function chk(){document.getElementById('btn-add').disabled=!(S.emp!==''&&S.date&&S.st.length>0&&S.sauce);}
+function chk(){var btn=document.getElementById('btn-add'); if(btn) btn.disabled=!(S.emp!==''&&S.date&&S.st.length>0&&S.sauce);}
+var fDate = document.getElementById('f-date');
+if(fDate) {
+  fDate.onchange=function(){S.date=this.value;renderSauces();updSummary();chk();};
+}
 
-// Re-render sauces and cost whenever the date changes
-document.getElementById('f-date').onchange=function(){S.date=this.value;renderSauces();updSummary();chk();};
-
-// ════════════════════════════════════════════
-// SECTION: Order Submission — doSubmit()
-// WHAT:    Assembles the order object and saves it; resets the form.
-// WHY:     FIX #3 — If editing, delete the old order first, THEN add the new one.
-//          This prevents duplicate orders when editing.
-// ════════════════════════════════════════════
-
-// This function runs when Place Order is clicked
 function doSubmit(){
-  var em=gE();
-  var s=null;for(var i=0;i<SC.length;i++){if(SC[i].k===S.sauce){s=SC[i];break;}}
-  var c=calcCost(s.p,S.date),co=c.co,tu=c.tu;
-  var special=document.getElementById('f-special').value.trim();
-  var order={
-    id:Date.now(),
-    ei:parseInt(S.emp),
-    en:em[parseInt(S.emp)],
-    date:S.date,
-    st:S.st.slice(),
-    sauce:s.l,sp:s.p,co:co,tu:tu,
-    special:special
-  };
-
-  // FIX #3: If we're in edit mode, delete the old Firebase record first
-  if(editingFbKey){
-    window.delOFB(editingFbKey);  // Remove old order from Firebase
-    editingFbKey=null;            // Clear edit tracking state
-    hideBanner();                 // Hide the edit mode banner
-  }
-
-  // Save the (new or updated) order
+  var em=gE(), s=null;
+  for(var i=0;i<SC.length;i++){if(SC[i].k===S.sauce){s=SC[i];break;}}
+  var c=calcCost(s.p,S.date), special=document.getElementById('f-special').value.trim(), order={ id:Date.now(), ei:parseInt(S.emp), en:em[parseInt(S.emp)], date:S.date, st:S.st.slice(), sauce:s.l,sp:s.p,co:c.co,tu:c.tu, special:special };
+  if(editingFbKey){ window.delOFB(editingFbKey); editingFbKey=null; hideBanner(); }
   window.doSubmitFB(order);
-
-  // Reset all form fields
-  S.sauce='';S.st=[];S.emp='';
-  document.getElementById('f-emp').value='';
+  S.sauce='';S.st=[];S.emp=''; document.getElementById('f-emp').value='';
   document.querySelectorAll('.pill').forEach(function(x){x.classList.remove('on');});
-  document.getElementById('st-hint').textContent='Nothing selected yet';
-  document.getElementById('sauces').innerHTML='';
-  document.getElementById('csummary').innerHTML='';
-  document.getElementById('f-special').value='';
-  document.getElementById('btn-add').disabled=true;
-  showOrderConfirmation(tu, N(tu));
+  document.getElementById('st-hint').textContent='Nothing selected yet'; document.getElementById('sauces').innerHTML=''; document.getElementById('csummary').innerHTML='';
+  document.getElementById('f-special').value=''; document.getElementById('btn-add').disabled=true;
+  
+  if(typeof window.triggerOrderSuccess === 'function') window.triggerOrderSuccess(c.tu, N(c.tu));
   refEmp();renderSauces();
 }
 
-// ════════════════════════════════════════════
-// SECTION: Log Render — renderLog()
-// WHAT:    Groups all orders by week and day, then renders them with orHTML().
-// WHY:     The log is the team's shared view of all daily orders.
-// ════════════════════════════════════════════
-
-// This function fetches all orders and builds the grouped HTML log view
 function renderLog(){
-  var orders=gO();
-  var wks=[];
-  orders.forEach(function(o){var w=wkKey(o.date);if(wks.indexOf(w)===-1)wks.push(w);});
-  wks.sort(function(a,b){return b.localeCompare(a);});
-  var fEl=document.getElementById('lf'),pv=fEl.value;
-  fEl.innerHTML='<option value="all">All weeks</option>'+wks.map(function(w){return '<option value="'+w+'"'+(pv===w?' selected':'')+'>'+fmtWk(w)+'</option>';}).join('');
-  var fv=fEl.value;
-  var list=fv==='all'?orders:orders.filter(function(o){return wkKey(o.date)===fv;});
-  var body=document.getElementById('log-body');
+  var orders=gO(), wks=[];
+  orders.forEach(function(o){var w=wkKey(o.date);if(wks.indexOf(w)===-1)wks.push(w);}); wks.sort(function(a,b){return b.localeCompare(a);});
+  var fEl=document.getElementById('lf');
+  if(!fEl) return;
+  var pv=fEl.value; fEl.innerHTML='<option value="all">All weeks</option>'+wks.map(function(w){return '<option value="'+w+'"'+(pv===w?' selected':'')+'>'+fmtWk(w)+'</option>';}).join('');
+  var fv=fEl.value, list=fv==='all'?orders:orders.filter(function(o){return wkKey(o.date)===fv;}), body=document.getElementById('log-body');
   if(!list.length){body.innerHTML='<div class="empty">No orders yet.</div>';return;}
-  var bw={};
-  list.forEach(function(o){
-    var w=wkKey(o.date);
-    if(!bw[w])bw[w]={};
-    if(!bw[w][o.date])bw[w][o.date]=[];
-    bw[w][o.date].push(o);
-  });
+  var bw={}; list.forEach(function(o){ var w=wkKey(o.date); if(!bw[w])bw[w]={}; if(!bw[w][o.date])bw[w][o.date]=[]; bw[w][o.date].push(o); });
   var wkeys=Object.keys(bw).sort(function(a,b){return b.localeCompare(a);});
   body.innerHTML=wkeys.map(function(w){
     var wo=[];Object.keys(bw[w]).forEach(function(d){wo=wo.concat(bw[w][d]);});
-    var wt=wo.reduce(function(s,o){return s+o.co;},0);
-    var days=Object.keys(bw[w]).sort(function(a,b){return b.localeCompare(a);});
-    return '<div class="wbk"><div class="wh"><h3>'+fmtWk(w)+'</h3><span class="wt">Company: UGX '+N(wt)+'</span></div>'
-      +days.map(function(d){return '<div class="dlb">'+fmtDay(d)+'</div>'+bw[w][d].map(orHTML).join('');}).join('')+'</div>';
+    var wt=wo.reduce(function(s,o){return s+o.co;},0), days=Object.keys(bw[w]).sort(function(a,b){return b.localeCompare(a);});
+    return '<div class="wbk"><div class="wh"><h3>'+fmtWk(w)+'</h3><span class="wt">Company: UGX '+N(wt)+'</span></div>'+days.map(function(d){return '<div class="dlb">'+fmtDay(d)+'</div>'+bw[w][d].map(orHTML).join('');}).join('')+'</div>';
   }).join('');
 }
 
-// ════════════════════════════════════════════
-// SECTION: Order HTML Builder — orHTML(o)
-// WHAT:    Renders one order row with avatar, meal details, cost, and action buttons.
-// WHY:     FIX #2 — Cancel button only shows if canCancel(o.date) returns true.
-//          FIX #3 — Edit button always shows for own orders (editing replaces, not duplicates).
-// ════════════════════════════════════════════
-
-// This function builds the HTML string for a single order row
 function orHTML(o){
-  var ac=AV[o.ei%3];
-  var sl=Array.isArray(o.st)?o.st.join(', '):(o.starch||'');
-  var sess=getSess();
-  var isOwn=sess&&sess.ei===o.ei;
-
-  // Build action buttons — only for the order's owner
-  var btns='';
+  var ac=AV[o.ei%3], sl=Array.isArray(o.st)?o.st.join(', '):(o.starch||''), sess=getSess(), isOwn=sess&&sess.ei===o.ei, btns='';
   if(isOwn){
-    btns='<div style="display:flex;flex-direction:column;gap:.3rem;flex-shrink:0;">';
-    // Edit is always available for own orders
-    btns+='<button class="bsm bedit" onclick="editO('+o.id+')">Edit order</button>';
-    // FIX #2: Cancel only shows if the order can still be cancelled (before 1pm today)
-    if(canCancel(o.date)){
-      btns+='<button class="bsm bdel" onclick="delO('+o.id+')">Cancel order</button>';
-    }
+    btns='<div style="display:flex;flex-direction:column;gap:.3rem;flex-shrink:0;"><button class="bsm bedit" onclick="editO('+o.id+')">Edit order</button>';
+    if(canCancel(o.date)){ btns+='<button class="bsm bdel" onclick="delO('+o.id+')">Cancel order</button>'; }
     btns+='</div>';
   }
-
-  return '<div class="or">'
-    +'<div class="av" style="background:'+ac.bg+';color:'+ac.fg+';">'+ini(o.en)+'</div>'
-    +'<div class="oi"><div class="nm">'+o.en+'</div><div class="ml">'+sl+' + '+o.sauce+'</div>'+(o.special?'<div class="spreq">💬 '+o.special+'</div>':'')+'</div>'
-    +'<div class="oc"><div class="cp2">Company: UGX '+N(o.co)+'</div>'+(o.tu>0?'<div class="tub">Top-up: UGX '+N(o.tu)+'</div>':'<div class="okb">✓ No top-up</div>')+'</div>'
-    +btns
-    +'</div>';
+  return '<div class="or"><div class="av" style="background:'+ac.bg+';color:'+ac.fg+';">'+ini(o.en)+'</div><div class="oi"><div class="nm">'+o.en+'</div><div class="ml">'+sl+' + '+o.sauce+'</div>'+(o.special?'<div class="spreq">💬 '+o.special+'</div>':'')+'</div><div class="oc"><div class="cp2">Company: UGX '+N(o.co)+'</div>'+(o.tu>0?'<div class="tub">Top-up: UGX '+N(o.tu)+'</div>':'<div class="okb">✓ No top-up</div>')+'</div>'+btns+'</div>';
 }
 
-// ════════════════════════════════════════════
-// SECTION: Order Delete — delO(id)
-// WHAT:    Confirms and then removes an order from Firebase.
-// WHY:     The local version is overridden by Firebase — this bridges the gap.
-// ════════════════════════════════════════════
-
-// This runs when Cancel order is clicked — asks for confirmation first
-function delO(id){
-  if(!confirm('Cancel this order?'))return;
-  sO(gO().filter(function(o){return o.id!==id;}));
-  renderLog();
-  showToast('Order cancelled');
-}
-
-// ════════════════════════════════════════════
-// SECTION: Order Edit — editO(id)
-// WHAT:    Loads an existing order into the form and stores its Firebase key.
-// WHY:     FIX #3 — We store editingFbKey so doSubmit() can delete the OLD record
-//          before saving the new one — preventing duplicate orders.
-// ════════════════════════════════════════════
-
-// This function loads an existing order into the form for editing
+function delO(id){ if(!confirm('Cancel this order?'))return; sO(gO().filter(function(o){return o.id!==id;})); renderLog(); showToast('Order cancelled'); }
 function editO(id){
-  var orders=gO();
-  var o=null;
-  for(var i=0;i<orders.length;i++){if(orders[i].id===id){o=orders[i];break;}}
-  if(!o)return;
-
-  // Store the Firebase key so doSubmit() knows what to delete
-  editingFbKey=o._fbKey||null;
-
-  // Load the existing order values into the form fields
-  refEmp();
-  document.getElementById('f-date').value=o.date;S.date=o.date;
-  S.st=Array.isArray(o.st)?o.st.slice():(o.starch?[o.starch]:[]);
-  document.querySelectorAll('.pill').forEach(function(p){
-    p.classList.toggle('on',S.st.indexOf(p.dataset.v)>-1);
-  });
+  var orders=gO(), o=null; for(var i=0;i<orders.length;i++){if(orders[i].id===id){o=orders[i];break;}} if(!o)return;
+  editingFbKey=o._fbKey||null; refEmp(); document.getElementById('f-date').value=o.date;S.date=o.date;
+  S.st=Array.isArray(o.st)?o.st.slice():(o.starch?[o.starch]:[]); document.querySelectorAll('.pill').forEach(function(p){ p.classList.toggle('on',S.st.indexOf(p.dataset.v)>-1); });
   document.getElementById('st-hint').textContent=S.st.length?S.st.join(', '):'Nothing selected yet';
-
-  // Find the sauce key from the sauce label stored on the order
-  var sc=null;
-  for(var j=0;j<SC.length;j++){if(SC[j].l===o.sauce){sc=SC[j];break;}}
-  S.sauce=sc?sc.k:'';
-  renderSauces();updSummary();
-  document.getElementById('f-special').value=o.special||'';
-  chk();
-
-  // Show the edit mode banner at the top of the orders page
-  showBanner();
-
-  // Navigate to the order form page
-  go('order');
-  showToast('Edit your order then tap Place Order');
+  var sc=null; for(var j=0;j<SC.length;j++){if(SC[j].l===o.sauce){sc=SC[j];break;}} S.sauce=sc?sc.k:''; renderSauces();updSummary(); document.getElementById('f-special').value=o.special||''; chk();
+  showBanner(); go('order'); showToast('Edit your order then tap Place Order');
 }
+function showBanner(){var b=document.getElementById('edit-banner');if(b)b.classList.add('on');} function hideBanner(){var b=document.getElementById('edit-banner');if(b)b.classList.remove('on');}
+function cancelEdit(){ editingFbKey=null; hideBanner(); S.sauce='';S.st=[]; document.querySelectorAll('.pill').forEach(function(x){x.classList.remove('on');}); document.getElementById('st-hint').textContent='Nothing selected yet'; document.getElementById('sauces').innerHTML=''; document.getElementById('csummary').innerHTML=''; document.getElementById('f-special').value=''; document.getElementById('btn-add').disabled=true; refEmp();renderSauces(); showToast('Edit cancelled'); }
+function showUnauth(){ document.getElementById('rep-body').innerHTML='<div style="text-align:center;padding:3.5rem 1rem;"><div style="font-size:3.5rem;margin-bottom:.85rem;">&#128274;</div><div style="font-family:DM Serif Display,serif;font-size:1.1rem;color:var(--text-main);margin-bottom:.5rem;">Admin Access Only</div><div style="font-size:.85rem;color:var(--text-muted);">Only the admin account can view financial reports.</div></div>'; }
 
-// ════════════════════════════════════════════
-// SECTION: Edit Banner Show/Hide
-// WHAT:    Controls the visible "you are editing" banner at the top of orders page.
-// WHY:     Without a visual cue, users don't know they're editing vs creating.
-// ════════════════════════════════════════════
-
-function showBanner(){var b=document.getElementById('edit-banner');if(b)b.classList.add('on');}
-function hideBanner(){var b=document.getElementById('edit-banner');if(b)b.classList.remove('on');}
-
-// cancelEdit clears the edit state and hides the banner without saving
-function cancelEdit(){
-  editingFbKey=null;
-  hideBanner();
-  // Reset form fields back to blank state
-  S.sauce='';S.st=[];
-  document.querySelectorAll('.pill').forEach(function(x){x.classList.remove('on');});
-  document.getElementById('st-hint').textContent='Nothing selected yet';
-  document.getElementById('sauces').innerHTML='';
-  document.getElementById('csummary').innerHTML='';
-  document.getElementById('f-special').value='';
-  document.getElementById('btn-add').disabled=true;
-  refEmp();renderSauces();
-  showToast('Edit cancelled');
-}
-
-// ════════════════════════════════════════════
-// SECTION: Unauthorised Report Message
-// WHAT:    Renders a lock screen inside the report page for non-admin users.
-// WHY:     FIX #1 — Even if staff somehow navigate to Report, they see a lock screen.
-// ════════════════════════════════════════════
-
-// This replaces the report body with an access denied message
-function showUnauth(){
-  document.getElementById('rep-body').innerHTML='<div style="text-align:center;padding:3.5rem 1rem;">'
-    +'<div style="font-size:3.5rem;margin-bottom:.85rem;">&#128274;</div>'
-    +'<div style="font-family:DM Serif Display,serif;font-size:1.1rem;color:var(--text-main);margin-bottom:.5rem;">Admin Access Only</div>'
-    +'<div style="font-size:.85rem;color:var(--text-muted);">Only the admin account can view financial reports.</div></div>';
-}
-
-// ════════════════════════════════════════════
-// SECTION: Report Render — renderReport() + renderRepTable() + renderMonthly()
-// WHAT:    Builds the weekly and monthly financial summary tables for admin.
-// WHY:     Admin needs accurate company cost and top-up totals for budgeting.
-// ════════════════════════════════════════════
-
-// This function populates the week selector and loads the first week's table
 function renderReport(){
-  var orders=gO();
-  var wks=[];
-  orders.forEach(function(o){var w=wkKey(o.date);if(wks.indexOf(w)===-1)wks.push(w);});
-  wks.sort(function(a,b){return b.localeCompare(a);});
-  var fEl=document.getElementById('rf'),pv=fEl.value;
-  fEl.innerHTML='<option value="">Select a week...</option>'+wks.map(function(w){
-    return '<option value="'+w+'"'+(pv===w?' selected':'')+'>'+fmtWk(w)+'</option>';
-  }).join('');
-  if(!fEl.value&&wks.length) fEl.value=wks[0];
-  renderRepTable();
+  var orders=gO(), wks=[]; orders.forEach(function(o){var w=wkKey(o.date);if(wks.indexOf(w)===-1)wks.push(w);}); wks.sort(function(a,b){return b.localeCompare(a);});
+  var fEl=document.getElementById('rf');
+  if(!fEl) return;
+  var pv=fEl.value; fEl.innerHTML='<option value="">Select a week...</option>'+wks.map(function(w){ return '<option value="'+w+'"'+(pv===w?' selected':'')+'>'+fmtWk(w)+'</option>'; }).join('');
+  if(!fEl.value&&wks.length) fEl.value=wks[0]; renderRepTable();
 }
-
-// This function renders the detailed order table for the selected week
 function renderRepTable(){
-  var w=document.getElementById('rf').value;
-  var body=document.getElementById('rep-body');
-  if(!w){body.innerHTML='<div class="empty">Select a week to view the report.</div>';return;}
-  var orders=gO().filter(function(o){return wkKey(o.date)===w;});
-  if(!orders.length){body.innerHTML='<div class="empty">No orders for this week.</div>';return;}
-  var tc=orders.reduce(function(s,o){return s+o.co;},0);
-  var tt=orders.reduce(function(s,o){return s+o.tu;},0);
-
-  var mainRows=orders.map(function(o){
-    var sl=Array.isArray(o.st)?o.st.join(', '):(o.starch||'');
-    return '<tr>'
-      +'<td>'+new Date(o.date+'T00:00:00').toLocaleDateString('en-UG',{weekday:'short',month:'short',day:'numeric'})+'</td>'
-      +'<td><strong>'+o.en+'</strong></td>'
-      +'<td>'+sl+'</td><td>'+o.sauce+'</td>'
-      +'<td style="text-align:right;">UGX '+N(o.sp)+'</td>'
-      +'<td style="text-align:right;color:#1565c0;font-weight:600;">UGX '+N(o.co)+'</td>'
-      +'<td style="text-align:right;'+(o.tu>0?'color:#92400e;font-weight:600;':'color:#0284c7;')+'">'+(o.tu>0?'UGX '+N(o.tu):'—')+'</td>'
-      +'</tr>';
-  }).join('');
-
+  var w=document.getElementById('rf').value, body=document.getElementById('rep-body'); if(!w){body.innerHTML='<div class="empty">Select a week to view the report.</div>';return;}
+  var orders=gO().filter(function(o){return wkKey(o.date)===w;}); if(!orders.length){body.innerHTML='<div class="empty">No orders for this week.</div>';return;}
+  var tc=orders.reduce(function(s,o){return s+o.co;},0), tt=orders.reduce(function(s,o){return s+o.tu;},0);
+  var mainRows=orders.map(function(o){ var sl=Array.isArray(o.st)?o.st.join(', '):(o.starch||''); return '<tr><td>'+new Date(o.date+'T00:00:00').toLocaleDateString('en-UG',{weekday:'short',month:'short',day:'numeric'})+'</td><td><strong>'+o.en+'</strong></td><td>'+sl+'</td><td>'+o.sauce+'</td><td style="text-align:right;">UGX '+N(o.sp)+'</td><td style="text-align:right;color:#1565c0;font-weight:600;">UGX '+N(o.co)+'</td><td style="text-align:right;'+(o.tu>0?'color:#92400e;font-weight:600;':'color:#0284c7;')+'">'+(o.tu>0?'UGX '+N(o.tu):'—')+'</td></tr>'; }).join('');
   var empRows=NAMES.slice(0,3).map(function(n,i){
-    var m=orders.filter(function(o){return o.ei===i;});
-    if(!m.length)return '';
-    var ec=m.reduce(function(s,o){return s+o.co;},0);
-    var et=m.reduce(function(s,o){return s+o.tu;},0);
-    return '<tr><td><strong>'+n+'</strong></td><td>'+m.length+'</td>'
-      +'<td style="text-align:right;color:#1565c0;font-weight:600;">UGX '+N(ec)+'</td>'
-      +'<td style="text-align:right;'+(et>0?'color:#92400e;font-weight:600;':'color:#0284c7;')+'">'+(et>0?'UGX '+N(et):'—')+'</td>'
-      +'<td style="text-align:right;font-weight:600;">UGX '+N(ec+et)+'</td></tr>';
+    var m=orders.filter(function(o){return o.ei===i;}); if(!m.length)return ''; var ec=m.reduce(function(s,o){return s+o.co;},0), et=m.reduce(function(s,o){return s+o.tu;},0);
+    return '<tr><td><strong>'+n+'</strong></td><td>'+m.length+'</td><td style="text-align:right;color:#1565c0;font-weight:600;">UGX '+N(ec)+'</td><td style="text-align:right;'+(et>0?'color:#92400e;font-weight:600;':'color:#0284c7;')+'">'+(et>0?'UGX '+N(et):'—')+'</td><td style="text-align:right;font-weight:600;">UGX '+N(ec+et)+'</td></tr>';
   }).join('');
-
-  body.innerHTML='<div class="sc3">'
-    +'<div class="sc"><div class="scl">Company Total</div><div class="scv">UGX '+N(tc)+'</div><div class="scs">'+orders.length+' orders</div></div>'
-    +'<div class="sc"><div class="scl">Employee Top-ups</div><div class="scv">UGX '+N(tt)+'</div><div class="scs">Paid by staff</div></div>'
-    +'<div class="sc"><div class="scl">Grand Total</div><div class="scv">UGX '+N(tc+tt)+'</div><div class="scs">All meals</div></div>'
-    +'</div>'
-    +'<div class="card"><div class="ct">All Orders — '+fmtWk(w)+'</div>'
-    +'<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="rtb" style="min-width:560px;">'
-    +'<thead><tr><th>Day</th><th>Employee</th><th>Main Course</th><th>Sauce</th><th style="text-align:right">Price</th><th style="text-align:right">Company Pays</th><th style="text-align:right">Top-up</th></tr></thead>'
-    +'<tbody>'+mainRows+'</tbody></table></div></div>'
-    +'<div class="card"><div class="ct">Per-Employee Summary</div>'
-    +'<div style="overflow-x:auto;"><table class="rtb" style="min-width:420px;">'
-    +'<thead><tr><th>Employee</th><th>Orders</th><th style="text-align:right">Company Paid</th><th style="text-align:right">Top-ups</th><th style="text-align:right">Total</th></tr></thead>'
-    +'<tbody>'+empRows
-    +'<tr class="ttr"><td>TOTAL</td><td>'+orders.length+'</td>'
-    +'<td style="text-align:right;">UGX '+N(tc)+'</td>'
-    +'<td style="text-align:right;">'+(tt?'UGX '+N(tt):'—')+'</td>'
-    +'<td style="text-align:right;">UGX '+N(tc+tt)+'</td></tr>'
-    +'</tbody></table></div></div>';
+  body.innerHTML='<div class="sc3"><div class="sc"><div class="scl">Company Total</div><div class="scv">UGX '+N(tc)+'</div><div class="scs">'+orders.length+' orders</div></div><div class="sc"><div class="scl">Employee Top-ups</div><div class="scv">UGX '+N(tt)+'</div><div class="scs">Paid by staff</div></div><div class="sc"><div class="scl">Grand Total</div><div class="scv">UGX '+N(tc+tt)+'</div><div class="scs">All meals</div></div></div><div class="card"><div class="ct">All Orders — '+fmtWk(w)+'</div><div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table class="rtb" style="min-width:560px;"><thead><tr><th>Day</th><th>Employee</th><th>Main Course</th><th>Sauce</th><th style="text-align:right">Price</th><th style="text-align:right">Company Pays</th><th style="text-align:right">Top-up</th></tr></thead><tbody>'+mainRows+'</tbody></table></div></div><div class="card"><div class="ct">Per-Employee Summary</div><div style="overflow-x:auto;"><table class="rtb" style="min-width:420px;"><thead><tr><th>Employee</th><th>Orders</th><th style="text-align:right">Company Paid</th><th style="text-align:right">Top-ups</th><th style="text-align:right">Total</th></tr></thead><tbody>'+empRows+'<tr class="ttr"><td>TOTAL</td><td>'+orders.length+'</td><td style="text-align:right;">UGX '+N(tc)+'</td><td style="text-align:right;">'+(tt?'UGX '+N(tt):'—')+'</td><td style="text-align:right;">UGX '+N(tc+tt)+'</td></tr></tbody></table></div></div>';
 }
-
-// renderAdminReport is an alias that populates the week selector before rendering
-function renderAdminReport(){
-  renderReport();
-}
-
-// ════════════════════════════════════════════
-// SECTION: Monthly Report — renderMonthly()
-// WHAT:    Groups orders by calendar month and shows per-employee monthly summary.
-// WHY:     Useful for end-of-month reconciliation and payroll deductions.
-// ════════════════════════════════════════════
-
+function renderAdminReport(){ renderReport(); }
 function renderMonthly(){
-  var orders=gO();
-  var months={};
-  orders.forEach(function(o){
-    var m=o.date.slice(0,7); // yyyy-mm
-    if(!months[m])months[m]=[];
-    months[m].push(o);
-  });
-  var mkeys=Object.keys(months).sort(function(a,b){return b.localeCompare(a);});
-  var mnames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  var sel=document.getElementById('rm'),pv=sel.value;
-  sel.innerHTML='<option value="">Select a month...</option>'+mkeys.map(function(m){
-    var parts=m.split('-');
-    var label=mnames[parseInt(parts[1])-1]+' '+parts[0];
-    return '<option value="'+m+'"'+(pv===m?' selected':'')+'>'+label+'</option>';
-  }).join('');
-  if(!sel.value&&mkeys.length)sel.value=mkeys[0];
-  var selMonth=sel.value;
-  if(!selMonth){document.getElementById('rep-body').innerHTML='<div class="empty">Select a month.</div>';return;}
-  var mo=months[selMonth]||[];
-  if(!mo.length){document.getElementById('rep-body').innerHTML='<div class="empty">No orders this month.</div>';return;}
-  var parts=selMonth.split('-');
-  var monthLabel=mnames[parseInt(parts[1])-1]+' '+parts[0];
-  var tc=mo.reduce(function(s,o){return s+o.co;},0);
-  var tt=mo.reduce(function(s,o){return s+o.tu;},0);
+  var orders=gO(), months={}; orders.forEach(function(o){ var m=o.date.slice(0,7); if(!months[m])months[m]=[]; months[m].push(o); });
+  var mkeys=Object.keys(months).sort(function(a,b){return b.localeCompare(a);}), mnames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], sel=document.getElementById('rm');
+  if(!sel) return;
+  var pv=sel.value;
+  sel.innerHTML='<option value="">Select a month...</option>'+mkeys.map(function(m){ var parts=m.split('-'); return '<option value="'+m+'"'+(pv===m?' selected':'')+'>'+(mnames[parseInt(parts[1])-1]+' '+parts[0])+'</option>'; }).join('');
+  if(!sel.value&&mkeys.length)sel.value=mkeys[0]; var selMonth=sel.value; if(!selMonth){document.getElementById('rep-body').innerHTML='<div class="empty">Select a month.</div>';return;}
+  var mo=months[selMonth]||[]; if(!mo.length){document.getElementById('rep-body').innerHTML='<div class="empty">No orders this month.</div>';return;}
+  var parts=selMonth.split('-'), monthLabel=mnames[parseInt(parts[1])-1]+' '+parts[0], tc=mo.reduce(function(s,o){return s+o.co;},0), tt=mo.reduce(function(s,o){return s+o.tu;},0);
   var empRows=NAMES.map(function(n,i){
-    var m2=mo.filter(function(o){return o.ei===i;});
-    if(!m2.length)return '';
-    var ec=m2.reduce(function(s,o){return s+o.co;},0);
-    var et=m2.reduce(function(s,o){return s+o.tu;},0);
-    return '<tr><td><strong>'+n+'</strong></td><td>'+m2.length+'</td>'
-      +'<td style="text-align:right;color:#1565c0;font-weight:600;">UGX '+N(ec)+'</td>'
-      +'<td style="text-align:right;'+(et>0?'color:#92400e;font-weight:600;':'color:#0284c7;')+'">'+(et>0?'UGX '+N(et):'—')+'</td>'
-      +'<td style="text-align:right;font-weight:600;">UGX '+N(ec+et)+'</td></tr>';
+    var m2=mo.filter(function(o){return o.ei===i;}); if(!m2.length)return ''; var ec=m2.reduce(function(s,o){return s+o.co;},0), et=m2.reduce(function(s,o){return s+o.tu;},0);
+    return '<tr><td><strong>'+n+'</strong></td><td>'+m2.length+'</td><td style="text-align:right;color:#1565c0;font-weight:600;">UGX '+N(ec)+'</td><td style="text-align:right;'+(et>0?'color:#92400e;font-weight:600;':'color:#0284c7;')+'">'+(et>0?'UGX '+N(et):'—')+'</td><td style="text-align:right;font-weight:600;">UGX '+N(ec+et)+'</td></tr>';
   }).join('');
-  document.getElementById('rep-body').innerHTML='<div class="sc3">'
-    +'<div class="sc"><div class="scl">Company Total</div><div class="scv">UGX '+N(tc)+'</div><div class="scs">'+mo.length+' orders in '+monthLabel+'</div></div>'
-    +'<div class="sc"><div class="scl">Top-ups</div><div class="scv">UGX '+N(tt)+'</div><div class="scs">Paid by staff</div></div>'
-    +'<div class="sc"><div class="scl">Grand Total</div><div class="scv">UGX '+N(tc+tt)+'</div><div class="scs">All meals</div></div>'
-    +'</div>'
-    +'<div class="card"><div class="ct">Per-Employee — '+monthLabel+'</div>'
-    +'<div style="overflow-x:auto;"><table class="rtb" style="min-width:420px;">'
-    +'<thead><tr><th>Employee</th><th>Orders</th><th style="text-align:right">Company</th><th style="text-align:right">Top-ups</th><th style="text-align:right">Total</th></tr></thead>'
-    +'<tbody>'+empRows
-    +'<tr class="ttr"><td>TOTAL</td><td>'+mo.length+'</td>'
-    +'<td style="text-align:right;">UGX '+N(tc)+'</td>'
-    +'<td style="text-align:right;">'+(tt?'UGX '+N(tt):'—')+'</td>'
-    +'<td style="text-align:right;">UGX '+N(tc+tt)+'</td></tr>'
-    +'</tbody></table></div></div>';
+  document.getElementById('rep-body').innerHTML='<div class="sc3"><div class="sc"><div class="scl">Company Total</div><div class="scv">UGX '+N(tc)+'</div><div class="scs">'+mo.length+' orders in '+monthLabel+'</div></div><div class="sc"><div class="scl">Top-ups</div><div class="scv">UGX '+N(tt)+'</div><div class="scs">Paid by staff</div></div><div class="sc"><div class="scl">Grand Total</div><div class="scv">UGX '+N(tc+tt)+'</div><div class="scs">All meals</div></div></div><div class="card"><div class="ct">Per-Employee — '+monthLabel+'</div><div style="overflow-x:auto;"><table class="rtb" style="min-width:420px;"><thead><tr><th>Employee</th><th>Orders</th><th style="text-align:right">Company</th><th style="text-align:right">Top-ups</th><th style="text-align:right">Total</th></tr></thead><tbody>'+empRows+'<tr class="ttr"><td>TOTAL</td><td>'+mo.length+'</td><td style="text-align:right;">UGX '+N(tc)+'</td><td style="text-align:right;">'+(tt?'UGX '+N(tt):'—')+'</td><td style="text-align:right;">UGX '+N(tc+tt)+'</td></tr></tbody></table></div></div>';
 }
-
-// ════════════════════════════════════════════
-// SECTION: Settings Render — renderCfg()
-// WHAT:    Shows name editor for current user and the pricing reference table.
-// WHY:     Staff shouldn't need to ask what things cost — the table is always here.
-// ════════════════════════════════════════════
-
 function renderCfg(){
   var em=gE(),sess=getSess();
-  if(isAdmin()){
-    document.getElementById('emp-list').innerHTML='<div style="font-size:.85rem;color:var(--text-muted);padding:.5rem 0;">Admin account — no name to update.</div>';
-  } else {
-    var idx=sess?sess.ei:0;
-    var ac=AV[idx];
-    document.getElementById('emp-list').innerHTML='<div class="er">'
-      +'<div class="av" style="width:38px;height:38px;background:'+ac.bg+';color:'+ac.fg+';flex-shrink:0;" id="avx">'+ini(em[idx])+'</div>'
-      +'<input type="text" id="eix" value="'+em[idx]+'" placeholder="Your name" oninput="document.getElementById(\'avx\').textContent=this.value.trim().split(\' \').map(function(w){return w[0];}).join(\'\').slice(0,2).toUpperCase()||\'?\'"></div>';
+  if(isAdmin()){ document.getElementById('emp-list').innerHTML='<div style="font-size:.85rem;color:var(--text-muted);padding:.5rem 0;">Admin account — no name to update.</div>'; }
+  else {
+    var idx=sess?sess.ei:0, ac=AV[idx];
+    document.getElementById('emp-list').innerHTML='<div class="er"><div class="av" style="width:38px;height:38px;background:'+ac.bg+';color:'+ac.fg+';flex-shrink:0;" id="avx">'+ini(em[idx])+'</div><input type="text" id="eix" value="'+em[idx]+'" placeholder="Your name" oninput="document.getElementById(\'avx\').textContent=this.value.trim().split(\' \').map(function(w){return w[0];}).join(\'\').slice(0,2).toUpperCase()||\'?\'"></div>';
   }
   document.getElementById('ptbl').innerHTML=SC.map(function(s){
     var t1=Math.max(0,s.p-3000),t2=Math.max(0,s.p-5000);
-    return '<tr>'
-      +'<td>'+s.icon+' '+s.l+'</td>'
-      +'<td style="text-align:right;">'+N(s.p)+'</td>'
-      +'<td style="text-align:right;'+(t1>0?'color:#92400e;font-weight:600;':'color:#0284c7;')+'">'+(t1?'+'+N(t1):'Covered')+'</td>'
-      +'<td style="text-align:right;'+(t2>0?'color:#92400e;font-weight:600;':'color:#0284c7;')+'">'+(t2?'+'+N(t2):'Covered')+'</td></tr>';
+    return '<tr><td>'+s.icon+' '+s.l+'</td><td style="text-align:right;">'+N(s.p)+'</td><td style="text-align:right;'+(t1>0?'color:#92400e;font-weight:600;':'color:#0284c7;')+'">'+(t1?'+'+N(t1):'Covered')+'</td><td style="text-align:right;'+(t2>0?'color:#92400e;font-weight:600;':'color:#0284c7;')+'">'+(t2?'+'+N(t2):'Covered')+'</td></tr>';
   }).join('');
 }
-
-// This saves the employee name to localStorage and refreshes the greeting
-function saveEmp(){
-  var em=gE(),sess=getSess(),idx=sess?sess.ei:0;
-  var v=document.getElementById('eix');
-  if(v&&v.value.trim()){em[idx]=v.value.trim();}
-  sE(em);
-  if(sess)setSess({ei:sess.ei,en:em[sess.ei]});
-  refEmp();showToast('Name saved');
-}
-
-// ════════════════════════════════════════════
-// SECTION: Report Tab Switcher
-// WHAT:    Switches between the Weekly and Monthly report views.
-// WHY:     Two time horizons serve different management needs.
-// ════════════════════════════════════════════
-
-function switchReportTab(tab){
-  document.getElementById('report-weekly-controls').style.display=tab==='weekly'?'block':'none';
-  document.getElementById('report-monthly-controls').style.display=tab==='monthly'?'block':'none';
-  document.getElementById('tab-weekly').style.background=tab==='weekly'?'var(--g)':'var(--text-muted)';
-  document.getElementById('tab-monthly').style.background=tab==='monthly'?'var(--g)':'var(--text-muted)';
-  if(tab==='monthly') renderMonthly();
-  else renderReport();
-}
-
-// ════════════════════════════════════════════
-// SECTION: Initialisation — runs on page load
-// WHAT:    Sets default date, and restores session if one exists.
-// WHY:     Refreshing the page should not log you out if the session is still valid.
-// ════════════════════════════════════════════
+function saveEmp(){ var em=gE(),sess=getSess(),idx=sess?sess.ei:0, v=document.getElementById('eix'); if(v&&v.value.trim()){em[idx]=v.value.trim();} sE(em); if(sess)setSess({ei:sess.ei,en:em[sess.ei]}); refEmp();showToast('Name saved'); }
+function switchReportTab(tab){ document.getElementById('report-weekly-controls').style.display=tab==='weekly'?'block':'none'; document.getElementById('report-monthly-controls').style.display=tab==='monthly'?'block':'none'; document.getElementById('tab-weekly').style.background=tab==='weekly'?'var(--g)':'var(--text-muted)'; document.getElementById('tab-monthly').style.background=tab==='monthly'?'var(--g)':'var(--text-muted)'; if(tab==='monthly') renderMonthly(); else renderReport(); }
 
 (function(){
-  // Set the date picker to today's date
-  var today=new Date().toISOString().slice(0,10);
-  document.getElementById('f-date').value=today;
-  S.date=today;
-
-  // If a valid session already exists, skip the login screen
-  var sess=getSess();
-  if(sess){
-    document.getElementById('ls').style.display='none';
-    document.getElementById('app').style.display='block';
-    if(sess.admin){go('report');}else{refEmp();go('order');}
-  }
-
-  // Always render sauces in case we're restoring to the orders page
+  var today=new Date().toISOString().slice(0,10); document.getElementById('f-date').value=today; S.date=today;
+  var sess=getSess(); if(sess){ document.getElementById('ls').style.display='none'; document.getElementById('app').style.display='block'; if(sess.admin){go('report');}else{refEmp();go('order');} }
   renderSauces();
 })();
 
-// ════════════════════════════════════════════
-// SECTION: Window Exports for Firebase Module
-// WHAT:    Makes core functions accessible to the Firebase module loaded below.
-// WHY:     ES modules have separate scope — window.* is the bridge.
-// ════════════════════════════════════════════
-window.gE=gE;window.sE=sE;window.gO=gO;window.sO=sO;window.getSess=getSess;
-window.setSess=setSess;window.SC=SC;window.S=S;window.N=N;
-window.calcCost=calcCost;window.showToast=showToast;window.refEmp=refEmp;
-window.renderSauces=renderSauces;window.renderLog=renderLog;
-window.renderAdminReport=renderAdminReport;window.doSubmit=doSubmit;window.delO=delO;
+window.gE=gE;window.sE=sE;window.gO=gO;window.sO=sO;window.getSess=getSess; window.setSess=setSess;window.SC=SC;window.S=S;window.N=N; window.calcCost=calcCost;window.showToast=showToast;window.refEmp=refEmp; window.renderSauces=renderSauces;window.renderLog=renderLog; window.renderAdminReport=renderAdminReport;window.doSubmit=doSubmit;window.delO=delO;
 </script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, onValue, remove, push } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-// Firebase project configuration — do not edit these values
-const firebaseConfig = {
-  apiKey: "AIzaSyAwW31V5RCTfhQMdqm9-Vx7YK6IQtFbY00",
-  authDomain: "mealtime-ha.firebaseapp.com",
-  databaseURL: "https://mealtime-ha-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "mealtime-ha",
-  storageBucket: "mealtime-ha.firebasestorage.app",
-  messagingSenderId: "661705305604",
-  appId: "1:661705305604:web:e08c85d0c327bf32414f51"
-};
+const firebaseConfig = { apiKey: "AIzaSyAwW31V5RCTfhQMdqm9-Vx7YK6IQtFbY00", authDomain: "mealtime-ha.firebaseapp.com", databaseURL: "https://mealtime-ha-default-rtdb.europe-west1.firebasedatabase.app", projectId: "mealtime-ha", storageBucket: "mealtime-ha.firebasestorage.app", messagingSenderId: "661705305604", appId: "1:661705305604:web:e08c85d0c327bf32414f51" };
+const app = initializeApp(firebaseConfig); const db = getDatabase(app); const ordersRef = ref(db, 'orders');
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const ordersRef = ref(db, 'orders');
-
-// In-memory order store — Firebase populates this via real-time listener
-window._fbOrders = [];
-window._fbReady = false;
-window._fbListeners = [];
-
-// This listener fires immediately and on every Firebase data change
+window._fbOrders = []; window._fbReady = false; window._fbListeners = [];
 onValue(ordersRef, function(snapshot) {
-  var data = snapshot.val();
-  var orders = [];
-  if(data){
-    Object.keys(data).forEach(function(key){
-      var o = data[key];
-      o._fbKey = key; // Store Firebase key on each order for later delete
-      orders.push(o);
-    });
-    // Sort newest first so the log always shows the most recent at the top
-    orders.sort(function(a,b){ return b.id - a.id; });
-  }
-  window._fbOrders = orders;
-  window._fbReady = true;
-  // Notify registered listeners (log page, report page) to re-render
-  window._fbListeners.forEach(function(fn){ fn(); });
+  var data = snapshot.val(), orders = [];
+  if(data){ Object.keys(data).forEach(function(key){ var o = data[key]; o._fbKey = key; orders.push(o); }); orders.sort(function(a,b){ return b.id - a.id; }); }
+  window._fbOrders = orders; window._fbReady = true; window._fbListeners.forEach(function(fn){ fn(); });
 });
+window.gO = function(){ return window._fbOrders.slice(); }; window.sO = function(orders){};
+window.doSubmitFB = function(order){ push(ordersRef, order).catch(function(e){ alert('Could not save order. Check your connection.'); }); };
+window.delOFB = function(fbKey){ remove(ref(db, 'orders/'+fbKey)); };
 
-// Override gO to return Firebase orders instead of localStorage
-window.gO = function(){ return window._fbOrders.slice(); };
-
-// sO is a no-op — Firebase handles writes through doSubmitFB and delOFB
-window.sO = function(orders){};
-
-// doSubmitFB pushes a new order to Firebase — generates a unique key automatically
-window.doSubmitFB = function(order){
-  push(ordersRef, order).catch(function(e){ alert('Could not save order. Check your connection.'); });
-};
-
-// delOFB removes an order from Firebase by its unique key
-window.delOFB = function(fbKey){
-  remove(ref(db, 'orders/'+fbKey));
-};
-
-// Patch doSubmit to use Firebase — replaces the localStorage version
 var _origDoSubmit = window.doSubmit;
 window.doSubmit = function(){
-  var em = window.gE();
-  var SC = window.SC;
-  var S = window.S;
-  // Find the selected sauce object from SC
-  var s = null; for(var i=0;i<SC.length;i++){if(SC[i].k===S.sauce){s=SC[i];break;}}
-  if(!s) return;
-  var c = window.calcCost(s.p, S.date);
-  var special = document.getElementById('f-special').value.trim();
-  var order = {
-    id: Date.now(),
-    ei: parseInt(S.emp),
-    en: em[parseInt(S.emp)],
-    date: S.date,
-    st: S.st.slice(),
-    sauce: s.l,
-    sp: s.p,
-    co: c.co,
-    tu: c.tu,
-    special: special
-  };
-
-  // FIX #3 (Firebase layer): If editing, delete the old record before pushing new one
-  if(window._editingFbKey){
-    window.delOFB(window._editingFbKey);
-    window._editingFbKey = null;
-  }
-
+  var em = window.gE(), SC = window.SC, S = window.S, s = null;
+  for(var i=0;i<SC.length;i++){if(SC[i].k===S.sauce){s=SC[i];break;}} if(!s) return;
+  var c = window.calcCost(s.p, S.date), special = document.getElementById('f-special').value.trim();
+  var order = { id: Date.now(), ei: parseInt(S.emp), en: em[parseInt(S.emp)], date: S.date, st: S.st.slice(), sauce: s.l, sp: s.p, co: c.co, tu: c.tu, special: special };
+  if(window._editingFbKey){ window.delOFB(window._editingFbKey); window._editingFbKey = null; }
   window.doSubmitFB(order);
-
-  // Reset the form after submission
-  S.sauce=''; S.st=[]; S.emp='';
-  document.getElementById('f-emp').value='';
-  document.querySelectorAll('.pill').forEach(function(x){x.classList.remove('on');});
-  document.getElementById('st-hint').textContent='Nothing selected yet';
-  document.getElementById('sauces').innerHTML='';
-  document.getElementById('csummary').innerHTML='';
-  document.getElementById('f-special').value='';
-  document.getElementById('btn-add').disabled=true;
-  window.showOrderConfirmation(c.tu, window.N(c.tu));
-  window.refEmp();
-  window.renderSauces();
-
-  // Hide the edit banner if it was showing
+  S.sauce=''; S.st=[]; S.emp=''; document.getElementById('f-emp').value=''; document.querySelectorAll('.pill').forEach(function(x){x.classList.remove('on');});
+  document.getElementById('st-hint').textContent='Nothing selected yet'; document.getElementById('sauces').innerHTML=''; document.getElementById('csummary').innerHTML='';
+  document.getElementById('f-special').value=''; document.getElementById('btn-add').disabled=true;
+  
+  if(typeof window.triggerOrderSuccess === 'function') window.triggerOrderSuccess(c.tu, window.N(c.tu));
+  window.refEmp(); window.renderSauces();
   var b=document.getElementById('edit-banner');if(b)b.classList.remove('on');
 };
 
-// Patch delO to use Firebase by matching the order's Firebase key
 window.delO = function(id){
   if(!confirm('Cancel this order?')) return;
-  var orders = window._fbOrders;
-  var o = null;
+  var orders = window._fbOrders, o = null;
   for(var i=0;i<orders.length;i++){ if(orders[i].id===id){ o=orders[i]; break; } }
-  if(o && o._fbKey){
-    window.delOFB(o._fbKey);
-    window.showToast('Order cancelled');
-  }
+  if(o && o._fbKey){ window.delOFB(o._fbKey); window.showToast('Order cancelled'); }
 };
 
-// Re-render the active page whenever Firebase data updates
 window._fbListeners.push(function(){
-  var active = document.querySelector('.pg.on');
-  if(!active) return;
-  var id = active.id;
-  if(id==='pg-log') window.renderLog();
-  if(id==='pg-report'){
-    var sess = window.getSess();
-    if(sess&&sess.admin) window.renderAdminReport();
-  }
+  var active = document.querySelector('.pg.on'); if(!active) return;
+  var id = active.id; if(id==='pg-log') window.renderLog(); if(id==='pg-report'){ var sess = window.getSess(); if(sess&&sess.admin) window.renderAdminReport(); }
 });
 
-// Make the editing FB key accessible from the non-module editO function
-// editO() sets this before calling go('order'), doSubmit() reads and clears it
-window._editingFbKey = null;
-var _origEditO = window.editO;
-// Patch editO to also set window._editingFbKey for the Firebase doSubmit override
-var originalScript = document.querySelector('script:not([type])');
-var _eo_orig = window.editO;
+window._editingFbKey = null; var _eo_orig = window.editO;
 window.editO = function(id){
-  var orders = window._fbOrders;
-  var o = null;
+  var orders = window._fbOrders, o = null;
   for(var i=0;i<orders.length;i++){if(orders[i].id===id){o=orders[i];break;}}
   if(o&&o._fbKey){ window._editingFbKey = o._fbKey; }
   _eo_orig(id);
 };
-
-console.log('Firebase connected to mealtime-ha — glassmorphism upgrade active');
+console.log('Firebase connected to mealtime-ha');
 </script>
 
-<!-- ═══════════════════════════════════════
-     ORDER CONFIRMATION OVERLAY
-     Shown after every successful order.
-     ═══════════════════════════════════════ -->
-<div id="order-confirm" role="dialog" aria-modal="true" aria-label="Order confirmed">
-  <div id="oc-card">
-    <div id="oc-ring"><span id="oc-plate">🍽️</span></div>
-    <div id="oc-title">Order Placed!</div>
-    <div id="oc-sub" id="oc-sub">Your lunch is on its way.<br>Enjoy your meal 😊</div>
-    <div id="oc-topup"></div>
-    <button id="oc-btn" onclick="closeOrderConfirm()">Awesome, thanks! →</button>
+<script>
+var SMS_WORKER='https://mealtimesms.iamnatture.workers.dev/', SMS_NUM_KEY='lt-sms-to', SMS_DISHES=[{name:'Hilda',dish:'PINK'},{name:'Paul',dish:'CLEAR'},{name:'Comfort',dish:'BLUE'},{name:'Admin',dish:''}];
+function smsGetDish(n){for(var i=0;i<SMS_DISHES.length;i++){if(SMS_DISHES[i].name===n)return SMS_DISHES[i].dish?'['+SMS_DISHES[i].dish+']':'';}return '';}
+function smsLoadNumber(){var s=localStorage.getItem(SMS_NUM_KEY);var inp=document.getElementById('sms-number');if(s&&inp)inp.value=s;}
+function smsSaveNumber(){var inp=document.getElementById('sms-number'), st=document.getElementById('sms-num-status'), num=inp?inp.value.trim():''; if(!num||!num.startsWith('+')){st.innerHTML='<span style="color:#e53e3e;">Use +256XXXXXXXXX format</span>';return;} localStorage.setItem(SMS_NUM_KEY,num); st.innerHTML='<span style="color:#2d9d78;">✓ Saved</span>';}
+function smsGetNumber(){var inp=document.getElementById('sms-number');return(inp?inp.value.trim():'')||localStorage.getItem(SMS_NUM_KEY)||'';}
+function smsTodayOrders(){var today=new Date().toISOString().slice(0,10);return gO().filter(function(o){return o.date===today;});}
+function smsBuild(orders){
+  if(!orders.length)return null; var dt=new Date(orders[0].date+'T00:00:00'), ds=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], ms=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], hdr='MEALTIME - '+ds[dt.getDay()]+' '+dt.getDate()+' '+ms[dt.getMonth()], div='---------------------', tco=0,ttu=0;
+  var rows=orders.map(function(o,i){ tco+=o.co;ttu+=o.tu; return (i+1)+'. '+o.en+' '+smsGetDish(o.en)+' | '+o.st.join('/')+' | '+o.sauce+' | '+N(o.sp)+' | '+(o.tu>0?'Top-up:'+N(o.tu):'No top-up')+(o.special?' ['+o.special+']':''); });
+  return [hdr,div,rows.join('\n'),div,'Orders: '+orders.length+'\nCompany: UGX '+N(tco)+'\nTop-up:  UGX '+N(ttu)].join('\n');
+}
+function smsPrev(){
+  var orders=smsTodayOrders(), prev=document.getElementById('sms-preview'), btn=document.getElementById('sms-send-btn'), st=document.getElementById('sms-status');
+  if(!orders.length){st.innerHTML='<span style="color:#e53e3e;">No orders for today yet.</span>';prev.style.display='none';btn.disabled=true;btn.style.opacity='0.5';return;}
+  prev.textContent=smsBuild(orders);prev.style.display='block'; btn.disabled=false;btn.style.opacity='1'; st.innerHTML='<span style="color:#2d9d78;">'+orders.length+' order(s) found.</span>';
+}
+async function smsSend(){
+  var orders=smsTodayOrders(), to=smsGetNumber(), st=document.getElementById('sms-status'), btn=document.getElementById('sms-send-btn');
+  if(!orders.length){showToast('No orders for today.');return;} if(!to||!to.startsWith('+')){st.innerHTML='<span style="color:#e53e3e;">Enter restaurant number first.</span>';return;}
+  btn.disabled=true;btn.style.opacity='0.5';btn.textContent='⏳ Sending...';
+  try{
+    var res=await fetch(SMS_WORKER,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({to:to,message:smsBuild(orders)})}), data=await res.json(), ok=data.SMSMessageData&&data.SMSMessageData.Recipients&&data.SMSMessageData.Recipients[0].status==='Success';
+    if(ok){st.innerHTML='<span style="color:#2d9d78;">✅ SMS sent!</span>';btn.textContent='✅ Sent';showToast('SMS sent to restaurant!');} else{st.innerHTML='<span style="color:#e53e3e;">Failed: '+(data.atRawResponse||JSON.stringify(data))+'</span>';btn.disabled=false;btn.style.opacity='1';btn.textContent='📤 Send SMS';}
+  }catch(e){ st.innerHTML='<span style="color:#e53e3e;">Network error.</span>';btn.disabled=false;btn.style.opacity='1';btn.textContent='📤 Send SMS'; }
+}
+
+function adminDelO(id){
+  if(!confirm('Delete this order? Cannot be undone.')) return;
+  var orders = window._fbOrders || [], target = null;
+  for(var i=0;i<orders.length;i++){if(orders[i].id===id){target=orders[i];break;}}
+  if(target && target._fbKey){ window.delOFB(target._fbKey); showToast('Order deleted'); } else { sO(gO().filter(function(o){return o.id!==id;})); renderLog(); showToast('Order deleted'); }
+}
+
+var _smsOrigOrHTML = orHTML;
+orHTML = function(o){
+  var html = _smsOrigOrHTML(o);
+  if(isAdmin()){ var delBtn = '<div style="padding:.15rem .5rem .4rem;display:flex;justify-content:flex-end;"><button class="bsm bdel" onclick="adminDelO('+o.id+')">🗑 Delete</button></div>'; var lastDiv = html.lastIndexOf('</div>'); html = html.slice(0,lastDiv) + delBtn + html.slice(lastDiv); }
+  return html;
+};
+
+(function(){
+  function checkPanel(){ var panel=document.getElementById('sms-panel'), report=document.getElementById('pg-report'); if(!panel||!report)return; var show=report.classList.contains('on')&&typeof isAdmin==='function'&&isAdmin(); panel.style.display=show?'block':'none'; if(show)smsLoadNumber(); }
+  new MutationObserver(checkPanel).observe(document.body,{attributes:true,subtree:true,attributeFilter:['class']});
+})();
+</script>
+
+<div id="sms-panel" style="display:none;position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;width:330px;background:rgba(255,255,255,0.97);backdrop-filter:blur(12px);border:1.5px solid rgba(26,158,212,0.3);border-radius:16px;padding:1.25rem 1.4rem;box-shadow:0 8px 32px rgba(0,0,0,0.14);">
+  <div style="font-weight:700;font-size:.95rem;margin-bottom:.5rem;">📱 Daily SMS to Restaurant</div>
+  <div style="margin-bottom:.85rem;">
+    <label style="font-size:.74rem;color:#666;display:block;margin-bottom:.3rem;">Restaurant number <span style="color:#aaa;">(+256XXXXXXXXX)</span></label>
+    <div style="display:flex;gap:.4rem;">
+      <input id="sms-number" type="tel" placeholder="+256XXXXXXXXX" style="flex:1;padding:.45rem .7rem;border:1.5px solid #d0d0d0;border-radius:8px;font-size:.8rem;color:#222;" />
+      <button onclick="smsSaveNumber()" style="padding:.45rem .75rem;border:none;border-radius:8px;background:#1a9ed4;color:#fff;font-size:.76rem;font-weight:600;cursor:pointer;">Save</button>
+    </div>
+    <div id="sms-num-status" style="font-size:.72rem;margin-top:.25rem;min-height:.9rem;"></div>
   </div>
+  <div id="sms-preview" style="display:none;font-family:monospace;font-size:.68rem;background:#f4f4f4;border-radius:8px;padding:.75rem;white-space:pre-wrap;margin-bottom:.85rem;max-height:180px;overflow-y:auto;"></div>
+  <div style="display:flex;gap:.5rem;margin-bottom:.6rem;">
+    <button onclick="smsPrev()" style="flex:1;padding:.5rem;border:1.5px solid #1a9ed4;border-radius:8px;background:transparent;color:#1a9ed4;font-size:.78rem;font-weight:600;cursor:pointer;">👁 Preview</button>
+    <button id="sms-send-btn" onclick="smsSend()" disabled style="flex:1;padding:.5rem;border:none;border-radius:8px;background:#1a9ed4;color:#fff;font-size:.78rem;font-weight:600;cursor:pointer;opacity:0.5;">📤 Send SMS</button>
+  </div>
+  <div id="sms-status" style="font-size:.74rem;min-height:1rem;"></div>
 </div>
 
 <script>
-// ── Order Confirmation Overlay ───────────────────────────────────────────────
-var CONFETTI_COLORS = ['#1565c0','#1a9ed4','#00d4f5','#f59e0b','#22c55e','#f97316','#fff'];
+// ══════════════════════════════════════════════
+// CHEF STATION LOGIC (Clean Execution)
+// ══════════════════════════════════════════════
+(function() {
+  var celebrateTimer = null;
 
-function showOrderConfirmation(topupAmount, topupStr){
-  var overlay = document.getElementById('order-confirm');
-  var card    = document.getElementById('oc-card');
-  var topup   = document.getElementById('oc-topup');
+  function syncPlate() {
+    var hasFood = false;
+    document.querySelectorAll('.av-food').forEach(function(el) { el.classList.remove('show'); });
 
-  // Show top-up warning if needed
-  if(topupAmount > 0){
-    topup.style.display = 'block';
-    topup.textContent   = '⚠️ Remember to top up UGX ' + topupStr;
-  } else {
-    topup.style.display = 'none';
+    if (window.S && window.S.st) {
+      window.S.st.forEach(function(starch) {
+        var el = document.getElementById('avf-' + starch.replace(/\s+/g, '-'));
+        if (el) { el.classList.add('show'); hasFood = true; }
+      });
+    }
+
+    if (window.S && window.S.sauce) {
+      var el = document.getElementById('avf-sauce-' + window.S.sauce);
+      if (el) { el.classList.add('show'); hasFood = true; }
+    }
+
+    var plateWrap = document.querySelector('.cs-plate-wrap');
+    if (plateWrap) {
+      if (hasFood) plateWrap.classList.add('has-food');
+      else plateWrap.classList.remove('has-food');
+    }
   }
 
-  // Clear any old confetti
-  card.querySelectorAll('.oc-confetti').forEach(function(el){ el.remove(); });
+  function triggerPlatingSequence() {
+    var wrap = document.querySelector('.cs-chef-wrap');
+    if(!wrap || wrap.classList.contains('is-celebrating')) return;
+    
+    wrap.classList.remove('is-plating');
+    document.querySelectorAll('.av-food').forEach(function(f){ f.style.animation = 'none'; void f.offsetWidth; f.style.animation = ''; });
+    void wrap.offsetWidth; 
+    
+    wrap.classList.add('is-plating');
+    syncPlate();
+    setTimeout(function() { wrap.classList.remove('is-plating'); }, 800);
+  }
 
-  // Show overlay
-  overlay.classList.add('show');
+  function triggerChefKiss(msg) {
+    var wrap = document.querySelector('.cs-chef-wrap');
+    var bubble = document.getElementById('cs-bubble');
+    if(!wrap) return;
 
-  // Burst confetti after card pops in
-  setTimeout(function(){
-    for(var i = 0; i < 22; i++){
-      (function(i){
-        var el = document.createElement('div');
-        el.className = 'oc-confetti';
-        el.style.background = CONFETTI_COLORS[i % CONFETTI_COLORS.length];
-        el.style.left = (10 + Math.random() * 80) + '%';
-        el.style.top  = (5  + Math.random() * 30) + '%';
-        el.style.width  = (6 + Math.random() * 6) + 'px';
-        el.style.height = (6 + Math.random() * 6) + 'px';
-        el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-        el.style.animationDelay = (Math.random() * 0.4) + 's';
-        el.style.animationDuration = (0.9 + Math.random() * 0.6) + 's';
-        card.appendChild(el);
-      })(i);
+    wrap.classList.remove('is-plating', 'celebrate-phase-1', 'celebrate-phase-2');
+    wrap.classList.add('is-celebrating', 'celebrate-phase-1');
+    
+    setTimeout(function() {
+      wrap.classList.remove('celebrate-phase-1');
+      wrap.classList.add('celebrate-phase-2');
+      
+      for(var i=0; i<6; i++){
+        var conf = document.createElement('div');
+        conf.className = 'chef-confetti';
+        conf.style.background = ['#1565c0','#1a9ed4','#f59e0b','#22c55e'][i%4];
+        conf.style.left = '45px'; conf.style.top = '120px';
+        conf.style.setProperty('--cx', (Math.random() * 80 - 40) + 'px');
+        conf.style.setProperty('--cy', (Math.random() * -60 - 20) + 'px');
+        conf.style.animation = 'chefConfettiBurst 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards';
+        wrap.appendChild(conf);
+        setTimeout((function(c){ return function(){ c.remove(); }})(conf), 1000);
+      }
+    }, 600); 
+
+    if(bubble) {
+      bubble.textContent = msg;
+      setTimeout(function(){ bubble.classList.add('show'); }, 600);
     }
-  }, 200);
+  }
 
-  // Auto-dismiss after 6 seconds
-  clearTimeout(window._ocTimer);
-  window._ocTimer = setTimeout(closeOrderConfirm, 6000);
-}
+  document.getElementById('starches').addEventListener('click', function(e) {
+    if(e.target.classList.contains('pill')) { triggerPlatingSequence(); }
+  });
 
-function closeOrderConfirm(){
-  clearTimeout(window._ocTimer);
-  var overlay = document.getElementById('order-confirm');
-  overlay.classList.remove('show');
-}
+  if(typeof window.pickSauce === 'function') {
+    var _origPickSauce = window.pickSauce;
+    window.pickSauce = function(k) { _origPickSauce(k); triggerPlatingSequence(); };
+  }
 
-// Close on backdrop click
-document.getElementById('order-confirm').addEventListener('click', function(e){
-  if(e.target === this) closeOrderConfirm();
-});
+  // Replaces the old fullscreen overlay
+  window.triggerOrderSuccess = function(tu, tuStr) {
+    var sess = window.getSess ? window.getSess() : null;
+    var chefCol = document.getElementById('chef-station-col');
+    var msg = tu > 0
+      ? 'Your food is on the way! Remember to top up ' + tuStr + ' shillings.'
+      : 'Your food is on the way! No top-up needed today! 🎉';
 
-window.showOrderConfirmation = showOrderConfirmation;
-window.closeOrderConfirm     = closeOrderConfirm;
+    if(sess && !sess.admin && chefCol && chefCol.style.display !== 'none') {
+      triggerChefKiss(msg);
+    } else {
+      showToast(msg); // Fallback to standard bubble behavior
+    }
+
+    if('speechSynthesis' in window) {
+      try {
+        window.speechSynthesis.cancel();
+        var utt = new SpeechSynthesisUtterance(msg.replace('🎉',''));
+        utt.rate = 1.0; utt.pitch = 1.0; window.speechSynthesis.speak(utt);
+      } catch(err) {}
+    }
+
+    clearTimeout(celebrateTimer);
+    celebrateTimer = setTimeout(function() {
+      var wrap = document.querySelector('.cs-chef-wrap');
+      var bubble = document.getElementById('cs-bubble');
+      if(wrap) { wrap.classList.remove('is-celebrating', 'celebrate-phase-1', 'celebrate-phase-2'); }
+      if(bubble) bubble.classList.remove('show');
+      syncPlate(); 
+    }, 7000);
+  };
+
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() { syncPlate(); }, 250);
+  });
+})();
 </script>
 
 </body>
