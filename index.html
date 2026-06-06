@@ -12,63 +12,75 @@
    ════════════════════════════════════════════ */
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{width:100%;overflow-x:hidden;}
+html{scroll-behavior:smooth;}
+::selection{background:rgba(0,212,245,0.2);color:var(--text-main);}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px;}
 :root{
-  --g:#0a1628; --gm:#1565c0; --gl:#dbeeff; --gp:#eef6ff; --al:#fef3c7; --bd:#e2e8f0; --mu:#6b7280;
-  --bg-page:#e8eef8; --bg-card:#ffffff; --bg-input:#ffffff;
-  --text-main:#1a1a2e; --text-muted:#6b7280; --text-light:#9ca3af;
-  --glass-bg:rgba(255,255,255,0.65); --glass-border:rgba(255,255,255,0.85);
-  --glass-shadow:0 8px 32px rgba(10,22,40,0.10), 0 1.5px 4px rgba(10,22,40,0.06);
-  --glass-blur:blur(18px) saturate(1.6);
+  --g:#0a1628; --gm:#1565c0; --gl:#dbeeff; --gp:#eef6ff; --al:#fef3c7;
+  --bd:rgba(0,212,245,0.25); --mu:#5a7a9e;
+  --bg-page:#eef6ff; --bg-card:#ffffff; --bg-input:#f8faff;
+  --text-main:#0a1628; --text-muted:#5a7a9e; --text-light:#94a3b8;
+  --glass-bg:rgba(255,255,255,0.97); --glass-border:rgba(0,212,245,0.25);
+  --glass-shadow:0 0 0 1px rgba(0,212,245,0.1), 0 8px 32px rgba(0,0,0,0.1);
+  --glass-blur:blur(0px);
+  --accent:#00d4f5; --accent-soft:rgba(0,212,245,0.12); --accent-ring:rgba(0,212,245,0.25);
+  --radius-card:18px; --radius-pill:14px; --spring:cubic-bezier(0.34,1.56,0.64,1);
 }
 
 body.dark{
-  --bg-page:#0d1117; --bg-card:#161b22; --bg-input:#1c2333;
-  --text-main:#e6edf3; --text-muted:#8b949e; --text-light:#484f58; --bd:#30363d; --mu:#8b949e;
-  --glass-bg:rgba(22,27,34,0.75); --glass-border:rgba(255,255,255,0.08);
-  --glass-shadow:0 8px 32px rgba(0,0,0,0.4), 0 1.5px 4px rgba(0,0,0,0.2);
+  --bg-page:#020810; --bg-card:#080f1e; --bg-input:#0f1e30;
+  --text-main:#e2f0ff; --text-muted:#4a6888; --text-light:#233548;
+  --glass-bg:rgba(6,14,26,0.98); --glass-border:rgba(0,212,245,0.14);
 }
 
 body{
   font-family:'DM Sans',sans-serif; color:var(--text-main); font-size:14px; min-height:100vh;
   -webkit-text-size-adjust:100%; transition:background .3s,color .3s; background-color:var(--bg-page);
   background-image:
-    radial-gradient(ellipse at 20% 10%, rgba(21,101,192,0.18) 0%, transparent 55%),
-    radial-gradient(ellipse at 80% 5%, rgba(10,22,40,0.12) 0%, transparent 50%),
-    radial-gradient(ellipse at 60% 80%, rgba(26,158,212,0.10) 0%, transparent 50%),
-    radial-gradient(ellipse at 10% 90%, rgba(21,101,192,0.08) 0%, transparent 45%);
+    radial-gradient(ellipse at 15% 0%, rgba(0,212,245,0.1) 0%, transparent 45%),
+    radial-gradient(ellipse at 85% 100%, rgba(21,101,192,0.07) 0%, transparent 45%);
   background-attachment:fixed;
-}
-body.dark{
-  background-image:
-    radial-gradient(ellipse at 20% 10%, rgba(21,101,192,0.25) 0%, transparent 55%),
-    radial-gradient(ellipse at 80% 5%, rgba(10,22,40,0.6) 0%, transparent 50%),
-    radial-gradient(ellipse at 60% 80%, rgba(26,158,212,0.12) 0%, transparent 50%),
-    radial-gradient(ellipse at 10% 90%, rgba(21,101,192,0.10) 0%, transparent 45%);
 }
 
 /* ════════════════════════════════════════════
    SECTION: Core Layout & Cards
    ════════════════════════════════════════════ */
-#ls{position:fixed;top:0;left:0;width:100%;height:100%;background:transparent;z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;}
-.lc{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:1.75rem;backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);box-shadow:var(--glass-shadow);}
+#ls{position:fixed;top:0;left:0;width:100%;height:100%;background:#eef6ff;z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;}
+#ls::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 500px 400px at 50% 50%,rgba(0,212,245,0.12) 0%,transparent 70%);pointer-events:none;z-index:0;}
+#ls>*{position:relative;z-index:1;}
+.lc{background:#ffffff;border:3px solid rgba(0,212,245,0.3);border-radius:20px;padding:2rem;max-width:360px;box-shadow:0 6px 0 rgba(0,212,245,0.25),0 16px 48px rgba(0,0,0,0.1);}
 .lf{margin-bottom:1rem;}
-.lf label{display:block;font-size:.68rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.3rem;}
-.lf select,.lf input{height:46px;padding:0 .9rem;border:1.5px solid var(--glass-border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--text-main);background:rgba(255,255,255,0.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);width:100%;appearance:none;transition:border-color .2s, box-shadow .2s;}
-.lf select:focus,.lf input:focus{outline:none;border-color:#1a9ed4;box-shadow:0 0 0 3px rgba(26,158,212,0.15);}
-body.dark .lf select,body.dark .lf input{background:rgba(28,35,51,0.7);border-color:rgba(255,255,255,0.12);color:#e6edf3;}
-.lf select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;}
-#lerr{display:none;font-size:.82rem;color:#c0392b;margin-bottom:.75rem;padding:.5rem .75rem;background:#fdecea;border-radius:10px;border:1px solid #fca5a5;}
-.lbtn{background:linear-gradient(135deg,#0a1628 0%,#1565c0 100%);color:#fff;border:none;border-radius:12px;height:46px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;width:100%;box-shadow:0 4px 16px rgba(10,22,40,0.25);transition:all .2s;letter-spacing:.02em;}
-.lbtn:hover{background:linear-gradient(135deg,#1565c0 0%,#1a9ed4 100%);transform:translateY(-1px);box-shadow:0 6px 20px rgba(10,22,40,0.35);}
-.lbtn:active{transform:translateY(0);}
+.lf label{display:block;font-size:.68rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.35rem;}
+.lf input{height:46px;padding:0 .9rem;border:2px solid rgba(0,212,245,0.2);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--text-main);background:#f8faff;width:100%;transition:border-color .15s,box-shadow .15s;}
+.lf input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-ring);}
+#lerr{display:none;font-size:.82rem;color:#dc2626;margin-bottom:.75rem;padding:.5rem .75rem;background:rgba(220,38,38,0.08);border-radius:10px;border:2px solid rgba(220,38,38,0.2);}
+.lbtn{position:relative;background:#00d4f5;color:#0a1628;border:none;border-radius:14px;height:52px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;width:100%;letter-spacing:.06em;box-shadow:0 5px 0 #0099b8;transition:box-shadow .1s,transform .1s;}
+.lbtn:hover{background:#1de0ff;}
+.lbtn:active{transform:translateY(4px);box-shadow:0 1px 0 #0099b8;}
 
-.bar{background:rgba(10,22,40,0.82);backdrop-filter:blur(20px) saturate(1.8);-webkit-backdrop-filter:blur(20px) saturate(1.8);border-bottom:1px solid rgba(255,255,255,0.07);padding:0 1rem;display:flex;align-items:center;justify-content:space-between;min-height:58px;width:100%;box-sizing:border-box;position:sticky;top:0;z-index:50;gap:.5rem;overflow-x:auto;}
-.bar-t{color:#fff;font-family:'DM Serif Display',serif;font-size:.95rem;letter-spacing:.01em;}
-.bar-s{color:rgba(255,255,255,.45);font-size:.68rem;margin-top:1px;}
+/* ── Name bubble picker ── */
+.name-picker{position:relative;width:100%;margin-bottom:1rem;}
+.name-picker-btn{width:100%;height:46px;padding:0 .9rem;border:2px solid rgba(0,212,245,0.2);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:16px;color:#94a3b8;background:#f8faff;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:border-color .15s,box-shadow .15s;text-align:left;}
+.name-picker-btn.has-value{color:#0a1628;font-weight:600;}
+.name-picker-btn:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-ring);}
+.name-picker-bubble{position:absolute;top:calc(100% + 10px);left:0;right:0;background:#0a1628;border-radius:16px;padding:.85rem;box-shadow:6px 6px 0 rgba(0,212,245,0.3),0 12px 40px rgba(0,0,0,0.25);opacity:0;visibility:hidden;transform:translateY(-10px) scale(0.97);transition:all .22s cubic-bezier(0.34,1.56,0.64,1);z-index:200;}
+.name-picker-bubble::before{content:'';position:absolute;top:-9px;left:22px;width:18px;height:18px;background:#0a1628;transform:rotate(45deg);border-radius:3px;}
+.name-picker-bubble.open{opacity:1;visibility:visible;transform:translateY(0) scale(1);}
+.name-picker-grid{display:grid;grid-template-columns:1fr 1fr;gap:.45rem;position:relative;}
+.name-tile{padding:.7rem .5rem;border:2px solid rgba(0,212,245,0.18);border-radius:10px;background:rgba(0,212,245,0.07);color:#dbeeff;font-family:'DM Sans',sans-serif;font-size:.92rem;font-weight:700;cursor:pointer;transition:all .15s var(--spring);text-align:center;}
+.name-tile:hover{background:#00d4f5;color:#0a1628;border-color:#00d4f5;transform:scale(1.05);}
+.name-tile:active{transform:scale(0.95);}
+
+.bar{background:rgba(255,255,255,0.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:2px solid rgba(0,212,245,0.18);padding:0 1rem;display:flex;align-items:center;justify-content:space-between;min-height:64px;width:100%;box-sizing:border-box;position:sticky;top:0;z-index:50;gap:.5rem;overflow-x:auto;}
+.bar-t{color:#0a1628;font-family:'DM Serif Display',serif;font-size:1.15rem;letter-spacing:.03em;}
+.bar-s{color:rgba(10,22,40,.45);font-size:.68rem;margin-top:1px;}
 .nav{display:flex;align-items:center;gap:.2rem;}
-.nb{background:none;border:none;color:rgba(255,255,255,.55);font-family:'DM Sans',sans-serif;font-size:.73rem;font-weight:600;padding:.45rem .65rem;cursor:pointer;border-bottom:2px solid transparent;text-transform:uppercase;letter-spacing:.04em;transition:all .2s;white-space:nowrap;flex-shrink:0;border-radius:6px 6px 0 0;}
-.nb.on{color:#fff;border-bottom-color:#00d4f5;background:rgba(255,255,255,0.06);}
-.nb:hover:not(.on){color:rgba(255,255,255,.9);background:rgba(255,255,255,0.05);}
+.nb{background:none;border:none;color:rgba(10,22,40,.45);font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:700;padding:.5rem .85rem;cursor:pointer;border-bottom:2px solid transparent;text-transform:uppercase;letter-spacing:.04em;transition:all .2s;white-space:nowrap;flex-shrink:0;border-radius:8px 8px 0 0;}
+.nb.on{color:#0a1628;border-bottom-color:#00d4f5;background:rgba(0,212,245,0.08);}
+.nb:hover:not(.on){color:#0a1628;background:rgba(0,212,245,0.06);}
+#greeting-box{display:flex;align-items:center;background:rgba(0,212,245,0.1);border:2px solid rgba(0,212,245,0.3);border-radius:99px;padding:.25rem .65rem;height:auto;}
+#greeting-box span{font-size:.72rem !important;font-weight:700;color:#00d4f5 !important;white-space:nowrap;}
+#greeting-box:has(span:empty){display:none;}
 
 /* Wide PG Width to accommodate the 75/25 layout */
 .pg{display:none;max-width:800px;margin:0 auto;padding:1.75rem 1.25rem;animation:pgIn .3s ease;}
@@ -76,107 +88,108 @@ body.dark .lf select,body.dark .lf input{background:rgba(28,35,51,0.7);border-co
 .pg.wide{max-width:1300px; padding: 2.5rem 1.5rem;} 
 @keyframes pgIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
 
-.card{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:1.5rem;margin-bottom:1.25rem;backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);box-shadow:var(--glass-shadow);transition:background .3s, box-shadow .2s;}
-.card:hover{box-shadow:0 12px 40px rgba(10,22,40,0.14), 0 2px 6px rgba(10,22,40,0.07);}
-.ct{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--text-main);margin-bottom:1.1rem;letter-spacing:.01em;}
-.lbl{display:block;font-size:.67rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.35rem;}
+.card{background:#ffffff;border:2px solid rgba(0,212,245,0.18);border-radius:18px;padding:1.5rem;margin-bottom:1.25rem;box-shadow:0 4px 0 rgba(0,212,245,0.12),0 8px 24px rgba(0,0,0,0.07);transition:border-color .2s,box-shadow .2s;}
+.card:hover{border-color:rgba(0,212,245,0.35);box-shadow:0 4px 0 rgba(0,212,245,0.18),0 12px 32px rgba(0,0,0,0.1);}
+.ct{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--text-main);margin-bottom:1.1rem;letter-spacing:.01em;}
+.lbl{display:block;font-size:.65rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.35rem;}
 .r2{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:.9rem;}
 .field{margin-bottom:.9rem;}
 
-select,input[type=date]{height:42px;padding:0 .85rem;border:1.5px solid rgba(203,213,225,0.7);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--text-main);background:rgba(255,255,255,0.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);width:100%;transition:border-color .2s,background .2s,box-shadow .2s;}
-body.dark select,body.dark input[type=date]{background:rgba(28,35,51,0.65);border-color:rgba(255,255,255,0.10);color:#e6edf3;}
-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;}
-select:focus,input:focus{outline:none;border-color:#1a9ed4;box-shadow:0 0 0 3px rgba(26,158,212,0.15);background:rgba(255,255,255,0.8);}
-body.dark select:focus,body.dark input:focus{background:rgba(28,35,51,0.9);}
+select,input[type=date]{height:42px;padding:0 .85rem;border:2px solid rgba(0,212,245,0.2);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--text-main);background:#f8faff;width:100%;transition:border-color .15s,box-shadow .15s;}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2300d4f5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;}
+select:focus,input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-ring);}
 
 /* ════════════════════════════════════════════
    SECTION: Meal Selection & UI Components
    ════════════════════════════════════════════ */
-.pills{display:grid;grid-template-columns:repeat(3,1fr);gap:.55rem;margin-top:.4rem;}
-.pill{padding:.65rem .5rem;border:1.5px solid rgba(203,213,225,0.6);border-radius:14px;font-size:.92rem;font-weight:600;text-align:center;cursor:pointer;background:rgba(255,255,255,0.5);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:var(--text-muted);user-select:none;transition:all .2s;}
-.pill.on{border-color:#1a9ed4;background:linear-gradient(135deg,rgba(26,158,212,0.15),rgba(21,101,192,0.1));color:var(--text-main);box-shadow:0 0 0 2px rgba(26,158,212,0.2);}
-.pill:hover:not(.on){border-color:#9ca3af;background:rgba(255,255,255,0.7);}
+.pills{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-top:.4rem;}
+.pill{padding:.85rem .5rem;border:2px solid rgba(0,212,245,0.2);border-radius:14px;text-align:center;cursor:pointer;background:#f0f7ff;color:var(--text-muted);user-select:none;transition:all .15s var(--spring);}
+.pill:active{transform:scale(0.93);}
+.pill-icon{display:block;font-size:1.7rem;line-height:1;margin-bottom:.3rem;pointer-events:none;}
+.pill-label{display:block;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);pointer-events:none;transition:color .15s;}
+.pill.on{border-color:#00d4f5;background:#00d4f5;box-shadow:0 4px 0 #0099b8;}
+.pill.on .pill-icon{filter:drop-shadow(0 1px 3px rgba(0,0,0,0.15));}
+.pill.on .pill-label{color:#0a1628;}
+.pill:hover:not(.on){border-color:rgba(0,212,245,0.45);background:#dbeeff;}
 .hint{font-size:.72rem;color:var(--text-light);margin-top:.45rem;}
 
-.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.75rem;margin-top:.35rem;}
-.food-card{position:relative;background:rgba(255,255,255,0.55);border:1.5px solid rgba(203,213,225,0.5);border-radius:16px;padding:1rem .9rem .85rem;cursor:pointer;transition:all .22s cubic-bezier(.34,1.56,.64,1);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);overflow:hidden;text-align:center;}
-body.dark .food-card{background:rgba(22,27,34,0.6);border-color:rgba(255,255,255,0.08);}
-.food-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.3) 0%,transparent 60%);opacity:0;transition:opacity .2s;border-radius:inherit;pointer-events:none;}
-.food-card:hover::before{opacity:1;}
-.food-card:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 12px 28px rgba(10,22,40,0.13);border-color:rgba(26,158,212,0.4);}
-.food-card.on{border-color:#1a9ed4;background:linear-gradient(135deg,rgba(26,158,212,0.18),rgba(21,101,192,0.12));box-shadow:0 0 0 3px rgba(26,158,212,0.2), 0 8px 24px rgba(10,22,40,0.12);transform:translateY(-2px);}
-body.dark .food-card.on{background:linear-gradient(135deg,rgba(26,158,212,0.22),rgba(21,101,192,0.15));}
-.food-card .tick{position:absolute;top:8px;right:8px;width:20px;height:20px;background:#1a9ed4;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:700;box-shadow:0 2px 8px rgba(26,158,212,0.4);}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.75rem;margin-top:.35rem;}
+.food-card{position:relative;background:#f8faff;border:2px solid rgba(0,212,245,0.18);border-radius:16px;padding:1.1rem 1rem 1rem;cursor:pointer;transition:all .18s var(--spring);overflow:hidden;text-align:center;}
+.food-card:hover{transform:translateY(-5px) scale(1.03);border-color:rgba(0,212,245,0.5);box-shadow:0 4px 0 rgba(0,212,245,0.2),0 8px 20px rgba(0,0,0,0.08);}
+.food-card.on{border-color:#00d4f5;background:#e8f9ff;box-shadow:0 0 0 2px #00d4f5,0 6px 0 #0099b8,0 12px 24px rgba(0,212,245,0.15);transform:translateY(-3px);}
+.food-card .tick{position:absolute;top:8px;right:8px;width:22px;height:22px;background:#00d4f5;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:11px;color:#0a1628;font-weight:900;box-shadow:0 2px 4px rgba(0,0,0,0.15);}
 .food-card.on .tick{display:flex;}
-.food-icon{font-size:2.4rem;display:block;text-align:center;margin:0 auto .5rem;line-height:1;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.12));transition:transform .2s;}
-.food-card:hover .food-icon{transform:scale(1.15) rotate(-5deg);}
+.food-icon{font-size:2.8rem;display:block;text-align:center;margin:0 auto .65rem;line-height:1;transition:transform .2s var(--spring);}
+.food-card:hover .food-icon{transform:scale(1.2) rotate(-8deg);}
 .food-card.on .food-icon{transform:scale(1.1);}
-.food-name{font-size:.85rem;font-weight:600;color:var(--text-main);margin-bottom:.3rem;line-height:1.2;}
-.food-price{font-size:.78rem;color:var(--text-muted);font-weight:500;margin-bottom:.2rem;}
-.food-badge{display:inline-block;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:50px;margin-top:.25rem;letter-spacing:.03em;}
-.badge-topup{background:rgba(254,243,199,0.8);color:#92400e;border:1px solid #fcd34d;}
-body.dark .badge-topup{background:rgba(45,31,0,0.8);color:#fbbf24;border-color:#854d0e;}
-.badge-covered{background:rgba(219,238,255,0.8);color:#1565c0;border:1px solid #7dd3fc;}
-body.dark .badge-covered{background:rgba(13,33,55,0.8);color:#38bdf8;border-color:#1e4a7a;}
+.food-name{font-size:.85rem;font-weight:700;color:var(--text-main);margin-bottom:.3rem;line-height:1.2;}
+.food-price{font-size:.78rem;color:var(--text-muted);font-weight:600;margin-bottom:.2rem;}
+.food-badge{display:inline-block;font-size:.62rem;font-weight:700;padding:2px 8px;border-radius:50px;margin-top:.25rem;letter-spacing:.03em;}
+.badge-topup{background:rgba(255,160,0,0.12);color:#b45309;border:1px solid rgba(255,160,0,0.3);}
+.badge-covered{background:rgba(0,212,245,0.1);color:#0284c7;border:1px solid rgba(0,212,245,0.25);}
 
-.cbox{border-radius:14px;padding:1rem 1.1rem;display:flex;gap:.9rem;flex-wrap:wrap;margin-top:.9rem;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
-.cbox.cg{background:rgba(219,238,255,0.65);border:1px solid rgba(125,211,252,0.6);}
-.cbox.ca{background:rgba(254,243,199,0.65);border:1px solid rgba(252,211,77,0.6);}
-body.dark .cbox.ca{background:rgba(45,31,0,0.6);border-color:#854d0e;}
-body.dark .cbox.cg{background:rgba(13,33,55,0.6);border-color:#1e4a7a;}
-.ci .cl{font-size:.66rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;margin-bottom:.2rem;letter-spacing:.06em;}
-.ci .cv{font-size:1.05rem;font-weight:700;color:var(--text-main);}
-.tual{background:rgba(254,243,199,0.7);border:1px solid rgba(252,211,77,0.5);border-radius:12px;padding:.7rem 1rem;margin-top:.7rem;font-size:.86rem;color:#92400e;font-weight:500;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
-body.dark .tual{background:rgba(45,31,0,0.7);border-color:#854d0e;color:#fbbf24;}
+.cbox{border-radius:14px;padding:1.1rem 1.25rem;display:flex;gap:.9rem;flex-wrap:wrap;margin-top:.9rem;}
+.cbox.cg{background:rgba(0,212,245,0.07);border:2px solid rgba(0,212,245,0.2);}
+.cbox.ca{background:rgba(255,160,0,0.07);border:2px solid rgba(255,160,0,0.25);}
+.ci .cl{font-size:.62rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;margin-bottom:.2rem;letter-spacing:.1em;}
+.ci .cv{font-size:1.2rem;font-weight:800;color:var(--text-main);}
+.tual{background:rgba(255,160,0,0.08);border:2px solid rgba(255,160,0,0.25);border-radius:12px;padding:.7rem 1rem;margin-top:.7rem;font-size:.86rem;color:#ffb830;font-weight:600;}
 
-.btn{background:linear-gradient(135deg,#0a1628 0%,#1565c0 100%);color:#fff;border:none;border-radius:12px;height:46px;font-family:'DM Sans',sans-serif;font-size:.92rem;font-weight:600;cursor:pointer;width:100%;margin-top:.9rem;transition:all .2s;letter-spacing:.02em;box-shadow:0 4px 14px rgba(10,22,40,0.2);}
-.btn:hover{background:linear-gradient(135deg,#1565c0 0%,#1a9ed4 100%);transform:translateY(-1px);box-shadow:0 6px 20px rgba(10,22,40,0.3);}
-.btn:active{transform:translateY(0);}
-.btn:disabled{background:linear-gradient(135deg,#94a3b8 0%,#cbd5e1 100%);cursor:not-allowed;transform:none;box-shadow:none;}
-.bsm{background:rgba(255,255,255,0.5);border:1.5px solid var(--bd);border-radius:8px;padding:.32rem .75rem;font-family:'DM Sans',sans-serif;font-size:.75rem;color:var(--text-muted);cursor:pointer;transition:all .18s;backdrop-filter:blur(4px);}
-.bsm:hover{border-color:#1a9ed4;color:var(--g);}
-.bdel{border-color:#fca5a5;color:#c0392b;}
-.bdel:hover{background:rgba(253,236,234,0.8);border-color:#c0392b;}
-.bedit{border-color:#bfdbfe;color:#1565c0;}
-.bedit:hover{background:rgba(239,246,255,0.8);border-color:#1565c0;}
+.btn{position:relative;overflow:hidden;background:#00d4f5;color:#060d1a;border:none;border-radius:14px;height:54px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;width:100%;margin-top:.9rem;letter-spacing:.06em;box-shadow:0 5px 0 #0099b8;transition:box-shadow .1s,transform .1s;}
+.btn:hover{background:#1de0ff;}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #0099b8;}
+.btn:disabled{background:#dbeeff;color:#94a3b8;cursor:not-allowed;box-shadow:none;transform:none;}
+.bsm{background:transparent;border:1.5px solid rgba(0,212,245,0.2);border-radius:8px;padding:.32rem .75rem;font-family:'DM Sans',sans-serif;font-size:.75rem;color:var(--text-muted);cursor:pointer;transition:all .15s;}
+.bsm:hover{border-color:var(--accent);color:var(--accent);}
+.bdel{border-color:rgba(255,80,80,0.3);color:#ff6b6b;}
+.bdel:hover{background:rgba(255,80,80,0.1);border-color:#ff6b6b;}
+.bedit{border-color:rgba(0,212,245,0.25);color:#00d4f5;}
+.bedit:hover{background:rgba(0,212,245,0.1);border-color:#00d4f5;}
 
 .wbk{margin-bottom:2rem;}
-.wh{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid rgba(26,158,212,0.4);padding-bottom:.5rem;margin-bottom:.75rem;}
-.wh h3{font-family:'DM Serif Display',serif;font-size:.95rem;color:var(--text-main);}
+.wh{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid rgba(0,212,245,0.5);padding-bottom:.5rem;margin-bottom:.75rem;}
+.wh h3{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--text-main);}
 .wh .wt{font-size:.82rem;font-weight:700;color:var(--text-main);}
 .dlb{font-size:.67rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;margin:.7rem 0 .4rem;}
-.or{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:14px;padding:.7rem 1rem;display:flex;align-items:center;gap:.7rem;margin-bottom:.4rem;backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);box-shadow:var(--glass-shadow);transition:all .2s;}
-.or:hover{transform:translateX(3px);}
-.av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.73rem;font-weight:700;flex-shrink:0;border:2px solid rgba(255,255,255,0.6);box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+.or{background:#ffffff;border:2px solid rgba(0,212,245,0.15);border-radius:14px;padding:.85rem 1.1rem;display:flex;align-items:center;gap:.7rem;margin-bottom:.4rem;transition:all .15s var(--spring);box-shadow:0 2px 0 rgba(0,212,245,0.1);}
+.or:hover{transform:translateX(5px);border-color:#00d4f5;box-shadow:0 2px 0 rgba(0,212,245,0.2),-4px 0 0 #00d4f5;}
+.av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:800;flex-shrink:0;border:2px solid rgba(0,212,245,0.3);}
 .oi{flex:1;min-width:0;}
-.nm{font-size:.88rem;font-weight:600;color:var(--text-main);}
+.nm{font-size:.9rem;font-weight:600;color:var(--text-main);}
 .ml{font-size:.78rem;color:var(--text-muted);margin-top:1px;}
 .spreq{font-size:.74rem;color:#1565c0;margin-top:3px;font-style:italic;}
 .oc{text-align:right;flex-shrink:0;}
 .cp2{font-size:.75rem;color:var(--text-muted);}
-.tub{display:inline-block;background:rgba(254,243,199,0.8);color:#92400e;font-size:.69rem;font-weight:700;padding:1px 7px;border-radius:5px;margin-top:2px;border:1px solid #fcd34d;}
+.tub{display:inline-block;background:rgba(254,243,199,0.8);color:#92400e;font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:6px;margin-top:2px;border:1px solid #fcd34d;}
 .okb{font-size:.71rem;color:#0284c7;font-weight:600;}
-.empty{text-align:center;padding:3.5rem 1rem;color:var(--text-light);font-size:.9rem;}
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3.5rem 1rem;color:var(--text-light);}
+.empty::before{content:'🍽️';font-size:3rem;display:block;margin-bottom:.75rem;opacity:.3;}
+.empty span{font-size:.88rem;color:var(--text-light);}
 
 .sc3{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;margin-bottom:1.35rem;}
-.sc{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:14px;padding:1rem 1.1rem;backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);box-shadow:var(--glass-shadow);transition:all .2s;}
-.sc:hover{transform:translateY(-2px);}
-.scl{font-size:.67rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;margin-bottom:.28rem;letter-spacing:.06em;}
-.scv{font-size:1.25rem;font-weight:700;color:var(--text-main);}
+.sc{background:#ffffff;border:2px solid rgba(0,212,245,0.18);border-radius:16px;padding:1.2rem 1.25rem;transition:all .15s var(--spring);box-shadow:0 3px 0 rgba(0,212,245,0.12);}
+.sc:hover{transform:translateY(-3px);border-color:#00d4f5;box-shadow:0 6px 0 #0099b8;}
+.scl{font-size:.62rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;margin-bottom:.28rem;letter-spacing:.1em;}
+.scv{font-size:1.5rem;font-weight:800;color:var(--text-main);}
 .scs{font-size:.71rem;color:var(--text-light);margin-top:.18rem;}
 .rtb{width:100%;border-collapse:collapse;font-size:.82rem;}
-.rtb th{background:rgba(10,22,40,0.85);color:#fff;padding:.6rem .85rem;text-align:left;font-size:.7rem;text-transform:uppercase;font-weight:600;letter-spacing:.05em;}
+.rtb th{background:#eef6ff;border-bottom:2px solid rgba(0,212,245,0.3);color:#0284c7;padding:.65rem .85rem;text-align:left;font-size:.63rem;text-transform:uppercase;font-weight:700;letter-spacing:.1em;}
 .rtb th:first-child{border-radius:8px 0 0 0;}
 .rtb th:last-child{border-radius:0 8px 0 0;}
-.rtb td{padding:.58rem .85rem;border-bottom:1px solid var(--bd);vertical-align:middle;color:var(--text-main);}
-.rtb tr:hover td{background:rgba(26,158,212,0.05);}
-.ttr td{background:rgba(219,238,255,0.5);font-weight:700;color:var(--g);border-top:2px solid #1a9ed4;}
+.rtb td{padding:.58rem .85rem;border-bottom:1px solid rgba(0,212,245,0.1);vertical-align:middle;color:var(--text-main);}
+.rtb tr:hover td{background:rgba(0,212,245,0.04);}
+.ttr td{background:rgba(0,212,245,0.08);font-weight:700;color:#0284c7;border-top:2px solid #00d4f5;}
+.bpr{background:#0a1628;color:#dbeeff;border:none;border-radius:10px;padding:.4rem .95rem;font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:700;cursor:pointer;transition:all .15s;letter-spacing:.04em;box-shadow:0 3px 0 rgba(0,0,0,0.3);}
+.bpr:hover{opacity:0.85;}
+.bpr:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,0.3);}
+.ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.1rem;}
+.ph h2{font-family:'DM Serif Display',serif;font-size:1.35rem;color:var(--text-main);}
 
-.er{display:flex;align-items:center;gap:.65rem;padding:.8rem 1rem;border:1px solid var(--glass-border);border-radius:12px;margin-bottom:.4rem;background:rgba(255,255,255,0.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
-.er input[type=text]{height:38px;padding:0 .75rem;border:1.5px solid var(--bd);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.9rem;flex:1;color:var(--text-main);background:rgba(255,255,255,0.6);transition:border-color .2s,background .2s;}
+.er{display:flex;align-items:center;gap:.65rem;padding:.8rem 1rem;border:2px solid rgba(0,212,245,0.15);border-radius:12px;margin-bottom:.4rem;background:#f0f7ff;}
+.er input[type=text]{height:38px;padding:0 .75rem;border:1.5px solid rgba(0,212,245,0.2);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.9rem;flex:1;color:var(--text-main);background:#ffffff;transition:border-color .2s;}
 
-#greeting-box{display:flex;align-items:center;padding:.7rem 1rem;background:linear-gradient(135deg,rgba(26,158,212,0.15),rgba(21,101,192,0.1));border:1.5px solid rgba(26,158,212,0.3);border-radius:12px;height:42px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
-#f-special{width:100%;padding:.65rem .9rem;border:1.5px solid rgba(203,213,225,0.6);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--text-main);background:rgba(255,255,255,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);resize:vertical;line-height:1.55;}
+#f-special{width:100%;padding:.65rem .9rem;border:2px solid rgba(0,212,245,0.2);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--text-main);background:#f8faff;resize:vertical;line-height:1.55;transition:border-color .15s,box-shadow .15s;}
+#f-special:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-ring);}
 #edit-banner{display:none;background:linear-gradient(135deg,rgba(21,101,192,0.2),rgba(26,158,212,0.15));border:1.5px solid rgba(26,158,212,0.4);border-radius:12px;padding:.7rem 1rem;margin-bottom:1rem;font-size:.85rem;color:#1565c0;font-weight:600;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);align-items:center;gap:.5rem;}
 #edit-banner.on{display:flex;}
 
@@ -191,7 +204,8 @@ body.dark .tual{background:rgba(45,31,0,0.7);border-color:#854d0e;color:#fbbf24;
 /* ════════════════════════════════════════════
    SECTION: Sign-in Splash Animation
    ════════════════════════════════════════════ */
-#splash{position:fixed;inset:0;z-index:600;background:linear-gradient(160deg,#0a1628 0%,#1565c0 60%,#1a9ed4 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;animation:splashExit .55s cubic-bezier(.77,0,.18,1) 2.6s forwards;pointer-events:none;}
+#splash{position:fixed;inset:0;z-index:600;background:#eef6ff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;animation:splashExit .55s cubic-bezier(.77,0,.18,1) 2.6s forwards;pointer-events:none;}
+#splash::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 65% 55% at 50% 50%,rgba(0,212,245,0.14) 0%,transparent 72%);pointer-events:none;}
 @keyframes splashExit{0%{opacity:1;transform:scale(1);}60%{opacity:1;transform:scale(1.04);}100%{opacity:0;transform:scale(0.96);}}
 #splash.gone{display:none;}
 #splash-scene{animation:scenePop .6s cubic-bezier(.34,1.56,.64,1) .2s both;}
@@ -208,13 +222,13 @@ body.dark .tual{background:rgba(45,31,0,0.7);border-color:#854d0e;color:#fbbf24;
 .sparkle{animation:blink 1s ease-in-out infinite;}
 .sparkle:nth-child(1){animation-delay:0s;} .sparkle:nth-child(2){animation-delay:.35s;} .sparkle:nth-child(3){animation-delay:.65s;}
 @keyframes blink{0%,100%{opacity:0;transform:scale(.5);}50%{opacity:1;transform:scale(1);}}
-#splash-tagline{font-family:'DM Serif Display',serif;font-size:1.35rem;color:rgba(255,255,255,.95);letter-spacing:.04em;text-align:center;animation:tagIn .5s ease .75s both;}
-#splash-sub{font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.12em;animation:tagIn .5s ease 1s both;}
+#splash-tagline{font-family:'DM Serif Display',serif;font-size:2rem;font-weight:400;color:#0a1628;letter-spacing:.02em;text-align:center;animation:tagIn .5s ease .75s both;}
+#splash-sub{font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;color:rgba(10,22,40,.4);text-transform:uppercase;letter-spacing:.12em;animation:tagIn .5s ease 1s both;}
 @keyframes tagIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-#splash-dots{display:flex;gap:.45rem;animation:tagIn .4s ease 1.3s both;}
-#splash-dots span{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.5);animation:dotPulse 1s ease-in-out infinite;}
-#splash-dots span:nth-child(2){animation-delay:.18s;} #splash-dots span:nth-child(3){animation-delay:.36s;}
-@keyframes dotPulse{0%,100%{transform:scale(.7);opacity:.4;}50%{transform:scale(1);opacity:1;}}
+#splash-dots{animation:tagIn .4s ease 1.3s both;}
+#splash-dots span{display:block;width:48px;height:4px;border-radius:99px;background:#00d4f5;animation:pillPulse .8s ease-in-out infinite alternate;}
+@keyframes pillPulse{from{opacity:.3;}to{opacity:1;}}
+#splash-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:360px;height:360px;border-radius:50%;background:radial-gradient(ellipse,rgba(0,212,245,0.18) 0%,transparent 70%);pointer-events:none;}
 
 /* ════════════════════════════════════════════
    SECTION: Food Icon Animations
@@ -257,39 +271,38 @@ body.dark .tual{background:rgba(45,31,0,0.7);border-color:#854d0e;color:#fbbf24;
    SECTION: THE CHEF STATION (Production Grade)
    ══════════════════════════════════════════════ */
 .chef-card {
-  padding: 0; 
-  overflow: hidden; 
+  padding: 0;
+  overflow: hidden;
   position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
-  min-height: 580px; 
+  min-height: 620px;
 }
 #chef-station {
   position: absolute; inset: 0; width: 100%; height: 100%;
   z-index: 10; pointer-events: none; user-select: none;
 }
 
-/* Layer 1: Frosted Kitchen Background */
+/* Layer 1: Cartoon Kitchen Background */
 .cs-bg {
-  position: absolute; inset: 0; background: rgba(255, 255, 255, 0.2); z-index: 1;
+  position: absolute; inset: 0; background: #dbeeff; z-index: 1;
 }
-body.dark .cs-bg { background: rgba(22, 27, 34, 0.2); }
-.cs-bg svg { width: 100%; height: 100%; opacity: 0.15; filter: blur(1px); }
+.cs-bg svg { width: 100%; height: 100%; opacity: 0.8; }
+.cs-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg,rgba(238,246,255,0.1) 0%,transparent 40%,rgba(219,238,255,0.3) 100%); z-index: 2; pointer-events: none; }
 
-/* Layer 2: Countertop */
+/* Layer 2: Cartoon Countertop */
 .cs-counter {
-  position: absolute; bottom: 0; left: 0; width: 100%; height: 120px;
-  background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  border-top: 3px solid rgba(255,255,255,0.7); box-shadow: 0 -4px 16px rgba(0,0,0,0.03); z-index: 3;
+  position: absolute; bottom: 0; left: 0; width: 100%; height: 130px;
+  background: #ffffff; border-top: 3px solid #0a1628;
+  box-shadow: 0 -4px 0 rgba(0,212,245,0.2), inset 0 2px 0 rgba(255,255,255,0.9); z-index: 3;
 }
-body.dark .cs-counter { background: rgba(28, 35, 51, 0.5); border-top-color: rgba(255,255,255,0.1); }
-.cs-counter-shadow { position: absolute; bottom: 120px; left: 0; width: 100%; height: 20px; background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.1)); z-index: 2; }
+.cs-counter-shadow { position: absolute; bottom: 130px; left: 0; width: 100%; height: 20px; background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.07)); z-index: 2; }
 
 /* Layer 3: The Chef Character */
 .cs-chef-wrap {
   position: absolute; bottom: 110px; left: 50%; transform: translateX(-50%);
-  width: 100%; max-width: 250px; z-index: 2;
+  width: 100%; max-width: 270px; z-index: 2;
 }
 
 /* -- Idle Animations -- */
@@ -345,23 +358,29 @@ body.dark .cs-counter { background: rgba(28, 35, 51, 0.5); border-top-color: rgb
 .cs-plate-shadow { transition: all 0.5s ease; fill: rgba(0,0,0,0.1); }
 .has-food .cs-plate-shadow { fill: rgba(0,0,0,0.22); transform: scale(1.05) translateY(2px); transform-origin: center; }
 
-/* Speech Bubble (Replaces all Toasts) */
+/* Speech Bubble — Cartoon Style */
 #cs-bubble {
-  position: absolute; top: 30px; left: 50%; transform: translateX(-50%) scale(0.8);
-  width: 90%; max-width: 280px;
-  background: rgba(255,255,255,0.98); border: 2px solid #1a9ed4; border-radius: 14px;
-  padding: 15px 20px; font-size: 0.9rem; font-weight: 600; color: #0a1628; line-height: 1.4; text-align: center;
-  box-shadow: 0 10px 24px rgba(10,22,40,0.12);
-  opacity: 0; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: absolute; top: 22px; left: 50%; transform: translateX(-50%) scale(0.8);
+  width: 90%; max-width: 275px;
+  background: #fff; border: 3px solid #0a1628; border-radius: 16px;
+  padding: 14px 18px; font-size: 0.88rem; font-weight: 700; color: #0a1628; line-height: 1.45; text-align: center;
+  box-shadow: 4px 4px 0 #0a1628;
+  opacity: 0; transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   pointer-events: none; z-index: 20;
 }
 #cs-bubble::after {
-  content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%) rotate(45deg);
-  width: 10px; height: 10px; background: #fff; border-right: 2px solid #1a9ed4; border-bottom: 2px solid #1a9ed4;
+  content: ''; position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%);
+  width: 0; height: 0;
+  border-left: 10px solid transparent; border-right: 10px solid transparent;
+  border-top: 10px solid #0a1628;
+}
+#cs-bubble::before {
+  content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
+  width: 0; height: 0; z-index: 1;
+  border-left: 8px solid transparent; border-right: 8px solid transparent;
+  border-top: 8px solid #fff;
 }
 #cs-bubble.show { opacity: 1; transform: translateX(-50%) scale(1); pointer-events: auto; }
-body.dark #cs-bubble { background: #1c2333; color: #e6edf3; border-color: #1a9ed4; }
-body.dark #cs-bubble::after { background: #1c2333; }
 
 .chef-confetti { position: absolute; width: 6px; height: 6px; border-radius: 2px; opacity: 0; z-index: 10; }
 @keyframes chefConfettiBurst { 0% { opacity: 1; transform: scale(0.5) translate(0, 0) rotate(0deg); } 100% { opacity: 0; transform: scale(1.2) translate(var(--cx), var(--cy)) rotate(720deg); } }
@@ -371,25 +390,56 @@ body.dark #cs-bubble::after { background: #1c2333; }
 <body>
 
 <div id="splash" role="presentation" aria-hidden="true">
+  <div id="splash-glow"></div>
   <div id="splash-scene">
     <svg width="220" height="240" viewBox="0 0 220 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g class="steam" style="animation-delay:.1s"><path d="M88 68 Q84 58 88 50 Q92 42 88 34" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" stroke-linecap="round" fill="none"/></g>
-      <g class="steam" style="animation-delay:.4s"><path d="M110 62 Q106 52 110 44 Q114 36 110 28" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" stroke-linecap="round" fill="none"/></g>
-      <g class="steam" style="animation-delay:.7s"><path d="M132 68 Q128 58 132 50 Q136 42 132 34" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" stroke-linecap="round" fill="none"/></g>
-      <g class="fork-tap" style="transform-origin:66px 205px"><rect x="62" y="130" width="8" height="75" rx="4" fill="#e2e8f0"/><rect x="64" y="108" width="4" height="26" rx="2" fill="#cbd5e1"/><rect x="60" y="90" width="2.5" height="22" rx="1.2" fill="#94a3b8"/><rect x="64" y="88" width="2.5" height="24" rx="1.2" fill="#94a3b8"/><rect x="68" y="90" width="2.5" height="22" rx="1.2" fill="#94a3b8"/><rect x="59" y="110" width="13" height="3" rx="1.5" fill="#94a3b8"/><rect x="64" y="132" width="2" height="30" rx="1" fill="rgba(255,255,255,0.3)"/></g>
-      <g class="spoon-swing" style="transform-origin:154px 205px"><rect x="150" y="135" width="8" height="70" rx="4" fill="#e2e8f0"/><rect x="152" y="110" width="4" height="28" rx="2" fill="#cbd5e1"/><ellipse cx="154" cy="100" rx="10" ry="13" fill="#cbd5e1"/><ellipse cx="154" cy="101" rx="7" ry="9" fill="rgba(255,255,255,0.25)"/><rect x="152" y="137" width="2" height="28" rx="1" fill="rgba(255,255,255,0.3)"/></g>
-      <ellipse cx="66" cy="208" rx="13" ry="10" fill="#c68642"/><rect x="53" y="200" width="26" height="14" rx="7" fill="#c68642"/>
-      <ellipse cx="154" cy="208" rx="13" ry="10" fill="#c68642"/><rect x="141" y="200" width="26" height="14" rx="7" fill="#c68642"/>
-      <ellipse cx="110" cy="195" rx="60" ry="8" fill="rgba(0,0,0,0.18)"/>
-      <g class="plate-bounce"><ellipse cx="110" cy="172" rx="62" ry="18" fill="#dbeafe"/><ellipse cx="110" cy="172" rx="62" ry="18" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/><ellipse cx="110" cy="168" rx="50" ry="13" fill="#eff6ff"/><ellipse cx="110" cy="162" rx="32" ry="12" fill="#fef9c3"/><ellipse cx="110" cy="158" rx="22" ry="8" fill="#fef08a"/><ellipse cx="110" cy="155" rx="13" ry="5" fill="#fde047"/><path d="M94 162 Q104 155 116 162 Q122 165 130 160" stroke="#f97316" stroke-width="3" stroke-linecap="round" fill="none"/><circle cx="100" cy="160" r="2.5" fill="#22c55e"/><circle cx="118" cy="158" r="2" fill="#22c55e"/><circle cx="108" cy="156" r="1.8" fill="#4ade80"/><ellipse cx="85" cy="162" rx="12" ry="4" fill="rgba(255,255,255,0.18)" transform="rotate(-15 85 162)"/></g>
-      <g class="sparkle" style="animation-delay:0s"><path d="M48 120 L50 114 L52 120 L58 122 L52 124 L50 130 L48 124 L42 122Z" fill="rgba(255,220,80,0.9)" transform="scale(0.8) translate(12,0)"/></g>
-      <g class="sparkle" style="animation-delay:.35s"><path d="M162 108 L164 102 L166 108 L172 110 L166 112 L164 118 L162 112 L156 110Z" fill="rgba(255,255,255,0.7)" transform="scale(0.65) translate(82,16)"/></g>
-      <g class="sparkle" style="animation-delay:.65s"><path d="M110 75 L112 70 L114 75 L119 77 L114 79 L112 84 L110 79 L105 77Z" fill="rgba(253,186,116,0.85)" transform="scale(0.7) translate(47,30)"/></g>
+      <g class="steam" style="animation-delay:.1s"><path d="M88 68 Q84 58 88 50 Q92 42 88 34" stroke="#00d4f5" stroke-width="3" stroke-linecap="round" fill="none"/></g>
+      <g class="steam" style="animation-delay:.4s"><path d="M110 62 Q106 52 110 44 Q114 36 110 28" stroke="#00d4f5" stroke-width="3" stroke-linecap="round" fill="none"/></g>
+      <g class="steam" style="animation-delay:.7s"><path d="M132 68 Q128 58 132 50 Q136 42 132 34" stroke="#00d4f5" stroke-width="3" stroke-linecap="round" fill="none"/></g>
+      <!-- Fork -->
+      <g class="fork-tap" style="transform-origin:66px 205px">
+        <rect x="62" y="130" width="8" height="75" rx="4" fill="#475569" stroke="#0a1628" stroke-width="1.5"/>
+        <rect x="64" y="108" width="4" height="26" rx="2" fill="#64748b"/>
+        <line x1="61" y1="90" x2="61" y2="112" stroke="#0a1628" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="65" y1="88" x2="65" y2="112" stroke="#0a1628" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="69" y1="90" x2="69" y2="112" stroke="#0a1628" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="61" y1="112" x2="69" y2="112" stroke="#0a1628" stroke-width="2.5" stroke-linecap="round"/>
+      </g>
+      <!-- Spoon -->
+      <g class="spoon-swing" style="transform-origin:154px 205px">
+        <rect x="150" y="135" width="8" height="70" rx="4" fill="#475569" stroke="#0a1628" stroke-width="1.5"/>
+        <rect x="152" y="110" width="4" height="28" rx="2" fill="#64748b"/>
+        <ellipse cx="154" cy="99" rx="11" ry="14" fill="#dbeeff" stroke="#0a1628" stroke-width="2.5"/>
+        <ellipse cx="154" cy="100" rx="7" ry="9" fill="#f0f7ff"/>
+      </g>
+      <!-- Legs -->
+      <ellipse cx="66" cy="208" rx="13" ry="10" fill="#e8955a" stroke="#0a1628" stroke-width="2"/>
+      <rect x="53" y="200" width="26" height="14" rx="7" fill="#e8955a" stroke="#0a1628" stroke-width="2"/>
+      <ellipse cx="154" cy="208" rx="13" ry="10" fill="#e8955a" stroke="#0a1628" stroke-width="2"/>
+      <rect x="141" y="200" width="26" height="14" rx="7" fill="#e8955a" stroke="#0a1628" stroke-width="2"/>
+      <!-- Shadow -->
+      <ellipse cx="110" cy="197" rx="62" ry="8" fill="rgba(0,0,0,0.12)"/>
+      <!-- Plate -->
+      <g class="plate-bounce">
+        <ellipse cx="110" cy="172" rx="62" ry="18" fill="#f8fafc" stroke="#0a1628" stroke-width="3"/>
+        <ellipse cx="110" cy="170" rx="50" ry="14" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
+        <ellipse cx="110" cy="163" rx="32" ry="12" fill="#fef9c3"/>
+        <ellipse cx="110" cy="159" rx="22" ry="8" fill="#fef08a"/>
+        <ellipse cx="110" cy="156" rx="13" ry="5" fill="#fde047"/>
+        <path d="M94 163 Q104 156 116 163 Q122 166 130 161" stroke="#f97316" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+        <circle cx="100" cy="161" r="3" fill="#22c55e"/>
+        <circle cx="118" cy="159" r="2.5" fill="#22c55e"/>
+        <circle cx="108" cy="157" r="2" fill="#4ade80"/>
+      </g>
+      <!-- Sparkles -->
+      <g class="sparkle" style="animation-delay:0s"><path d="M48 120 L50 114 L52 120 L58 122 L52 124 L50 130 L48 124 L42 122Z" fill="#fbbf24" transform="scale(0.8) translate(12,0)"/></g>
+      <g class="sparkle" style="animation-delay:.35s"><path d="M162 108 L164 102 L166 108 L172 110 L166 112 L164 118 L162 112 L156 110Z" fill="#00d4f5" transform="scale(0.65) translate(82,16)"/></g>
+      <g class="sparkle" style="animation-delay:.65s"><path d="M110 75 L112 70 L114 75 L119 77 L114 79 L112 84 L110 79 L105 77Z" fill="#f97316" transform="scale(0.7) translate(47,30)"/></g>
     </svg>
   </div>
   <div id="splash-tagline">Your lunch is waiting.</div>
   <div id="splash-sub">Highway Academy · Mealtime</div>
-  <div id="splash-dots"><span></span><span></span><span></span></div>
+  <div id="splash-dots"><span></span></div>
 </div>
 <script>
 (function(){
@@ -401,14 +451,41 @@ body.dark #cs-bubble::after { background: #1c2333; }
 <div id="ls">
   <div style="width:100%;max-width:350px;">
     <div style="text-align:center;margin-bottom:1.75rem;">
-      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KICA8Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0OCIgZmlsbD0iIzBhMTYyOCIvPgogIDxlbGxpcHNlIGN4PSI1MCIgY3k9IjU4IiByeD0iMzIiIHJ5PSI5IiBmaWxsPSJub25lIiBzdHJva2U9IiMxYTllZDQiIHN0cm9rZS13aWR0aD0iMi41Ii8+CiAgPGVsbGlwc2UgY3g9IjUwIiBjeT0iNTUiIHJ4PSIyNSIgcnk9IjciIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzFhOWVkNCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICA8ZWxsaXBzZSBjeD0iNTAiIGN5PSI1NiIgcng9IjI1IiByeT0iNyIgZmlsbD0iI2RiZWVmZiIgb3BhY2l0eT0iMC4xMiIvPgogIDxsaW5lIHgxPSIyOCIgeTE9IjI1IiB4Mj0iMjgiIHkyPSI2OCIgc3Ryb2tlPSIjMWE5ZWQ0IiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjI0IiB5MT0iMjUiIHgyPSIyNCIgeTI9IjM4IiBzdHJva2U9IiMxYTllZDQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjI4IiB5MT0iMjUiIHgyPSIyOCIgeTI9IjM4IiBzdHJva2U9IiMxYTllZDQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjMyIiB5MT0iMjUiIHgyPSIzMiIgeTI9IjM4IiBzdHJva2U9IiMxYTllZDQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjI0IiB5MT0iMzgiIHgyPSIzMiIgeTI9IjM4IiBzdHJva2U9IiMxYTllZDQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjcyIiB5MT0iMjUiIHgyPSI3MiIgeTI9IjY4IiBzdHJva2U9IiMwMGQ0ZjUiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8cGF0aCBkPSJNNzIgMjUgUTgwIDMwIDgwIDQyIEw3MiA0MiBaIiBmaWxsPSIjMDBkNGY1IiBvcGFjaXR5PSIwLjkiLz4KICA8ZWxsaXBzZSBjeD0iNDAiIGN5PSI1MyIgcng9IjgiIHJ5PSIzIiBmaWxsPSJ3aGl0ZSIgb3BhY2l0eT0iMC4wNyIgdHJhbnNmb3JtPSJyb3RhdGUoLTE1IDQwIDUzKSIvPgo8L3N2Zz4=" id="logo-img" style="height:62px;width:62px;object-fit:contain;mix-blend-mode:screen;display:block;margin:0 auto .75rem;filter:drop-shadow(0 4px 12px rgba(21,101,192,0.3));">
-      <div style="font-family:'DM Serif Display',serif;font-size:1.55rem;color:#0a1628;letter-spacing:.01em;">Mealtime</div>
-      <div style="font-size:.8rem;color:#6b7280;margin-top:.25rem;letter-spacing:.05em;text-transform:uppercase;font-weight:600;">Highway Academy</div>
+      <svg id="logo-img" viewBox="0 0 100 100" width="88" height="88" style="display:block;margin:0 auto .75rem;filter:drop-shadow(0 6px 16px rgba(0,212,245,0.3));">
+        <circle cx="50" cy="50" r="46" fill="#ffffff" stroke="#0a1628" stroke-width="4.5"/>
+        <ellipse cx="50" cy="61" rx="29" ry="9" fill="#eef6ff" stroke="#0a1628" stroke-width="3"/>
+        <ellipse cx="50" cy="59" rx="22" ry="7" fill="#ffffff" stroke="#0a1628" stroke-width="2.5"/>
+        <ellipse cx="50" cy="57" rx="13" ry="5" fill="#00d4f5"/>
+        <line x1="26" y1="19" x2="26" y2="64" stroke="#0a1628" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="21" y1="19" x2="21" y2="33" stroke="#0a1628" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="26" y1="19" x2="26" y2="33" stroke="#0a1628" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="31" y1="19" x2="31" y2="33" stroke="#0a1628" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="21" y1="33" x2="31" y2="33" stroke="#0a1628" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="74" y1="22" x2="74" y2="64" stroke="#0a1628" stroke-width="3.5" stroke-linecap="round"/>
+        <ellipse cx="74" cy="16" rx="8.5" ry="10" fill="#eef6ff" stroke="#0a1628" stroke-width="3"/>
+        <ellipse cx="74" cy="16" rx="5" ry="6.5" fill="#ffffff"/>
+      </svg>
+      <div style="font-family:'DM Serif Display',serif;font-size:2rem;color:#0a1628;letter-spacing:.01em;margin-bottom:.35rem;">Mealtime</div>
+      <div style="font-size:.72rem;color:#0099b8;margin-top:.25rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;">Highway Academy</div>
     </div>
     <div class="lc">
       <div class="lf">
         <label>Your name</label>
-        <select id="ln">
+        <div class="name-picker" id="name-picker-root">
+          <button type="button" class="name-picker-btn" id="name-picker-btn" onclick="toggleNamePicker(event)">
+            <span id="name-picker-display">Choose your name...</span>
+            <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="#00d4f5" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+          <div class="name-picker-bubble" id="name-picker-bubble">
+            <div class="name-picker-grid">
+              <button type="button" class="name-tile" onclick="selectName('Hilda','0')">👩 Hilda</button>
+              <button type="button" class="name-tile" onclick="selectName('Paul','1')">👨 Paul</button>
+              <button type="button" class="name-tile" onclick="selectName('Comfort','2')">👩 Comfort</button>
+              <button type="button" class="name-tile" onclick="selectName('Admin','admin')">🔑 Admin</button>
+            </div>
+          </div>
+        </div>
+        <select id="ln" style="display:none">
           <option value="" disabled selected>Select your name...</option>
           <option value="0">Hilda</option>
           <option value="1">Paul</option>
@@ -423,6 +500,11 @@ body.dark #cs-bubble::after { background: #1c2333; }
       <div id="lerr"></div>
       <button class="lbtn" onclick="doLogin()">Sign in →</button>
     </div>
+    <script>
+    function toggleNamePicker(e){e.stopPropagation();document.getElementById('name-picker-bubble').classList.toggle('open');}
+    function selectName(name,val){document.getElementById('ln').value=val;document.getElementById('name-picker-display').textContent=name;document.getElementById('name-picker-bubble').classList.remove('open');document.getElementById('name-picker-btn').classList.add('has-value');}
+    document.addEventListener('click',function(e){var r=document.getElementById('name-picker-root');if(r&&!r.contains(e.target)){var b=document.getElementById('name-picker-bubble');if(b)b.classList.remove('open');}});
+    </script>
   </div>
 </div>
 
@@ -430,17 +512,33 @@ body.dark #cs-bubble::after { background: #1c2333; }
 
 <div class="bar">
   <span style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KICA8Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0OCIgZmlsbD0iIzBhMTYyOCIvPgogIDxlbGxpcHNlIGN4PSI1MCIgY3k9IjU4IiByeD0iMzIiIHJ5PSI5IiBmaWxsPSJub25lIiBzdHJva2U9IiMxYTllZDQiIHN0cm9rZS13aWR0aD0iMi41Ii8+CiAgPGVsbGlwc2UgY3g9IjUwIiBjeT0iNTUiIHJ4PSIyNSIgcnk9IjciIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzFhOWVkNCIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICA8ZWxsaXBzZSBjeD0iNTAiIGN5PSI1NiIgcng9IjI1IiByeT0iNyIgZmlsbD0iI2RiZWVmZiIgb3BhY2l0eT0iMC4xMiIvPgogIDxsaW5lIHgxPSIyOCIgeTE9IjI1IiB4Mj0iMjgiIHkyPSI2OCIgc3Ryb2tlPSIjMWE5ZWQ0IiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjI0IiB5MT0iMjUiIHgyPSIyNCIgeTI9IjM4IiBzdHJva2U9IiMxYTllZDQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjI4IiB5MT0iMjUiIHgyPSIyOCIgeTI9IjM4IiBzdHJva2U9IiMxYTllZDQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjMyIiB5MT0iMjUiIHgyPSIzMiIgeTI9IjM4IiBzdHJva2U9IiMxYTllZDQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjI0IiB5MT0iMzgiIHgyPSIzMiIgeTI9IjM4IiBzdHJva2U9IiMxYTllZDQiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjcyIiB5MT0iMjUiIHgyPSI3MiIgeTI9IjY4IiBzdHJva2U9IiMwMGQ0ZjUiIHN0cm9rZS13aWR0aD0iMi41IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8cGF0aCBkPSJNNzIgMjUgUTgwIDMwIDgwIDQyIEw3MiA0MiBaIiBmaWxsPSIjMDBkNGY1IiBvcGFjaXR5PSIwLjkiLz4KICA8ZWxsaXBzZSBjeD0iNDAiIGN5PSI1MyIgcng9IjgiIHJ5PSIzIiBmaWxsPSJ3aGl0ZSIgb3BhY2l0eT0iMC4wNyIgdHJhbnNmb3JtPSJyb3RhdGUoLTE1IDQwIDUzKSIvPgo8L3N2Zz4=" id="bar-logo" style="height:38px;width:38px;object-fit:contain;mix-blend-mode:screen;">
+    <svg id="bar-logo" viewBox="0 0 100 100" width="38" height="38" style="flex-shrink:0;">
+      <circle cx="50" cy="50" r="46" fill="#ffffff" stroke="#0a1628" stroke-width="4.5"/>
+      <ellipse cx="50" cy="61" rx="29" ry="9" fill="#eef6ff" stroke="#0a1628" stroke-width="3"/>
+      <ellipse cx="50" cy="59" rx="22" ry="7" fill="#ffffff" stroke="#0a1628" stroke-width="2.5"/>
+      <ellipse cx="50" cy="57" rx="13" ry="5" fill="#00d4f5"/>
+      <line x1="26" y1="19" x2="26" y2="64" stroke="#0a1628" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="21" y1="19" x2="21" y2="33" stroke="#0a1628" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="26" y1="19" x2="26" y2="33" stroke="#0a1628" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="31" y1="19" x2="31" y2="33" stroke="#0a1628" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="21" y1="33" x2="31" y2="33" stroke="#0a1628" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="74" y1="22" x2="74" y2="64" stroke="#0a1628" stroke-width="3.5" stroke-linecap="round"/>
+      <ellipse cx="74" cy="16" rx="8.5" ry="10" fill="#eef6ff" stroke="#0a1628" stroke-width="3"/>
+      <ellipse cx="74" cy="16" rx="5" ry="6.5" fill="#ffffff"/>
+    </svg>
     <span><div class="bar-t">Mealtime</div></span>
   </span>
-  <div style="display:flex;align-items:center;flex-shrink:0;gap:.3rem;">
+  <div style="display:flex;align-items:center;flex-shrink:0;gap:.5rem;">
+    <div id="greeting-box"><span id="greeting-text"></span></div>
     <nav class="nav">
       <button class="nb on" onclick="go('order')">Orders</button>
       <button class="nb" onclick="go('log')">Log</button>
       <button class="nb" id="nav-report" onclick="go('report')">Report</button>
       <button class="nb" onclick="go('cfg')">Settings</button>
     </nav>
-    <button onclick="doLogout()" title="Sign out" style="background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.18);border-radius:50px;padding:.35rem .65rem;cursor:pointer;color:rgba(255,255,255,.7);font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:600;margin-left:.2rem;flex-shrink:0;transition:all .2s;letter-spacing:.04em;">OUT</button>
+    <button onclick="doLogout()" title="Sign out" style="width:32px;height:32px;background:rgba(0,212,245,0.08);border:2px solid rgba(0,212,245,0.25);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;padding:0;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(10,22,40,0.55)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    </button>
   </div>
 </div>
 
@@ -454,22 +552,22 @@ body.dark #cs-bubble::after { background: #1c2333; }
     
     <div class="order-col-main">
       <div class="card" id="main-order-card">
-        <div class="ct">🍽️ New Lunch Order</div>
-        <div class="r2">
-          <div id="greeting-box"><span id="greeting-text" style="font-size:.92rem;font-weight:500;color:var(--text-main);">Welcome</span></div>
-          <input type="hidden" id="f-emp" value="">
+        <div class="ct"><span style="display:inline-block;width:6px;height:6px;background:#00d4f5;border-radius:50%;margin-right:.5rem;vertical-align:middle;"></span>What's for lunch?</div>
+        <input type="hidden" id="f-emp" value="">
+        <div class="r2" style="grid-template-columns:1fr auto;align-items:end;">
           <div><label class="lbl">Date</label><input type="date" id="f-date"></div>
+          <span id="day-display" style="font-size:.75rem;font-weight:700;color:#1a9ed4;letter-spacing:.08em;text-transform:uppercase;font-variant:small-caps;padding-bottom:.6rem;"></span>
         </div>
 
         <div class="field">
           <label class="lbl">Main Course <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-light);font-size:.68rem;">— select one or more</span></label>
           <div class="pills" id="starches">
-            <div class="pill" data-v="Posho">🌽 Posho</div>
-            <div class="pill" data-v="Brown Rice">🍚 Brown Rice</div>
-            <div class="pill" data-v="White Rice">🍚 White Rice</div>
-            <div class="pill" data-v="Matooke">🍌 Matooke</div>
-            <div class="pill" data-v="Pumpkin">🎃 Pumpkin</div>
-            <div class="pill" data-v="Sweet Potatoes">🍠 Sweet Potatoes</div>
+            <div class="pill" data-v="Posho"><span class="pill-icon">🌽</span><span class="pill-label">Posho</span></div>
+            <div class="pill" data-v="Brown Rice"><span class="pill-icon">🍚</span><span class="pill-label">Brown Rice</span></div>
+            <div class="pill" data-v="White Rice"><span class="pill-icon">🍚</span><span class="pill-label">White Rice</span></div>
+            <div class="pill" data-v="Matooke"><span class="pill-icon">🍌</span><span class="pill-label">Matooke</span></div>
+            <div class="pill" data-v="Pumpkin"><span class="pill-icon">🎃</span><span class="pill-label">Pumpkin</span></div>
+            <div class="pill" data-v="Sweet Potatoes"><span class="pill-icon">🍠</span><span class="pill-label">Sweet Potatoes</span></div>
           </div>
           <div class="hint" id="st-hint">Nothing selected yet</div>
         </div>
@@ -498,84 +596,88 @@ body.dark #cs-bubble::after { background: #1c2333; }
           <div class="cs-bg">
             <svg viewBox="0 0 220 300" preserveAspectRatio="none">
               <defs>
-                <pattern id="tile-pattern" x="0" y="0" width="40" height="20" patternUnits="userSpaceOnUse">
-                  <rect width="40" height="20" fill="none" stroke="#64748b" stroke-width="1"/>
-                  <line x1="20" y1="0" x2="20" y2="20" stroke="#64748b" stroke-width="1"/>
+                <pattern id="tile-pattern" x="0" y="0" width="44" height="22" patternUnits="userSpaceOnUse">
+                  <rect width="44" height="22" fill="#c7dff7" stroke="#93c5fd" stroke-width="1.5"/>
+                  <line x1="22" y1="0" x2="22" y2="22" stroke="#93c5fd" stroke-width="1.5"/>
                 </pattern>
               </defs>
               <rect width="100%" height="100%" fill="url(#tile-pattern)"/>
-              <rect x="0" y="40" width="220" height="8" fill="#334155"/>
-              <path d="M160,48 L160,80" stroke="#334155" stroke-width="2"/>
-              <ellipse cx="160" cy="85" rx="15" ry="5" fill="#475569"/>
-              <path d="M40,48 L40,70" stroke="#334155" stroke-width="2"/>
-              <rect x="36" y="70" width="8" height="15" fill="#475569" rx="2"/>
+              <!-- shelf -->
+              <rect x="0" y="38" width="220" height="10" fill="#0a1628" rx="2"/>
+              <rect x="0" y="46" width="220" height="4" fill="#00d4f5" opacity="0.6"/>
+              <!-- pot on shelf -->
+              <path d="M150,48 L150,82" stroke="#0a1628" stroke-width="3" stroke-linecap="round"/>
+              <ellipse cx="150" cy="87" rx="18" ry="6" fill="#1565c0" stroke="#0a1628" stroke-width="2.5"/>
+              <ellipse cx="150" cy="84" rx="18" ry="6" fill="#1e88e5" stroke="#0a1628" stroke-width="2.5"/>
+              <!-- utensil holder -->
+              <path d="M38,48 L38,72" stroke="#0a1628" stroke-width="3" stroke-linecap="round"/>
+              <rect x="32" y="72" width="12" height="18" rx="3" fill="#f59e0b" stroke="#0a1628" stroke-width="2.5"/>
+              <line x1="36" y1="72" x2="36" y2="65" stroke="#0a1628" stroke-width="2" stroke-linecap="round"/>
+              <line x1="40" y1="72" x2="40" y2="63" stroke="#0a1628" stroke-width="2" stroke-linecap="round"/>
+              <line x1="44" y1="72" x2="44" y2="66" stroke="#0a1628" stroke-width="2" stroke-linecap="round"/>
             </svg>
           </div>
 
           <div class="cs-chef-wrap">
             <svg viewBox="0 0 160 160" width="100%" height="100%">
+
+              <!-- TORSO / JACKET -->
               <g class="chef-torso">
-                <path d="M40,160 C40,110 50,90 80,90 C110,90 120,110 120,160 Z" fill="#f8fafc"/>
-                <path d="M70,90 L80,120 L90,90" fill="#e2e8f0"/>
-                <circle cx="65" cy="115" r="3" fill="#1e293b"/>
-                <circle cx="65" cy="135" r="3" fill="#1e293b"/>
-                <circle cx="95" cy="115" r="3" fill="#1e293b"/>
-                <circle cx="95" cy="135" r="3" fill="#1e293b"/>
-                <rect x="70" y="75" width="20" height="20" fill="#c68642"/>
-                <path d="M70,85 Q80,95 90,85" stroke="#9a652f" stroke-width="2" fill="none"/>
+                <path d="M36 160 C32 122 46 106 80 103 C114 106 128 122 124 160 Z" fill="#f8fafc" stroke="#0a1628" stroke-width="3.5" stroke-linejoin="round"/>
+                <path d="M71 104 L80 130 L89 104" fill="#dbeeff" stroke="#0a1628" stroke-width="2.5"/>
+                <path d="M68 105 Q80 113 92 105" fill="none" stroke="#00d4f5" stroke-width="4.5" stroke-linecap="round"/>
+                <circle cx="67" cy="124" r="4.5" fill="#0a1628"/>
+                <circle cx="67" cy="142" r="4.5" fill="#0a1628"/>
+                <circle cx="93" cy="124" r="4.5" fill="#0a1628"/>
+                <circle cx="93" cy="142" r="4.5" fill="#0a1628"/>
+                <rect x="89" y="113" width="14" height="11" rx="3" fill="none" stroke="#94a3b8" stroke-width="1.5"/>
               </g>
-              
+
+              <!-- HEAD GROUP — headLook uses transform-origin: 75px 80px -->
               <g class="chef-head-group chef-head">
-                <ellipse cx="80" cy="65" rx="28" ry="32" fill="#c68642"/>
-                <ellipse cx="52" cy="68" rx="4" ry="7" fill="#b37335"/>
-                <ellipse cx="108" cy="68" rx="4" ry="7" fill="#b37335"/>
-                <path d="M52,65 Q56,50 60,40" stroke="#1c1917" stroke-width="4" fill="none" stroke-linecap="round"/>
-                <path d="M108,65 Q104,50 100,40" stroke="#1c1917" stroke-width="4" fill="none" stroke-linecap="round"/>
-                
-                <circle class="chef-eye" cx="68" cy="62" r="3.5" fill="#1c1917"/>
-                <circle class="chef-eye" cx="92" cy="62" r="3.5" fill="#1c1917"/>
-                <circle class="chef-eye" cx="69" cy="61" r="1" fill="#fff"/>
-                <circle class="chef-eye" cx="93" cy="61" r="1" fill="#fff"/>
-                <path class="chef-eye-happy" d="M64,62 Q68,57 72,62" stroke="#1c1917" stroke-width="2" fill="none" stroke-linecap="round"/>
-                <path class="chef-eye-happy" d="M88,62 Q92,57 96,62" stroke="#1c1917" stroke-width="2" fill="none" stroke-linecap="round"/>
-
-                <path d="M62,54 Q68,52 74,54" stroke="#1c1917" stroke-width="2" fill="none" stroke-linecap="round"/>
-                <path d="M86,54 Q92,52 98,54" stroke="#1c1917" stroke-width="2" fill="none" stroke-linecap="round"/>
-                <path d="M80,65 L80,72 Q82,74 84,72" stroke="#9a652f" stroke-width="2" fill="none" stroke-linecap="round"/>
-                
-                <path class="chef-mouth-rest" d="M72,80 Q80,82 88,80" stroke="#4a2010" stroke-width="2" fill="none" stroke-linecap="round"/>
-                <path class="chef-mouth-smile" d="M68,78 Q80,95 92,78 Z" fill="#4a2010"/>
-                
+                <!-- HAT -->
                 <g class="chef-hat">
-                  <path d="M60,35 C50,35 45,20 60,15 C65,0 95,0 100,15 C115,20 110,35 100,35 Z" fill="#ffffff"/>
-                  <rect x="58" y="32" width="44" height="12" fill="#f1f5f9" rx="2"/>
-                  <path d="M65,15 Q65,25 65,35 M75,10 Q75,25 75,35 M85,10 Q85,25 85,35 M95,15 Q95,25 95,35" stroke="#e2e8f0" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                  <ellipse cx="80" cy="20" rx="29" ry="23" fill="white" stroke="#0a1628" stroke-width="3.5"/>
+                  <path d="M64 16 Q64 27 64 40" stroke="#e2e8f0" stroke-width="2" stroke-linecap="round" fill="none"/>
+                  <path d="M76 10 Q76 25 76 42" stroke="#e2e8f0" stroke-width="2" stroke-linecap="round" fill="none"/>
+                  <path d="M88 10 Q88 25 88 42" stroke="#e2e8f0" stroke-width="2" stroke-linecap="round" fill="none"/>
+                  <path d="M99 16 Q99 27 99 40" stroke="#e2e8f0" stroke-width="2" stroke-linecap="round" fill="none"/>
+                  <rect x="51" y="36" width="58" height="14" rx="5" fill="#1565c0" stroke="#0a1628" stroke-width="3.5"/>
+                  <rect x="55" y="39" width="50" height="8" rx="3" fill="#00d4f5" opacity="0.35"/>
                 </g>
-              </g>
-              
-              <g id="chef-arm-group">
-                <g class="chef-arm-shoulder">
-                  <path d="M45,85 C30,95 25,120 30,125 C38,125 45,115 50,95 Z" fill="#f8fafc"/>
-                  <g class="chef-arm-elbow">
-                    <path d="M28,122 L15,145 L25,150 L35,125 Z" fill="#f8fafc"/>
-                    
-                    <g class="chef-hand-rest">
-                      <ellipse cx="20" cy="150" rx="6" ry="5" fill="#c68642" transform="rotate(-30 20 150)"/>
-                      <rect x="15" y="145" width="3" height="30" fill="#94a3b8" rx="1.5"/>
-                      <ellipse cx="16.5" cy="175" rx="5" ry="8" fill="#cbd5e1"/>
-                    </g>
-                    
-                    <g class="chef-hand-pinch">
-                      <path d="M15,150 Q18,140 22,142 Q26,145 23,152 Z" fill="#c68642"/>
-                      <path d="M18,142 L22,142 M19,145 L21,145" stroke="#9a652f" stroke-width="1" fill="none"/>
-                    </g>
-
-                    <g class="chef-hand-open">
-                      <circle cx="20" cy="150" r="6" fill="#c68642"/>
-                      <path d="M20,150 L10,140 M20,150 L15,135 M20,150 L25,135 M20,150 L30,140 M20,150 L32,150" stroke="#c68642" stroke-width="3" stroke-linecap="round" fill="none"/>
-                    </g>
-                  </g>
-                </g>
+                <!-- EARS -->
+                <ellipse cx="49" cy="78" rx="9" ry="12" fill="#e8955a" stroke="#0a1628" stroke-width="3"/>
+                <ellipse cx="111" cy="78" rx="9" ry="12" fill="#e8955a" stroke="#0a1628" stroke-width="3"/>
+                <ellipse cx="49" cy="79" rx="5" ry="7" fill="#d4784a" opacity="0.4"/>
+                <ellipse cx="111" cy="79" rx="5" ry="7" fill="#d4784a" opacity="0.4"/>
+                <!-- FACE -->
+                <ellipse cx="80" cy="80" rx="30" ry="34" fill="#e8955a" stroke="#0a1628" stroke-width="3.5"/>
+                <!-- BLUSH -->
+                <ellipse cx="60" cy="91" rx="10" ry="7" fill="rgba(210,70,40,0.22)"/>
+                <ellipse cx="100" cy="91" rx="10" ry="7" fill="rgba(210,70,40,0.22)"/>
+                <!-- EYE WHITES -->
+                <circle class="chef-eye" cx="66" cy="72" r="9.5" fill="white" stroke="#0a1628" stroke-width="2.5"/>
+                <circle class="chef-eye" cx="94" cy="72" r="9.5" fill="white" stroke="#0a1628" stroke-width="2.5"/>
+                <!-- PUPILS -->
+                <circle cx="67.5" cy="73" r="5.5" fill="#0a1628"/>
+                <circle cx="95.5" cy="73" r="5.5" fill="#0a1628"/>
+                <!-- CATCHLIGHTS -->
+                <circle cx="71" cy="70" r="2" fill="white"/>
+                <circle cx="99" cy="70" r="2" fill="white"/>
+                <!-- HAPPY EYES (hidden, shown when celebrating) -->
+                <path class="chef-eye-happy" d="M57 72 Q66 62 75 72" stroke="#0a1628" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                <path class="chef-eye-happy" d="M85 72 Q94 62 103 72" stroke="#0a1628" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                <!-- EYEBROWS -->
+                <path d="M58 61 Q66 55 74 60" stroke="#0a1628" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                <path d="M86 60 Q94 55 102 61" stroke="#0a1628" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                <!-- NOSE -->
+                <path d="M77 83 Q80 88 83 83" stroke="#c47d3e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                <!-- MOUTH REST -->
+                <path class="chef-mouth-rest" d="M70 95 Q80 101 90 95" stroke="#0a1628" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <!-- MOUTH SMILE (hidden) -->
+                <path class="chef-mouth-smile" d="M65 92 Q80 112 95 92 Z" fill="#0a1628"/>
+                <path class="chef-mouth-smile" d="M67 93 Q80 110 93 93" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <ellipse class="chef-mouth-smile" cx="80" cy="101" rx="7" ry="5" fill="#ef4444"/>
               </g>
             </svg>
           </div>
@@ -585,100 +687,124 @@ body.dark #cs-bubble::after { background: #1c2333; }
 
           <div class="cs-plate-wrap">
             <svg viewBox="0 0 240 120" width="100%" height="100%">
-              <ellipse class="cs-plate-shadow" cx="120" cy="85" rx="100" ry="18" />
-              <ellipse cx="120" cy="80" rx="95" ry="25" fill="#f8fafc"/>
-              <ellipse cx="120" cy="80" rx="95" ry="25" fill="none" stroke="#e2e8f0" stroke-width="1.5"/>
-              <ellipse cx="120" cy="78" rx="75" ry="18" fill="#ffffff"/>
+              <!-- Plate shadow + rim -->
+              <ellipse class="cs-plate-shadow" cx="120" cy="88" rx="98" ry="14"/>
+              <ellipse cx="120" cy="80" rx="95" ry="25" fill="#f8fafc" stroke="#0a1628" stroke-width="3"/>
+              <ellipse cx="120" cy="78" rx="74" ry="18" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
 
+              <!-- STARCH AREA (left ~25–115) -->
               <g id="avf-Pumpkin" class="av-food">
-                <path d="M 30 75 Q 40 55 60 70 Q 50 90 30 75 Z" fill="#ea580c"/>
-                <path d="M 35 75 Q 45 60 55 72" stroke="#c2410c" stroke-width="1.5" fill="none"/>
-                <path d="M 40 85 Q 50 65 70 75 Q 55 95 40 85 Z" fill="#f97316"/>
-                <path d="M 45 82 Q 55 68 65 75" stroke="#ea580c" stroke-width="1.5" fill="none"/>
-                <path d="M 30 75 Q 40 85 50 85 M 40 85 Q 50 95 60 90" stroke="#14532d" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                <path d="M28 78 Q38 56 54 70 Q46 90 28 78 Z" fill="#f97316" stroke="#0a1628" stroke-width="2.5"/>
+                <path d="M38 82 Q52 60 68 73 Q58 92 38 82 Z" fill="#ea580c" stroke="#0a1628" stroke-width="2.5"/>
+                <line x1="48" y1="60" x2="42" y2="50" stroke="#15803d" stroke-width="3.5" stroke-linecap="round"/>
+                <line x1="58" y1="62" x2="60" y2="51" stroke="#15803d" stroke-width="3" stroke-linecap="round"/>
               </g>
-              
+
               <g id="avf-Matooke" class="av-food">
-                <path d="M 40 92 Q 65 75 100 92 Q 70 105 40 92 Z" fill="#15803d"/>
-                <path d="M 50 88 C 50 70, 90 70, 90 88 C 90 98, 50 98, 50 88 Z" fill="#fde047"/>
-                <path d="M 60 82 Q 70 75 80 82 M 55 88 Q 70 82 85 88 M 65 92 Q 75 88 85 92" stroke="#eab308" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <path d="M36 92 Q62 74 98 91 Q68 107 36 92 Z" fill="#16a34a" stroke="#0a1628" stroke-width="2.5"/>
+                <path d="M48 87 C48 67 90 67 90 87 C90 99 48 99 48 87 Z" fill="#fde047" stroke="#0a1628" stroke-width="2.5"/>
+                <path d="M58 80 Q70 73 82 80" stroke="#ca8a04" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                <path d="M54 88 Q70 82 86 88" stroke="#ca8a04" stroke-width="2" fill="none" stroke-linecap="round"/>
               </g>
 
               <g id="avf-Posho" class="av-food">
-                <path d="M 55 72 C 55 52, 90 52, 90 72 C 90 82, 55 82, 55 72 Z" fill="#fdfbf7"/>
-                <path d="M 62 65 Q 72 58 82 65 M 65 72 Q 75 66 85 72" stroke="#f4f1ea" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                <path d="M52 74 C52 52 92 52 92 74 C92 86 52 86 52 74 Z" fill="#fdfcf8" stroke="#0a1628" stroke-width="2.5"/>
+                <path d="M60 65 Q72 58 84 65" stroke="#d6d3cc" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <path d="M57 74 Q72 67 87 74" stroke="#d6d3cc" stroke-width="2.5" fill="none" stroke-linecap="round"/>
               </g>
 
               <g id="avf-Brown-Rice" class="av-food">
-                <path d="M 80 68 C 80 50, 115 50, 115 68 C 115 80, 80 80, 80 68 Z" fill="#d2b48c"/>
-                <path d="M 90 60 Q 95 55 100 60 M 100 65 Q 105 60 110 65 M 85 68 Q 95 62 105 68 M 90 75 Q 100 70 110 75" stroke="#a1887f" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="1 3"/>
+                <path d="M78 70 C78 49 118 49 118 70 C118 83 78 83 78 70 Z" fill="#c8a46e" stroke="#0a1628" stroke-width="2.5"/>
+                <circle cx="90" cy="62" r="3" fill="#8b6340"/>
+                <circle cx="101" cy="57" r="3" fill="#8b6340"/>
+                <circle cx="110" cy="63" r="3" fill="#8b6340"/>
+                <circle cx="86" cy="71" r="3" fill="#8b6340"/>
+                <circle cx="99" cy="69" r="3" fill="#8b6340"/>
+                <circle cx="109" cy="73" r="3" fill="#8b6340"/>
               </g>
 
               <g id="avf-White-Rice" class="av-food">
-                <path d="M 75 82 C 75 65, 115 65, 115 82 C 115 95, 75 95, 75 82 Z" fill="#ffffff"/>
-                <path d="M 85 75 Q 90 70 95 75 M 95 80 Q 100 75 105 80 M 80 85 Q 90 80 100 85 M 85 92 Q 95 88 105 92" stroke="#e2e8f0" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="1 3"/>
+                <path d="M74 83 C74 63 118 63 118 83 C118 97 74 97 74 83 Z" fill="#f8fafc" stroke="#0a1628" stroke-width="2.5"/>
+                <circle cx="86" cy="74" r="2.5" fill="#cbd5e1"/>
+                <circle cx="97" cy="70" r="2.5" fill="#cbd5e1"/>
+                <circle cx="107" cy="76" r="2.5" fill="#cbd5e1"/>
+                <circle cx="83" cy="83" r="2.5" fill="#cbd5e1"/>
+                <circle cx="96" cy="81" r="2.5" fill="#cbd5e1"/>
+                <circle cx="108" cy="86" r="2.5" fill="#cbd5e1"/>
               </g>
 
               <g id="avf-Sweet-Potatoes" class="av-food">
-                <path d="M 50 65 Q 60 55 65 65 Q 60 72 50 65 Z" fill="#d946ef" stroke="#a21caf" stroke-width="1.5"/>
-                <path d="M 75 60 Q 85 50 95 60 Q 85 68 75 60 Z" fill="#c026d3" stroke="#86198f" stroke-width="1.5"/>
-                <path d="M 45 82 Q 55 72 65 82 Q 55 90 45 82 Z" fill="#e879f9" stroke="#c026d3" stroke-width="1.5"/>
+                <ellipse cx="54" cy="68" rx="14" ry="9" fill="#a855f7" stroke="#0a1628" stroke-width="2.5" transform="rotate(-15 54 68)"/>
+                <ellipse cx="72" cy="62" rx="13" ry="8" fill="#c026d3" stroke="#0a1628" stroke-width="2.5" transform="rotate(12 72 62)"/>
+                <ellipse cx="50" cy="82" rx="13" ry="8" fill="#e879f9" stroke="#0a1628" stroke-width="2.5" transform="rotate(5 50 82)"/>
               </g>
 
+              <!-- SAUCE POOL base (right side ~122–195) -->
+              <!-- beans -->
               <g id="avf-sauce-beans" class="av-food">
-                <path d="M 125 80 C 125 60, 185 60, 185 80 C 185 95, 125 95, 125 80 Z" fill="#78350f"/>
-                <ellipse cx="145" cy="72" rx="4" ry="2.5" fill="#92400e" transform="rotate(15 145 72)"/>
-                <ellipse cx="160" cy="78" rx="4" ry="2.5" fill="#92400e" transform="rotate(-30 160 78)"/>
-                <ellipse cx="170" cy="70" rx="4" ry="2.5" fill="#92400e" transform="rotate(45 170 70)"/>
-                <ellipse cx="135" cy="80" rx="4" ry="2.5" fill="#92400e" transform="rotate(10 135 80)"/>
-                <ellipse cx="150" cy="85" rx="4" ry="2.5" fill="#92400e"/>
+                <path d="M122 80 C122 59 192 59 192 80 C192 96 122 96 122 80 Z" fill="#92400e" stroke="#0a1628" stroke-width="2.5"/>
+                <ellipse cx="140" cy="71" rx="5" ry="3.5" fill="#c2773a" stroke="#0a1628" stroke-width="1.5" transform="rotate(20 140 71)"/>
+                <ellipse cx="157" cy="76" rx="5" ry="3.5" fill="#c2773a" stroke="#0a1628" stroke-width="1.5" transform="rotate(-15 157 76)"/>
+                <ellipse cx="172" cy="70" rx="5" ry="3.5" fill="#c2773a" stroke="#0a1628" stroke-width="1.5" transform="rotate(35 172 70)"/>
+                <ellipse cx="147" cy="84" rx="5" ry="3.5" fill="#c2773a" stroke="#0a1628" stroke-width="1.5"/>
+                <ellipse cx="165" cy="83" rx="5" ry="3.5" fill="#c2773a" stroke="#0a1628" stroke-width="1.5" transform="rotate(10 165 83)"/>
               </g>
+              <!-- gnuts -->
               <g id="avf-sauce-gnuts" class="av-food">
-                <path d="M 125 80 C 125 60, 185 60, 185 80 C 185 95, 125 95, 125 80 Z" fill="#b45309"/>
-                <circle cx="145" cy="72" r="3" fill="#d97706"/>
-                <circle cx="160" cy="78" r="3" fill="#d97706"/>
-                <circle cx="170" cy="70" r="3" fill="#d97706"/>
-                <circle cx="135" cy="80" r="3" fill="#d97706"/>
-                <circle cx="150" cy="85" r="3" fill="#d97706"/>
+                <path d="M122 80 C122 59 192 59 192 80 C192 96 122 96 122 80 Z" fill="#b45309" stroke="#0a1628" stroke-width="2.5"/>
+                <circle cx="140" cy="70" r="4.5" fill="#fbbf24" stroke="#0a1628" stroke-width="1.5"/>
+                <circle cx="157" cy="76" r="4.5" fill="#f59e0b" stroke="#0a1628" stroke-width="1.5"/>
+                <circle cx="172" cy="69" r="4.5" fill="#fbbf24" stroke="#0a1628" stroke-width="1.5"/>
+                <circle cx="147" cy="84" r="4.5" fill="#f59e0b" stroke="#0a1628" stroke-width="1.5"/>
+                <circle cx="165" cy="83" r="4.5" fill="#fbbf24" stroke="#0a1628" stroke-width="1.5"/>
               </g>
+              <!-- offals -->
               <g id="avf-sauce-offals" class="av-food">
-                <path d="M 125 80 C 125 60, 185 60, 185 80 C 185 95, 125 95, 125 80 Z" fill="#451a03"/>
-                <path d="M 140 75 Q 150 65 160 75 M 155 80 Q 165 70 175 80" stroke="#78350f" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <path d="M122 80 C122 59 192 59 192 80 C192 96 122 96 122 80 Z" fill="#57210a" stroke="#0a1628" stroke-width="2.5"/>
+                <path d="M136 74 Q148 62 160 74 Q156 82 148 78 Q140 82 136 74 Z" fill="#7f1d1d" stroke="#0a1628" stroke-width="1.5"/>
+                <path d="M158 78 Q170 66 182 78 Q178 86 170 82 Q162 86 158 78 Z" fill="#991b1b" stroke="#0a1628" stroke-width="1.5"/>
               </g>
+              <!-- peas -->
               <g id="avf-sauce-peas" class="av-food">
-                <path d="M 125 80 C 125 60, 185 60, 185 80 C 185 95, 125 95, 125 80 Z" fill="#14532d"/>
-                <circle cx="145" cy="72" r="3" fill="#22c55e"/>
-                <circle cx="160" cy="78" r="3" fill="#16a34a"/>
-                <circle cx="170" cy="70" r="3" fill="#22c55e"/>
-                <circle cx="135" cy="80" r="3" fill="#16a34a"/>
-                <circle cx="150" cy="85" r="3" fill="#22c55e"/>
+                <path d="M122 80 C122 59 192 59 192 80 C192 96 122 96 122 80 Z" fill="#14532d" stroke="#0a1628" stroke-width="2.5"/>
+                <circle cx="138" cy="70" r="5" fill="#4ade80" stroke="#0a1628" stroke-width="1.5"/>
+                <circle cx="153" cy="75" r="5" fill="#22c55e" stroke="#0a1628" stroke-width="1.5"/>
+                <circle cx="168" cy="69" r="5" fill="#4ade80" stroke="#0a1628" stroke-width="1.5"/>
+                <circle cx="146" cy="83" r="5" fill="#22c55e" stroke="#0a1628" stroke-width="1.5"/>
+                <circle cx="162" cy="83" r="5" fill="#4ade80" stroke="#0a1628" stroke-width="1.5"/>
+                <circle cx="177" cy="75" r="5" fill="#22c55e" stroke="#0a1628" stroke-width="1.5"/>
               </g>
+              <!-- meat -->
               <g id="avf-sauce-meat" class="av-food">
-                <path d="M 125 80 C 125 60, 185 60, 185 80 C 185 95, 125 95, 125 80 Z" fill="#451a03"/>
-                <path d="M 135 75 L 145 65 L 155 70 L 150 80 Z" fill="#7f1d1d"/>
-                <path d="M 160 80 L 170 70 L 180 75 L 170 85 Z" fill="#991b1b"/>
-                <path d="M 145 85 L 155 75 L 165 80 L 155 90 Z" fill="#7f1d1d"/>
-                <path d="M 135 80 Q 155 70 175 80" stroke="#78350f" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <path d="M122 80 C122 59 192 59 192 80 C192 96 122 96 122 80 Z" fill="#57210a" stroke="#0a1628" stroke-width="2.5"/>
+                <path d="M133 76 L143 64 L155 70 L149 82 Z" fill="#b91c1c" stroke="#0a1628" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M158 80 L168 68 L180 74 L170 86 Z" fill="#dc2626" stroke="#0a1628" stroke-width="1.5" stroke-linejoin="round"/>
               </g>
+              <!-- fish mid/tail -->
               <g id="avf-sauce-fish_mid" class="av-food">
-                <path d="M 125 80 C 125 60, 185 60, 185 80 C 185 95, 125 95, 125 80 Z" fill="#b45309"/>
-                <path d="M 145 75 Q 155 60 175 75 L 165 85 Q 150 90 135 80 Z" fill="#e2e8f0"/>
-                <path d="M 150 75 Q 160 70 170 75 M 147 80 Q 157 75 167 80" stroke="#94a3b8" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <path d="M122 80 C122 59 192 59 192 80 C192 96 122 96 122 80 Z" fill="#b45309" stroke="#0a1628" stroke-width="2.5"/>
+                <path d="M142 76 Q155 58 178 74 L168 86 Q152 92 136 80 Z" fill="#e2e8f0" stroke="#0a1628" stroke-width="2"/>
+                <path d="M148 73 Q160 67 172 73" stroke="#94a3b8" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                <path d="M144 80 Q158 75 170 80" stroke="#94a3b8" stroke-width="2" fill="none" stroke-linecap="round"/>
               </g>
+              <!-- fish head -->
               <g id="avf-sauce-fish_head" class="av-food">
-                <path d="M 125 80 C 125 60, 185 60, 185 80 C 185 95, 125 95, 125 80 Z" fill="#b45309"/>
-                <path d="M 170 75 Q 155 60 130 75 Q 140 90 170 90 Z" fill="#cbd5e1"/>
-                <circle cx="150" cy="73" r="4" fill="#f8fafc"/>
-                <circle cx="148" cy="73" r="2" fill="#0f172a"/>
-                <path d="M 160 70 Q 170 75 160 85" stroke="#94a3b8" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <path d="M122 80 C122 59 192 59 192 80 C192 96 122 96 122 80 Z" fill="#b45309" stroke="#0a1628" stroke-width="2.5"/>
+                <path d="M172 76 Q156 58 128 75 Q136 92 172 90 Z" fill="#d1d5db" stroke="#0a1628" stroke-width="2"/>
+                <circle cx="148" cy="72" r="5" fill="#f8fafc" stroke="#0a1628" stroke-width="1.5"/>
+                <circle cx="146" cy="72" r="2.5" fill="#0f172a"/>
+                <circle cx="147" cy="71" r="1" fill="white"/>
+                <path d="M163 68 Q174 74 163 86" stroke="#94a3b8" stroke-width="2" fill="none" stroke-linecap="round"/>
               </g>
+              <!-- chicken -->
               <g id="avf-sauce-chicken" class="av-food">
-                <path d="M 125 80 C 125 60, 185 60, 185 80 C 185 95, 125 95, 125 80 Z" fill="#b45309"/>
-                <path d="M 175 85 L 195 70" stroke="#f8fafc" stroke-width="6" stroke-linecap="round" fill="none"/>
-                <circle cx="193" cy="67" r="4" fill="#f8fafc"/>
-                <circle cx="197" cy="73" r="4" fill="#f8fafc"/>
-                <path d="M 150 78 Q 140 60 170 65 Q 185 70 185 85 Q 165 95 150 78 Z" fill="#d97706"/>
-                <path d="M 155 72 Q 160 68 165 72 M 160 80 Q 165 76 170 80" stroke="#f59e0b" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <path d="M122 80 C122 59 192 59 192 80 C192 96 122 96 122 80 Z" fill="#b45309" stroke="#0a1628" stroke-width="2.5"/>
+                <path d="M148 78 Q138 59 168 63 Q185 68 185 83 Q165 96 148 78 Z" fill="#d97706" stroke="#0a1628" stroke-width="2"/>
+                <path d="M153 72 Q160 67 167 72" stroke="#fbbf24" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                <path d="M150 80 Q160 75 170 80" stroke="#fbbf24" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <line x1="180" y1="80" x2="196" y2="66" stroke="#f8fafc" stroke-width="7" stroke-linecap="round"/>
+                <circle cx="195" cy="63" r="5" fill="#f8fafc" stroke="#d1d5db" stroke-width="1.5"/>
+                <circle cx="200" cy="71" r="4.5" fill="#f8fafc" stroke="#d1d5db" stroke-width="1.5"/>
               </g>
             </svg>
           </div>
@@ -721,7 +847,7 @@ body.dark #cs-bubble::after { background: #1c2333; }
     </div>
     <p style="font-size:.83rem;color:var(--text-muted);margin-bottom:.9rem;">Update your display name.</p>
     <div id="emp-list"></div>
-    <button class="btn" onclick="saveEmp()" style="max-width:200px;margin-top:.75rem;">Save Name</button>
+    <button class="btn" onclick="saveEmp()" style="max-width:180px;margin-top:.75rem;height:46px;border-radius:14px;">Save Name</button>
   </div>
   <div class="card">
     <div class="ct">Pricing Reference</div>
